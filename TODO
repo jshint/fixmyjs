@@ -1,0 +1,29 @@
+Strings must use doublequote.
+
+A trailing decimal point can be confused with a dot '{a}'.
+
+"A dot following a number can be confused with a decimal point.
+
+A leading decimal point can be confused with a dot: '.{a}'.
+
+Use the array literal notation [].
+
+Unexpected space after '{a}'.
+
+Unexpected space before '{a}'.
+
+Line breaking error '{a}'.
+
+Use the isNaN function to compare with NaN.
+
+Use the object literal notation {}.
+
+Missing '()' invoking a constructor.
+
+"Move the invocation into the parens that contain the function."
+
+Extra comma.
+
+It is not necessary to initialize '{a}' to 'undefined'.
+
+All 'debugger' statements should be removed.
