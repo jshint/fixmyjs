@@ -1,0 +1,17 @@
+{
+  "name": "jshint-autofix",
+  "version": "0.1.0",
+  "description": "Automatically fixes silly errors from jshint",
+  "homepage": "http://github.com/goatslacker/jshint-autofix",
+  "author": {
+    "name": "Josh Perez",
+    "email": "josh@goatslacker.com",
+    "url": "http://github.com/goatslacker"
+  },
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/mit-license.php"
+  }],
+  "bin": { "jshint-autofix": "./bin/jshint-autofix" },
+  "preferGlobal" : true
+}
