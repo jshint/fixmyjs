@@ -16,5 +16,9 @@ foo.bar = function() {
   return 2+2 - 1*4
 };
 
+function id() {
+// unnecessary semicolon
+};
+
 // can be expressed in dot notation
 foo["bar"]();
