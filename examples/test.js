@@ -17,6 +17,19 @@ foo.bar = function() {
 };
 
 function id() {
+  var bar = 9;
+
+  if (200 > bar) {
+  // bad indentation
+      bar = 14;
+  } else {
+  // bad indentation + Mixed spaces & tabs
+  	 	 	    bar = 12;
+           
+  }
+
+  return bar;
+
 // unnecessary semicolon
 };
 
