@@ -3,13 +3,13 @@ var fs = require('fs');
 var fix = require('./fix');
 
 function fixFile(fileName) {
-  return function (fn) {
+  return function (line, chr, fn) {
     var file = fs.readFileSync(fileName, 'utf8');
     var lines = file.split("\n");
 
-    var result = fn(lines);
+    lines[line] = fn(lines[line], chr);
 
-    fs.writeFileSync(fileName, result.join("\n"), 'utf8');
+    fs.writeFileSync(fileName, lines.join("\n"), 'utf8');
   };
 }
 
@@ -18,16 +18,16 @@ function callback(results, data) {
     var l = fixFile(result.file);
 
     var error = result.error;
-    var reason = error.reason;
+    var raw = error.raw;
     var line = error.line - 1;
     var chr = error.character;
 
-    switch (reason) {
+    switch (raw) {
     case "Missing semicolon.":
-      l(function (lines) {
-        lines[line] = fix.addSemicolon(lines[line], chr);
-        return lines; // figure out so we don't have to return lines always...
-      });
+      l(line, chr, fix.addSemicolon);
+      break;
+    case "Missing space after '{a}'.":
+      l(line, (chr - 1), fix.addSpace);
       break;
     default:
     }

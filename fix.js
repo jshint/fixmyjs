@@ -1,11 +1,20 @@
 /*global module */
 
-var Fix = {
-  addSemicolon: function (str, chr) {
-    var part1 = str.substr(0, chr);
-    var part2 = str.substr(chr);
+var helpers = {
+  insertIntoString: function (str, offset, newstr) {
+    var part1 = str.substr(0, offset);
+    var part2 = str.substr(offset);
 
-    return part1 + ";" + part2;
+    return part1 + newstr + part2;
+  }
+};
+
+var Fix = {
+  addSpace: function (str, chr) {
+    return helpers.insertIntoString(str, chr, " ");
+  },
+  addSemicolon: function (str, chr) {
+    return helpers.insertIntoString(str, chr, ";");
   }
 };
 
