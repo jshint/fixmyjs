@@ -4,8 +4,6 @@ If indentation is set:
   - Mixed spaces/tabs
   - Auto-indent
 
-- '{a}' is already defined.
-
 - '{a}' is better written in dot notation
 
 - The body of a for in should be wrapped in an if statement to filter unwanted properties from the prototype. (maybe)

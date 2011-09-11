@@ -10,11 +10,14 @@ var helpers = {
 };
 
 var Fix = {
+  addSemicolon: function (str, chr) {
+    return helpers.insertIntoString(str, chr, ";");
+  },
   addSpace: function (str, chr) {
     return helpers.insertIntoString(str, chr, " ");
   },
-  addSemicolon: function (str, chr) {
-    return helpers.insertIntoString(str, chr, ";");
+  alreadyDefined: function (str) {
+    return str.replace("var ", "");
   }
 };
 

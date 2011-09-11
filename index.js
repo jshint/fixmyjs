@@ -29,6 +29,9 @@ function callback(results, data) {
     case "Missing space after '{a}'.":
       l(line, (chr - 1), fix.addSpace);
       break;
+    case "'{a}' is already defined.":
+      l(line, null, fix.alreadyDefined);
+      break;
     default:
     }
   });
