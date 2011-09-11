@@ -1,3 +1,6 @@
 var foo = function() {
-  dowhatnow();
-};
+  dowhatnow()
+  var test = null;
+
+  var test = 12
+}
