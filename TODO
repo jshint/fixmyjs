@@ -1,5 +1,3 @@
-- Add help and --dry-run to bin
-
 If indentation is set:
   - Mixed spaces/tabs
   - Auto-indent
