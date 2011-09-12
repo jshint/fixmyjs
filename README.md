@@ -1,6 +1,12 @@
 # jshint-autofix
 
-Currently supports
+Meant to automatically fix your lint errors in a non-destructive way.
+
+## How to Install
+
+    npm install jshint-autofix
+
+## Currently supports
 
 * Missing semicolon.
 
