@@ -8,19 +8,19 @@ Meant to automatically fix your lint errors in a non-destructive way.
 
 ## Currently supports
 
-<del>* Missing semicolon.</del>
+* <del>Missing semicolon.</del>
 
-<del>* Missing spaces. `white`</del>
+* <del>Missing spaces. `white`</del>
 
 * Multiple definitions of a variable in scope.
 
 * Statements written better in dot notation vs square bracket notation.
 
-* Indentation (if you have `auto-indent` turned on)
+* <del>Indentation (if you have `auto-indent` turned on)</del>
 
 * Mixed spaces/tabs
 
-<del>* Unnecessary semicolons</del>
+* <del>Unnecessary semicolons</del>
 
 * Removes confusing trailing decimal points
 
