@@ -25,8 +25,14 @@ function id() {
   } else {
   // bad indentation + Mixed spaces & tabs
   	 	 	    bar = 12;
-           
+
   }
+
+	if (true) {
+		// redeclaration
+		var bar = 1;
+	// unnecessary semicolon (with tabs!)
+	};
 
   return bar;
 
