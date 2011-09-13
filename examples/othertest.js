@@ -2,7 +2,10 @@
 var a = 2.;
 
 // leading decimal
-var b = .0;
+var b = .3;
+
+// trailing + leading
+var aa = .3; var ab = 1.2; var ac = .5; var ad = 2.0; var ae = 0.;
 
 // array literal instead
 var c = new Array();
