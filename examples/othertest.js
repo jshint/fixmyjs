@@ -26,13 +26,6 @@ if (a === NaN) {
   // do nothing
 }
 
-function F(param) {
-  this.param = param;
-}
-
-// missing parens when invoking constructor
-var g = new F;
-
 var h = (function i() {
   return "foo";
 
