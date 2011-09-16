@@ -1,50 +1,28 @@
 var vows = require('vows');
 var assert = require('assert');
+var jshint = require('../lib/');
 
-var jshint_autofix = require('../lib/');
+var test = function (name, specs) {
 
-var ri = function (code) {
-  var result = null;
-  try {
-    result = jshint_autofix.fix(code);
-  } catch (err) {
-    result = err.message;
-  }
+  var tests = {};
 
-  return result;
-};
+  Object.keys(specs).forEach(function (spec) {
+    var result = specs[spec];
 
-var createTest = function (when, it, test) {
-  var topic, result, ret;
+    tests[spec] = {
+      topic: function () {
+        jshint.fix(spec, this.callback);
+      }
+    }
 
-  topic = function () {
-    return ri(test[when]);
-  };
-
-  result = (typeof test[it] === "function") ? function (result) {
-    test[it](assert, result);
-  } : function (r) {
-    assert.equal(r, test[it]);
-  };
-
-  ret = {};
-
-  ret.topic = topic;
-  ret[it] = result;
-
-  return ret;
-};
-
-module.exports = function (description, tests) {
-  var batch = {};
-
-  tests.forEach(function (test) {
-    var keys = Object.keys(test),
-        when = keys.shift(),
-        it = keys.shift();
-
-    batch[when] = createTest(when, it, test);
+    tests[spec][result] = function (topic) {
+      assert.equal(topic, result);
+    }
   });
 
-  return vows.describe(description).addBatch(batch);
+
+  return vows.describe(name).addBatch(tests);
 };
+
+module.exports = test;
+
