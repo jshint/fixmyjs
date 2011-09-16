@@ -17,6 +17,9 @@
     "argsparser": ">=0.0.3",
     "glob": ">=2.0.7"
   },
+  "devDependencies": {
+    "vows": "0.5.x"
+  },
   "bin": { "jshint-autofix": "./bin/jshint-autofix" },
   "preferGlobal" : true
 }
