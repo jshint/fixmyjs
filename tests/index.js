@@ -1,12 +1,12 @@
 var vows = require('vows');
 var assert = require('assert');
 
-var jshint_autofix = require('../jshint-autofix');
+var jshint_autofix = require('../lib/');
 
 var ri = function (code) {
   var result = null;
   try {
-    result = jshint_autofix(code);
+    result = jshint_autofix.fix(code);
   } catch (err) {
     result = err.message;
   }
