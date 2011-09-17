@@ -8,9 +8,9 @@ Meant to automatically fix your lint errors in a non-destructive way.
 
 ## Currently supports
 
-* <del>Missing semicolon.</del>
+* Missing semicolon.
 
-* <del>Missing spaces. `white`</del>
+* Missing spaces. `white`
 
 * Multiple definitions of a variable in scope.
 
@@ -20,7 +20,7 @@ Meant to automatically fix your lint errors in a non-destructive way.
 
 * Mixed spaces/tabs
 
-* <del>Unnecessary semicolons</del>
+* Unnecessary semicolons
 
 * Removes confusing trailing decimal points
 
@@ -37,6 +37,10 @@ Meant to automatically fix your lint errors in a non-destructive way.
 * Uses isNaN function rather than comparing to NaN
 
 * Moves the invocation of a function within it's parenthesis
+
+# TODO
+
+* Code Coverage
 
 # License
 
