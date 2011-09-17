@@ -1,2 +1,4 @@
+node_modules/glob
+node_modules/argsparser
 node_modules/vows
 node_modules/.bin
