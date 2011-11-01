@@ -1,6 +1,6 @@
 {
   "name": "jshint-autofix",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Automatically fixes silly errors from jshint",
   "homepage": "http://github.com/goatslacker/jshint-autofix",
   "author": {
