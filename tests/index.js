@@ -1,28 +1,37 @@
 var vows = require('vows');
 var assert = require('assert');
 var jshint = require('../lib/');
+var EventEmitter = require('events').EventEmitter;
+var fs = require('fs');
 
-var test = function (name, specs) {
+var tests = fs.readdirSync(__dirname + "/fixtures/broken/");
 
-  var tests = {};
+var specs = {};
 
-  Object.keys(specs).forEach(function (spec) {
-    var result = specs[spec];
+tests.forEach(function (test) {
+  var file_n = __dirname + "/fixtures/broken/" + test;
+  var file_y = __dirname + "/fixtures/ok/" + test;
 
-    tests[spec] = {
-      topic: function () {
-        jshint.fix(spec, this.callback);
-      }
+  var spec = {};
+  spec["?"] = {
+    topic: function () {
+      var ev = new EventEmitter();
+      ev.on("done", function (io) {
+        this.callback(null, io.getCode());
+        io.clearCache();
+      }.bind(this));
+
+      jshint.run(["node", "vows", file_n], ev);
+    },
+
+    "ok": function (topic) {
+      var ok = fs.readFileSync(file_y).toString();
+      assert.equal(topic, ok);
     }
 
-    tests[spec][result] = function (topic) {
-      assert.equal(topic, result);
-    }
-  });
+  };
 
+  specs[test] = spec;
+});
 
-  return vows.describe(name).addBatch(tests);
-};
-
-module.exports = test;
-
+vows.describe("jshint-autofix").addBatch(specs).export(module);

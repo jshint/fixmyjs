@@ -1,4 +1,2 @@
 test:
-	@vows tests/*-test.js -spec
-
-.PHONY: test
+	@vows tests/index.js --spec
