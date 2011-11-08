@@ -2,12 +2,14 @@
 
 Meant to automatically fix your lint errors in a non-destructive way.
 
-This repository hosts the code as well as the node-package for the CLI tool.
+For the node-package see https://github.com/goatslacker/node-fixmyjs
+
+For the website see https://github.com/goatslacker/fixmyjs.com
 
 ## How to Install CLI
 
     npm install jshint-autofix
-    
+
 ## Website
 
 http://fixmyjs.com allows you to use this tool on the web.
