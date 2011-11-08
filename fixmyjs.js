@@ -318,8 +318,6 @@
   };
 
   exports.fixMyJS = (function () {
-  //  var EventEmitter = require('events').EventEmitter;
-
     // copies over the results into one of our own objects
     function copyResults(result, config) {
       var r = {};

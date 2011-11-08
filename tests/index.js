@@ -4,7 +4,13 @@ var jshint = require('../packages/jshint/jshint').JSHINT;
 var fixmyjs = require('../fixmyjs');
 var fs = require('fs');
 
-var tests = fs.readdirSync(__dirname + "/fixtures/broken/");
+var tests;
+
+if (process.argv[2]) {
+  tests = [process.argv[2]];
+} else {
+  tests = fs.readdirSync(__dirname + "/fixtures/broken/");
+}
 
 var specs = {};
 
