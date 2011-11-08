@@ -6,7 +6,7 @@ var fs = require('fs');
 
 var tests;
 
-if (process.argv[2]) {
+if (process.argv[1].indexOf("vows") === -1 && process.argv[2]) {
   tests = [process.argv[2]];
 } else {
   tests = fs.readdirSync(__dirname + "/fixtures/broken/");

@@ -17,3 +17,7 @@ function tabs() {
 function spaces() {
   var b = 2;;
 }
+
+for (;;;) {
+  // do something
+}
