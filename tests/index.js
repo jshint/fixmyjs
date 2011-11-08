@@ -1,7 +1,7 @@
 var vows = require('vows');
 var assert = require('assert');
-var jshint = require('../lib/');
-var EventEmitter = require('events').EventEmitter;
+var jshint = require('../packages/jshint/jshint').JSHINT;
+var fixmyjs = require('../fixmyjs');
 var fs = require('fs');
 
 var tests = fs.readdirSync(__dirname + "/fixtures/broken/");
@@ -15,13 +15,14 @@ tests.forEach(function (test) {
   var spec = {};
   spec["?"] = {
     topic: function () {
-      var ev = new EventEmitter();
-      ev.on("done", function (io) {
-        this.callback(null, io.getCode());
-        io.clearCache();
-      }.bind(this));
-
-      jshint.run(["node", "vows", file_n], ev);
+      var code = fs.readFileSync(file_n, "utf-8");
+      var result = jshint(code, {
+        asi: false, auto_indent: true,
+        debug: false, indent: 2, immed: true,
+        lastsemic: false, laxbreak: true, maxerr: 9000,
+        shadow: false, sub: false, supernew: false, white: true
+      });
+      return fixmyjs(jshint.data(), code);
     },
 
     "ok": function (topic) {

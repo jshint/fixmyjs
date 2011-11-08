@@ -375,7 +375,7 @@
 
       // filter out errors we don't support.
       results = results.filter(function (v) {
-        return errors.hasOwnProperty(v.raw);
+        return v && errors.hasOwnProperty(v.raw);
       });
 
       // sort errors.
