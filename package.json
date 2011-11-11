@@ -1,8 +1,8 @@
 {
-  "name": "jshint-autofix",
-  "version": "0.3.6",
+  "name": "fixmyjs",
+  "version": "0.4.0",
   "description": "Automatically fixes silly errors from jshint",
-  "homepage": "http://github.com/goatslacker/jshint-autofix",
+  "homepage": "http://fixmyjs.com",
   "author": {
     "name": "Josh Perez",
     "email": "josh@goatslacker.com",
@@ -11,15 +11,9 @@
   "keywords": ["jshint", "hint", "lint", "jslint"],
   "license": {
     "type": "MIT",
-    "url": "http://www.opensource.org/licenses/mit-license.php"
-  },
-  "dependencies": {
-    "argsparser": ">=0.0.3",
-    "glob": ">=2.0.7"
+    "url": "http://josh.mit-license.org"
   },
   "devDependencies": {
     "vows": "0.5.x"
-  },
-  "bin": { "jshint-autofix": "./bin/jshint-autofix" },
-  "preferGlobal" : true
+  }
 }
