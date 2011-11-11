@@ -1,14 +1,14 @@
-# jshint-autofix
+# fixmyjs || jshint-autofix
 
 Meant to automatically fix your lint errors in a non-destructive way.
 
-For the node-package see https://github.com/goatslacker/node-fixmyjs
+For the nodejs package see https://github.com/goatslacker/node-fixmyjs
 
 For the website see https://github.com/goatslacker/fixmyjs.com
 
 ## How to Install CLI
 
-    npm install jshint-autofix
+    npm install fixmyjs
 
 ## Website
 
