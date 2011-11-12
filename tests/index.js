@@ -28,7 +28,7 @@ tests.forEach(function (test) {
         lastsemic: false, laxbreak: true, maxerr: 9000,
         shadow: false, sub: false, supernew: false, white: true
       });
-      return fixmyjs(jshint.data(), code);
+      return fixmyjs(jshint.data(), code).run();
     },
 
     "ok": function (topic) {

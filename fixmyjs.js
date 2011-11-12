@@ -12,10 +12,6 @@
   Code.prototype.fix = function (fn, line) {
     var args = Array.prototype.slice.call(arguments, 2);
 
-    if (!this.src) {
-      this.readCode();
-    }
-
     args.unshift(this.src[line]);
 
     this.src[line] = fn.apply(this, args);
@@ -24,10 +20,6 @@
   Code.prototype.getChr = function (r) {
     var tabs;
     var lineNo = r.line;
-
-    if (!this.src) {
-      this.readCode();
-    }
 
     tabs = this.src[lineNo].split("\t");
 
@@ -370,6 +362,7 @@
       var code = new Code(src);
       var results = data.errors;
       var config = data.options;
+      var current = 0;
 
       // filter out errors we don't support.
       results = results.filter(function (v) {
@@ -379,10 +372,42 @@
       // sort errors.
       results.sort(byPriority);
 
-      // fix them.
-      results.forEach(fixErrors(code, config));
+      return {
+        getErrors: function () {
+          return results.slice(0);
+        },
 
-      return code.getCode();
+        getCode: function () {
+          return code.getCode();
+        },
+
+        getConfig: function () {
+          return JSON.parse(JSON.stringify(config));
+        },
+
+        next: function () {
+          if (current <= results.length) {
+            throw new Error("End of list.");
+          }
+
+          var r = results[current];
+          var data = {
+            fix: errors[r.raw].fix.bind(null, r, code),
+            getDetails: function () {
+              return JSON.parse(JSON.stringify(r));
+            }
+          };
+          current += 1;
+          return data;
+        },
+
+        run: function () {
+          // fix them.
+          results.forEach(fixErrors(code, config));
+          return code.getCode();
+        }
+      };
+
     }
 
     return fixMyJS;
