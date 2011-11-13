@@ -254,7 +254,7 @@
     "Mixed spaces and tabs.": {
       priority: 1,
       fix: function (r, code) {
-//        code.fix(fix.mixedSpacesNTabs, r.line, r.config);
+        code.fix(fix.mixedSpacesNTabs, r.line, r.config);
       }
     },
 
