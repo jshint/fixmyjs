@@ -18,12 +18,10 @@
   };
 
   Code.prototype.getChr = function (r) {
-    var tabs;
     var lineNo = r.line;
+    var tabs = this.src[lineNo].split("\t");
 
-    tabs = this.src[lineNo].split("\t");
-
-    return r.character - tabs.length;
+    return r.character - ((tabs.length - 1) * (r.config.indent - 1)) - 1;
   };
 
 
@@ -256,7 +254,7 @@
     "Mixed spaces and tabs.": {
       priority: 1,
       fix: function (r, code) {
-        code.fix(fix.mixedSpacesNTabs, r.line, r.config);
+//        code.fix(fix.mixedSpacesNTabs, r.line, r.config);
       }
     },
 
