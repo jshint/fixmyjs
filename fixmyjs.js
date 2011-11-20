@@ -360,10 +360,18 @@
       var code = new Code(src);
       var results = data.errors || [];
       var config = data.options || {};
+      var dupes = {};
       var current = 0;
 
       // filter out errors we don't support.
       results = results.filter(function (v) {
+        var err = "line" + v.line + "char" + v.character + "reason" + v.reason;
+        if (dupes.hasOwnProperty(err)) {
+          return false;
+        }
+
+        dupes[err] = v;
+
         return v && errors.hasOwnProperty(v.raw);
       });
 
