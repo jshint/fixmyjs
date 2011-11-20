@@ -358,8 +358,8 @@
 
     function fixMyJS(data, src) {
       var code = new Code(src);
-      var results = data.errors;
-      var config = data.options;
+      var results = data.errors || [];
+      var config = data.options || {};
       var current = 0;
 
       // filter out errors we don't support.
