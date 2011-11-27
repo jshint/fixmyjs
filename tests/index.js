@@ -11,17 +11,20 @@ var specs = {};
 
 // These are the options fixmyjs supports.
 var options = {
-  asi: false, auto_indent: true,
-  debug: false, indent: 2, immed: true,
-  lastsemic: false, laxbreak: true, maxerr: 9000,
-  shadow: false, sub: false, supernew: false, white: true
+  asi: false, auto_indent: false,
+  debug: false, indent: 2,
+  indentpref: "spaces", immed: true,
+  lastsemic: false, laxbreak: true,
+  maxerr: 9000, shadow: false, sub: false,
+  supernew: false, white: true
 };
 
 // DSL for running a string against JSHint and passing off results
 // to fixmyjs. Returns an Object.
-var DSL = function (code) {
+var DSL = function (code, opts) {
   code = code || "var foo = 1";
-  var result = jshint(code, options);
+  opts = opts || options;
+  var result = jshint(code, opts);
   return fixmyjs(jshint.data(), code);
 };
 
@@ -43,10 +46,21 @@ tests.forEach(function (test) {
   var file_n = __dirname + "/fixtures/broken/" + test;
   var file_y = __dirname + "/fixtures/ok/" + test;
 
+  var opts = options;
+
+  // special case tests where options need to be different.
+  if (test === "autoindentspaces.js") {
+    opts = { white: true, indent: 2, indentpref: "spaces", auto_indent: true };
+  } else if (test === "autoindenttabs.js") {
+    opts = { white: true, indent: 2, indentpref: "tabs", auto_indent: true };
+  }
+  // \
+
+  // Adds the spec.
   var spec = {};
   spec["?"] = {
     topic: function () {
-      return DSL(fs.readFileSync(file_n, "utf-8")).run();
+      return DSL(fs.readFileSync(file_n, "utf-8"), opts).run();
     },
 
     "ok": function (topic) {
@@ -56,6 +70,7 @@ tests.forEach(function (test) {
 
   };
 
+  // Adds individual spec into group of specs.
   specs[test] = spec;
 });
 

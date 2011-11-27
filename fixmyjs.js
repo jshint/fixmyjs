@@ -78,8 +78,16 @@
         return str;
       },
       indent: function (str, indent, config) {
-        if (config.auto_indent === true) {
-          str = new Array(indent).join(" ") + str.trim();
+        var ident;
+        if (config.auto_indent === true && config.indentpref) {
+          if (config.indentpref === "spaces") {
+            str = new Array(indent).join(" ") + str.trim();
+          } else if (config.indentpref === "tabs") {
+            ident = (indent + 1) / config.indent;
+            if (ident > 0) {
+              str = new Array(ident).join("\t") + str.trim();
+            }
+          }
         }
 
         return str;
@@ -119,8 +127,15 @@
         return str;
       },
       mixedSpacesNTabs: function (str, config) {
-        if (config.auto_indent === true) {
-          str = str.replace(/\t/g, new Array(config.indent + 1).join(" "));
+        var spaces;
+        if (config.indentpref) {
+          spaces = new Array(config.indent + 1).join(" ");
+
+          if (config.indentpref === "spaces") {
+            str = str.replace(/\t/g, spaces);
+          } else if (config.indentpref === "tabs") {
+            str = str.replace(new RegExp(spaces, "g"), "\t");
+          }
         }
 
         return str;
@@ -207,7 +222,7 @@
     "Expected '{a}' to have an indentation at {b} instead at {c}.": {
       priority: 1,
       fix: function (r, code) {
-    //    code.fix(fix.indent, r.line, r.b, r.config);
+        code.fix(fix.indent, r.line, r.b, r.config);
       }
     },
 
