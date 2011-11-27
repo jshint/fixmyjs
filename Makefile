@@ -10,4 +10,4 @@ cover:
 	google-chrome coverage.html
 
 clean:
-	@rm -rf jscoverage && rm coverage.html
+	@rm -rf jscoverage && rm -f coverage.html
