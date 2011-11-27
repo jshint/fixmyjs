@@ -60,9 +60,6 @@
 
         return str.replace(incorrect, replacement);
       },
-      anonFuncInvocation: function (str) {
-        return str.replace("})()", "}())");
-      },
       arrayLiteral: function (str) {
         return str.replace("new Array()", "[]");
       },
@@ -73,6 +70,17 @@
         if (rx.test(str)) {
           sqbNotation = rx.exec(str);
           str = str.replace(sqbNotation[0], "." + dot);
+        }
+
+        return str;
+      },
+      immed: function (str) {
+        var rx = /\)\((.*)\);/;
+        var params;
+
+        if (rx.test(str)) {
+          params = rx.exec(str);
+          str = str.replace(params[0], "(" + params[1] + "));");
         }
 
         return str;
@@ -271,7 +279,7 @@
     "Move the invocation into the parens that contain the function.": {
       priority: 1,
       fix: function (r, code) {
-        code.fix(fix.anonFuncInvocation, r.line);
+        code.fix(fix.immed, r.line);
       }
     },
 

@@ -304,4 +304,4 @@ $.extend($.ui, {
 	}
 });
 
-})(jQuery);
+}(jQuery));

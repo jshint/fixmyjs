@@ -1,6 +1,7 @@
 var vows = require('vows');
 var assert = require('assert');
 var jshint = require('../packages/jshint/jshint').JSHINT;
+var jsdiff = require('./jsdiff');
 var fs = require('fs');
 
 // An Array of tests to run.
@@ -65,7 +66,17 @@ tests.forEach(function (test) {
 
     "ok": function (topic) {
       var ok = fs.readFileSync(file_y).toString();
-      assert.equal(topic, ok);
+      var err = null;
+      try {
+        assert.equal(topic, ok);
+      } catch (e) {
+        console.log(jsdiff.diffString(e.actual, e.expected));
+        err = e;
+      }
+
+      if (err) {
+        throw err;
+      }
     }
 
   };

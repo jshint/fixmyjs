@@ -1,6 +1,0 @@
-(function () { })();
-
-(function () {
-})();
-
-(function () { })(); (function () { })();
