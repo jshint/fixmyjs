@@ -1,7 +1,6 @@
 var vows = require('vows');
 var assert = require('assert');
 var jshint = require('../packages/jshint/jshint').JSHINT;
-var fixmyjs = require('../fixmyjs');
 var fs = require('fs');
 
 var tests;
@@ -11,6 +10,8 @@ if (process.argv[1].indexOf("vows") === -1 && process.argv[2]) {
 } else {
   tests = fs.readdirSync(__dirname + "/fixtures/broken/");
 }
+
+var fixmyjs = require((process.argv[3] && process.argv[3].indexOf("--cover") !== -1) ? '../jscoverage/fixmyjs' : '../fixmyjs');
 
 var specs = {};
 
