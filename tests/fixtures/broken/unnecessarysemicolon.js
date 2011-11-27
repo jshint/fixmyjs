@@ -18,6 +18,6 @@ function spaces() {
   var b = 2;;
 }
 
-for (;;;) {
+for (;;) {
   // do something
 }
