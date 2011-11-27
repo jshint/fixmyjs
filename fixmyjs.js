@@ -392,13 +392,16 @@
         },
 
         next: function () {
-          if (current <= results.length) {
+          if (current >= results.length) {
             throw new Error("End of list.");
           }
 
-          var r = results[current];
+          var r = copyResults(results[current], config);
           var data = {
-            fix: errors[r.raw].fix.bind(null, r, code),
+            fix: function () {
+              fixError(r, code);
+              return code.getCode();
+            },
             getDetails: function () {
               return JSON.parse(JSON.stringify(r));
             }
