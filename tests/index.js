@@ -15,7 +15,7 @@ var options = {
   debug: false, indent: 2,
   indentpref: "spaces", immed: true,
   lastsemic: false, laxbreak: true,
-  maxerr: 9000, shadow: false, sub: false,
+  maxerr: 500, shadow: false, sub: false,
   supernew: false, white: true
 };
 
@@ -74,95 +74,105 @@ tests.forEach(function (test) {
   specs[test] = spec;
 });
 
+if (tests.length > 1) {
+  specs.api = {
+    "when too many errors are encountered": {
+      topic: function () {
+        return DSL(fs.readFileSync(__dirname + "/fixtures/toomanyerrors.js", "utf-8")).run;
+      },
 
-// Testing for the API of fixmyjs.
-specs.api = {
-  "getErrors() when retrieving all errors": {
-    topic: function () {
-      return DSL().getErrors();
-    },
-
-    "we get an Array of all the errors": function (topic) {
-      assert.isArray(topic);
-      assert.equal(topic.length, 1);
-    }
-  },
-
-  "getCode() when retrieving the code": {
-    topic: function () {
-      return DSL().getCode();
-    },
-
-    "we get the code as a String": function (topic) {
-      assert.isString(topic);
-      assert.equal(topic, "var foo = 1");
-    }
-  },
-
-  "getConfig() when retrieving the config": {
-    topic: function () {
-      return DSL().getConfig();
-    },
-
-    "we get the config as an Object": function (topic) {
-      assert.isObject(topic);
-      assert.isFalse(topic.asi);
-      assert.isTrue(topic.immed);
-    }
-  },
-
-  "next() when using next to iterate through the errors": {
-    topic: function () {
-      var result;
-      try {
-        result = DSL().next();
-      } catch (e) {
-        result = e;
+      "an error is thrown": function (topic) {
+        assert.throws(topic, Error);
       }
-      return result;
     },
 
-    "we expect the next item to be an Object": function (topic) {
-      assert.isObject(topic);
-      assert.isFunction(topic.fix);
-      assert.isFunction(topic.getDetails);
-    }
-  },
+    // Testing for the API of fixmyjs.
+    "getErrors() when retrieving all errors": {
+      topic: function () {
+        return DSL().getErrors();
+      },
 
-  "next().getDetails() when retrieving an item's details": {
-    topic: function () {
-      return DSL().next().getDetails();
+      "we get an Array of all the errors": function (topic) {
+        assert.isArray(topic);
+        assert.equal(topic.length, 1);
+      }
     },
 
-    "we expect the results from JSHint": function (topic) {
-      assert.isObject(topic);
-      assert.equal(topic.reason, "Missing semicolon.");
-    }
-  },
+    "getCode() when retrieving the code": {
+      topic: function () {
+        return DSL().getCode();
+      },
 
-  "next().fix() when fixing an item": {
-    topic: function () {
-      return DSL().next().fix();
+      "we get the code as a String": function (topic) {
+        assert.isString(topic);
+        assert.equal(topic, "var foo = 1");
+      }
     },
 
-    "we expect the String to return fixed": function (topic) {
-      assert.isString(topic);
-      assert.equal(topic, "var foo = 1;");
-    }
-  },
+    "getConfig() when retrieving the config": {
+      topic: function () {
+        return DSL().getConfig();
+      },
 
-  "next().next() when getting to the end of the list.": {
-    topic: function () {
-      return null;
+      "we get the config as an Object": function (topic) {
+        assert.isObject(topic);
+        assert.isFalse(topic.asi);
+        assert.isTrue(topic.immed);
+      }
     },
 
-    "we expect an error to be thrown": function (topic) {
-      var f = DSL();
-      f.next();
-      assert.throws(f.next, Error);
+    "next() when using next to iterate through the errors": {
+      topic: function () {
+        var result;
+        try {
+          result = DSL().next();
+        } catch (e) {
+          result = e;
+        }
+        return result;
+      },
+
+      "we expect the next item to be an Object": function (topic) {
+        assert.isObject(topic);
+        assert.isFunction(topic.fix);
+        assert.isFunction(topic.getDetails);
+      }
+    },
+
+    "next().getDetails() when retrieving an item's details": {
+      topic: function () {
+        return DSL().next().getDetails();
+      },
+
+      "we expect the results from JSHint": function (topic) {
+        assert.isObject(topic);
+        assert.equal(topic.reason, "Missing semicolon.");
+      }
+    },
+
+    "next().fix() when fixing an item": {
+      topic: function () {
+        return DSL().next().fix();
+      },
+
+      "we expect the String to return fixed": function (topic) {
+        assert.isString(topic);
+        assert.equal(topic, "var foo = 1;");
+      }
+    },
+
+    "next().next() when getting to the end of the list.": {
+      topic: function () {
+        return DSL();
+      },
+
+      "we expect an error to be thrown": function (topic) {
+        topic.next();
+        assert.throws(topic.next, Error);
+      }
     }
-  }
-};
+  };
+}
 
 // Export to vows.
 vows.describe("jshint-autofix").addBatch(specs).export(module);

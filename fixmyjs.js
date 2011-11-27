@@ -271,6 +271,7 @@
     "Too many errors.": {
       priority: 2,
       fix: function () {
+        throw new Error("Too many errors reported by JSHint.");
       }
     },
 
@@ -368,6 +369,10 @@
 
       // filter out errors we don't support.
       results = results.filter(function (v) {
+        if (!v) {
+          return false;
+        }
+
         var err = "line" + v.line + "char" + v.character + "reason" + v.reason;
         if (dupes.hasOwnProperty(err)) {
           return false;
@@ -375,7 +380,7 @@
 
         dupes[err] = v;
 
-        return v && errors.hasOwnProperty(v.raw);
+        return errors.hasOwnProperty(v.raw);
       });
 
       // sort errors.
