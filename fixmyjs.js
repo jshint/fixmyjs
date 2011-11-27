@@ -118,11 +118,6 @@
 
         return str;
       },
-      lineBrk: function (str, o, n) {
-        str = this.src[o] + " " + this.src[n].trim();
-        this.src[n] = "";
-        return str;
-      },
       mixedSpacesNTabs: function (str, config) {
         if (config.auto_indent === true) {
           str = str.replace(/\t/g, new Array(config.indent + 1).join(" "));
@@ -220,13 +215,6 @@
       priority: 1,
       fix: function (r, code) {
         code.fix(fix.rmUndefined, r.line);
-      }
-    },
-
-    "Line breaking error '{a}'.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.lineBrk, r.line, r.line, (r.line + 1));
       }
     },
 
