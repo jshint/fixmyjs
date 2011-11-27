@@ -16,33 +16,35 @@ http://fixmyjs.com allows you to use this tool on the web.
 
 ## Currently supports
 
-* Missing semicolon.
+* Missing semicolon. `var a = 1` -> `var a = 1;`
 
 * Missing spaces. `white`
 
 * Multiple definitions of a variable in scope.
 
-* Statements written better in dot notation vs square bracket notation.
+* Statements written better in dot notation vs square bracket notation. `foo['hello']` -> `foo.hello`
 
 * Mixed spaces/tabs
 
-* Unnecessary semicolons
+* Unnecessary semicolons `if (1) { };` -> `if (1) { }`
 
-* Removes confusing trailing decimal points
+* Removes confusing trailing decimal points `4.` -> `4`
 
-* Obj & Array literals instead of new Array | new Object
+* Obj & Array literals instead of new Array | new Object `var arr = new Array();` -> `var arr = [];`
 
-* Adds 0 to leading decimals
+* Adds 0 to leading decimals `.2` -> `0.2`
 
-* Adds parenthesis when invoking a constructor without them
+* Adds parenthesis when invoking a constructor without them `var a = new Foo;` -> `var a = new Foo();`
 
 * Removes `undefined` when assigning to variables
 
 * Removes debugger statements
 
-* Uses isNaN function rather than comparing to NaN
+* Uses isNaN function rather than comparing to NaN `a === NaN` -> `isNaN(a)`
 
-* Moves the invocation of a function within it's parenthesis
+* Moves the invocation of a function within it's parenthesis `(function () { })()` -> `(function () { }())`
+
+* Extra comma `var a = [1,,2];` -> `var a = [1,2];`
 
 # License
 
