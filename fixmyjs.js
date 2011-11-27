@@ -226,6 +226,13 @@
       }
     },
 
+    "Extra comma.": {
+      priority: 0,
+      fix: function (r, code) {
+        code.fix(fix.rmChar, r.line, code.getChr(r));
+      }
+    },
+
     "It is not necessary to initialize '{a}' to 'undefined'.": {
       priority: 1,
       fix: function (r, code) {
