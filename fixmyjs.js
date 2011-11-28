@@ -228,6 +228,20 @@
         return str;
       },
 
+// You shouldn't delete vars. This will remove the delete statement
+// and instead set the variable to undefined.
+//
+// Example: `delete foo;` -> `foo = undefined;`
+      noDeleteVar: function (str) {
+        var rx = /delete ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
+        var exec;
+        if (rx.test(str)) {
+          exec = rx.exec(str);
+          str = str.replace(exec[0], exec[1] + " = undefined");
+        }
+        return str;
+      },
+
 // Removes `new` when it's used as a statement.
 // Only works if option `nonew` is set to true.
 //
@@ -393,6 +407,7 @@
   w(1, "Use the isNaN function to compare with NaN.",                     fix.useIsNaN);
   w(1, "Use the array literal notation [].",                              fix.arrayLiteral);
   w(1, "Use the object literal notation {}.",                             fix.objectLiteral);
+  w(1, "Variables should not be deleted.",                                fix.noDeleteVar);
   w(2, "Too many errors.",                                                fix.tme);
 
 
