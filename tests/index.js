@@ -70,7 +70,7 @@ tests.forEach(function (test) {
       try {
         assert.equal(topic, ok);
       } catch (e) {
-        console.log(jsdiff.diffString(e.actual, e.expected));
+        console.log(jsdiff.diffString(e.expected, e.actual));
         err = e;
       }
 
