@@ -1,7 +1,12 @@
+.PHONY: test docs coverage
+
 test:
 	@vows tests/index.js --spec
 
 coverage: clean cover
+
+docs:
+	@docco fixmyjs.js
 
 cover:
 	@jscoverage . /tmp/jscoverage --exclude=node_modules --exclude=packages --exclude=tests && \

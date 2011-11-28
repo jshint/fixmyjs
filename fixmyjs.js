@@ -36,14 +36,15 @@
 // **r** is the JSHint object related to the error
 //
 // returns Number
+//
+// Tabs are special, they count as two characters in text
+// and as one character by the JSHint parser.
+// If there are tabs then indentation is important, we'll need to know
+// how many characters each tab is supposed to be worth.
   Code.prototype.getChr = function (r) {
     var lineNo = r.line;
-    // tabs are special, they count as two characters in text
-    // and as one character by the JSHint parser.
     var tabs = this.src[lineNo].split("\t");
 
-    // if there are tabs then indentation is important, we'll need to know
-    // how many characters each tab is supposed to be worth.
     return r.character - ((tabs.length - 1) * (r.config.indent - 1)) - 1;
   };
 
@@ -361,7 +362,7 @@
 
 // fixMyJS is part of the global object
   exports.fixMyJS = (function () {
-// copies over the results into one of our own objects
+// Copies over the results into one of our own objects
 // we decrement r.line by one becuse Arrays start at 0.
 // and we pass the config object to r.
     function copyResults(result, config) {
