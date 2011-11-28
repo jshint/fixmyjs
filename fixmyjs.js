@@ -1,29 +1,67 @@
 (function () {
+// Global object.
   var exports = this;
 
+// Code Object
+// This object is what manipulates the code that's passed
+// to be fixed.
   var Code = function (src) {
     this.src = src.split("\n");
   };
 
+// Retrieves the code that was stored in the Object
+//
+// returns String
   Code.prototype.getCode = function () {
     return this.src.join("\n");
   };
 
+// The fix method fixes a certain line in the code.
+//
+// **fn** is the function which will be responsible for modifying the line
+// **o** is the JSHint object related to the error we're fixing
+//
+// returns the fixed line as a String
   Code.prototype.fix = function (fn, o) {
     var line = o.line;
     return (this.src[line] = fn.call(fn, this.src[line], o, this));
   };
 
+// This function keeps track of character changes.
+// As the code is modified via additions/deletions
+// the character positioning reported by JSHint is no
+// longer 100% accurate. This function will return the
+// position where the intended character is at.
+//
+// **r** is the JSHint object related to the error
+//
+// returns Number
   Code.prototype.getChr = function (r) {
     var lineNo = r.line;
+    // tabs are special, they count as two characters in text
+    // and as one character by the JSHint parser.
     var tabs = this.src[lineNo].split("\t");
 
+    // if there are tabs then indentation is important, we'll need to know
+    // how many characters each tab is supposed to be worth.
     return r.character - ((tabs.length - 1) * (r.config.indent - 1)) - 1;
   };
 
 
+// Fix Object
+// Contains all the methods that fix the various errors
   var fix = (function () {
+
+// These are helpers that a few of the errors share in common
     var helpers = {
+
+// Inserts a string within a string at a certain offset.
+//
+// **str** is the initial string
+// **offset** is a number where we'll be inserting
+// **newstr** is the string that will be inserted
+//
+// returns the modified String
       insertIntoString: function (str, offset, newstr) {
         var part1 = str.substr(0, offset);
         var part2 = str.substr(offset);
@@ -31,26 +69,47 @@
         return part1 + newstr + part2;
       },
 
+// Removes a certain character from the string
+//
+// **str** is the string
+// **pos** is the position in the string we'll be removing
+//
+// returns the modified String
       rmFromString: function (str, pos) {
         return str.slice(0, pos) + "".substr(0, 1) + "".slice(1) + str.slice(pos + 1);
       }
     };
 
+// The following are the methods that make the fixes.
+// Each method is responsible for fixing one error.
+//
+// All methods have the same parameters
+// **str** is the string to fix
+// **o** is the JSHint object which holds the error information
+// **code** is the current Code object
+//
+// returns String
     var Fix = {
+
+// Adds a semicolon at the position specified by JSHint
       addSemicolon: function (str, o, code) {
         var chr = code.getChr(o);
         return helpers.insertIntoString(str, chr, ";");
       },
+
+// Adds a space at the position specified by JSHint
       addSpace: function (str, o, code) {
         var chr = code.getChr(o);
         return helpers.insertIntoString(str, chr, " ");
       },
+
+// If a var is already defined `shadow` then we remove the var.
       alreadyDefined: function (str, o) {
         var a = o.a;
         var rx = new RegExp("(.*)(var " + a + ")");
-        var exec = "",
-            incorrect = "",
-            replacement = "";
+        var exec = "";
+        var incorrect = "";
+        var replacement = "";
 
         if (rx.test(str)) {
           exec = rx.exec(str);
@@ -60,9 +119,13 @@
 
         return str.replace(incorrect, replacement);
       },
+
+// Converts assignments from Object to Literal form.
       arrayLiteral: function (str) {
         return str.replace("new Array()", "[]");
       },
+
+// Converts from square bracket notation to dot notation.
       dotNotation: function (str, o) {
         var dot = o.a;
         var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
@@ -75,6 +138,8 @@
 
         return str;
       },
+
+// Immediate functions are executed within the parenthesis.
       immed: function (str) {
         var rx = /\)\((.*)\);/;
         var params;
@@ -86,6 +151,8 @@
 
         return str;
       },
+
+// Auto-indents.
       indent: function (str, o) {
         var indent = o.b;
         var config = o.config;
@@ -103,6 +170,8 @@
 
         return str;
       },
+
+// Adds parens to constructors missing them during invocation.
       invokeConstructor: function (str) {
         var rx = /new [a-zA-Z_$][0-9a-zA-Z_$]*\(/g;
         var result = str;
@@ -125,6 +194,8 @@
 
         return addInvocation(result);
       },
+
+// Adds a zero when there is a leading decimal.
       leadingDecimal: function (str) {
         var rx = /([\D])(\.[0-9]*)/;
 
@@ -137,6 +208,9 @@
 
         return str;
       },
+
+// Removes spaces or tabs (depending on preference) when
+// both are present on the same line.
       mixedSpacesNTabs: function (str, o) {
         var config = o.config;
         var spaces;
@@ -152,9 +226,13 @@
 
         return str;
       },
+
+// Converts assignments from Object to Literal form.
       objectLiteral: function (str) {
         return str.replace("new Object()", "{}");
       },
+
+// Uses isNaN function rather than comparing to NaN.
       useIsNaN: function (str) {
         var rx = /([a-zA-Z_$][0-9a-zA-Z_$]*)( )*(=|!)(=|==)( )*NaN/;
         var exec;
@@ -169,6 +247,8 @@
 
         return str;
       },
+
+// Adds radix parameter to parseInt statements.
       radix: function (str) {
         var rx = /parseInt\((.*)\)/;
         var exec;
@@ -181,22 +261,42 @@
 
         return str;
       },
+
+// Removes a Character from the String
       rmChar: function (str, o, code) {
         var chr = code.getChr(o);
         return helpers.rmFromString(str, chr);
       },
+
+// Removes debugger statements.
       rmDebugger: function () {
         return "";
       },
+
+// Removes undefined when variables are initialized to it.
       rmUndefined: function (str) {
         return str.replace(/( )*=( )*undefined/, "");
       },
+
+// Removes trailing whitespace.
       rmTrailingWhitespace: function (str) {
         return str.replace(/\s+$/g, "");
       },
+
+// Throws an error that too many errors were reported by JSHint.
+// JSHint has a maximum amount of errors it can handle before it barfs.
+// If we encounter this, we just throw and recommend that the applications
+// that use `fixmyjs` catch the error and either retry to fix the file or
+// ask the user what they would like to do.
+//
+// NOTE: In cases where there are many errors in the file the `TME` error
+// may be encountered and none of the errors reported are supported by fixmyjs
+// see: GH-31
       tme: function () {
         throw new Error("Too many errors reported by JSHint.");
       },
+
+// Removes a trailing decimal where not necessary.
       trailingDecimal: function (str) {
         var rx = /([0-9]*)\.(\D)/;
         var result;
@@ -214,8 +314,15 @@
   }());
 
 
+// The errors Object
   var errors = {};
 
+// DSL to generate the error fixing function.
+// First we apply the error to `errors` Object
+// Next, we set the priority which determines in which order
+// the error will be fixed.
+// Last, we pass the function responsible for fixing the error
+// along with the Object containing the error's details.
   function w(priority, err, fn) {
     errors[err] = {
       priority: priority,
@@ -225,6 +332,10 @@
     };
   }
 
+// All errors supported by fixmyjs.
+// **priority** Is the order in which the error will be fixed, lower is sooner.
+// **error** is a string describing the raw input of the error.
+// **fn** is the function which handles the fixing.
   w(0, "Extra comma.",                                                    fix.rmChar);
   w(0, "Missing semicolon.",                                              fix.addSemicolon);
   w(0, "Missing space after '{a}'.",                                      fix.addSpace);
@@ -248,33 +359,31 @@
   w(2, "Too many errors.",                                                fix.tme);
 
 
+// fixMyJS is part of the global object
   exports.fixMyJS = (function () {
-    // copies over the results into one of our own objects
+// copies over the results into one of our own objects
+// we decrement r.line by one becuse Arrays start at 0.
+// and we pass the config object to r.
     function copyResults(result, config) {
       var r = {};
-
-      // copy over
       Object.keys(result).forEach(function (key) {
         r[key] = result[key];
       });
-
-      // because Array's start at 0.
       r.line -= 1;
-
-      // pass the user config along with it
       r.config = config;
-
       return r;
     }
 
-    // checks if this error is fixable, and fixes it
+// Calls the function responsible for fixing the error passed.
     function fixError(r, code) {
-      // call fix function
-      if (errors.hasOwnProperty(r.raw)) {
-        errors[r.raw].fix(r, code);
-      }
+      errors[r.raw].fix(r, code);
     }
 
+// Function used in forEach which fixes all errors passed
+// **code** is the Code object
+// **config** is the config object
+// returns a function which when iterated it copies over the results
+// so we can mutate data later and then call fixError.
     function fixErrors(code, config) {
       return function (result) {
         var r = copyResults(result, config);
@@ -282,6 +391,11 @@
       };
     }
 
+// Used by fixMyJS function in order to sort the
+// errors in descending order by priority.
+// The logic is that if the priority matches
+// then we check the line, if that matches
+// we check the character and return in descending order.
     function byPriority(a, b) {
       var p1 = errors[a.raw].priority;
       var p2 = errors[b.raw].priority;
@@ -297,6 +411,13 @@
       }
     }
 
+// The fixMyJS function is what's returned to the
+// global object.
+//
+// **data** is the data from jshint.data()
+// **src** is the original src passed to JSHint
+//
+// returns an Object containing the API
     function fixMyJS(data, src) {
       var code = new Code(src);
       var results = data.errors || [];
@@ -304,7 +425,11 @@
       var dupes = {};
       var current = 0;
 
-      // filter out errors we don't support.
+// Filter out errors we don't support.
+// If the error is null then we immediately return false
+// Then we check for duplicate errors. Sometimes JSHint will complain
+// about the same thing twice. This is a safeguard.
+// Otherwise we return true if we support this error.
       results = results.filter(function (v) {
         if (!v) {
           return false;
@@ -314,28 +439,47 @@
         if (dupes.hasOwnProperty(err)) {
           return false;
         }
-
         dupes[err] = v;
 
         return errors.hasOwnProperty(v.raw);
       });
 
-      // sort errors.
+// sorts errors by priority.
       results.sort(byPriority);
 
+
+// fixMyJS API
+//
+// * getErrors
+// * getCode
+// * getConfig
+// * next
+//   * fix
+//   * getDetails
+// * run
       return {
+// returns are supported errors that can be fixed.
         getErrors: function () {
           return results.slice(0);
         },
 
+// returns the current state of the code.
         getCode: function () {
           return code.getCode();
         },
 
+// returns the config Object that JSHint used to
+// parse the code.
         getConfig: function () {
           return JSON.parse(JSON.stringify(config));
         },
 
+// Iterator method. Iterates through each error in the
+// Array and returns an Object with fix and getDetails methods.
+// if the end of the Array is reached then an error is thrown.
+//
+// fix function will fix the current error and return the state of the code.
+// getDetails will return the current error's details including the config object.
         next: function () {
           if (current >= results.length) {
             throw new Error("End of list.");
@@ -355,8 +499,9 @@
           return data;
         },
 
+// runs through all errors and fixes them.
+// returns the fixed code.
         run: function () {
-          // fix them.
           results.forEach(fixErrors(code, config));
           return code.getCode();
         }
@@ -367,9 +512,10 @@
     return fixMyJS;
   }());
 
+// for node.js
+// if module is available, we export to it.
   if (typeof module !== "undefined") {
     module.exports = exports.fixMyJS;
   }
 
 }.call(this));
-
