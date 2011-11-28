@@ -17,7 +17,7 @@ var options = {
   indentpref: "spaces", immed: true,
   lastsemic: false, laxbreak: true,
   maxerr: 500, shadow: false, sub: false,
-  supernew: false, white: true
+  supernew: false, trailing: true, white: true
 };
 
 // DSL for running a string against JSHint and passing off results

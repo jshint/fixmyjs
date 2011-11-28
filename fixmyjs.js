@@ -174,6 +174,9 @@
       rmUndefined: function (str) {
         return str.replace(/( )*=( )*undefined/, "");
       },
+      rmTrailingWhitespace: function (str) {
+        return str.replace(/\s+$/g, "");
+      },
       trailingDecimal: function (str) {
         var rx = /([0-9]*)\.(\D)/;
         var result;
@@ -287,6 +290,13 @@
       priority: 2,
       fix: function () {
         throw new Error("Too many errors reported by JSHint.");
+      }
+    },
+
+    "Trailing whitespace.": {
+      priority: 1,
+      fix: function (r, code) {
+        code.fix(fix.rmTrailingWhitespace, r.line);
       }
     },
 
