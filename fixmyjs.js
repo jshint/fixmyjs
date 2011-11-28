@@ -165,6 +165,18 @@
 
         return str;
       },
+      radix: function (str) {
+        var rx = /parseInt\((.*)\)/;
+        var exec;
+
+        if (rx.test(str)) {
+          exec = rx.exec(str);
+
+          str = str.replace(exec[0], "parseInt(" + exec[1] + ", 10)");
+        }
+
+        return str;
+      },
       rmChar: function (str, chr) {
         return helpers.rmFromString(str, chr);
       },
@@ -255,6 +267,13 @@
       priority: 1,
       fix: function (r, code) {
         code.fix(fix.invokeConstructor, r.line);
+      }
+    },
+
+    "Missing radix parameter.": {
+      priority: 1,
+      fix: function (r, code) {
+        code.fix(fix.radix, r.line);
       }
     },
 
