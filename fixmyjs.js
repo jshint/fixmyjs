@@ -233,6 +233,24 @@
         return str.replace("new Object()", "{}");
       },
 
+// Removes `new` when attempting to use a function not meant to
+// be a constructor.
+//
+// Uses RegEx to determine where the error occurs. If there's a match
+// then we extract the 1st and 2nd value of the result of the RegExp
+// execution, and use them in String replace.
+//
+// Example: `new Number(16)` -> `Number(16)`
+      objNoConstruct: function (str) {
+        var rx = /new (Number|String|Boolean|Math|JSON)/;
+        var exec;
+        if (rx.test(str)) {
+          exec = rx.exec(str);
+          str = str.replace(exec[0], exec[1]);
+        }
+        return str;
+      },
+
 // Uses isNaN function rather than comparing to NaN.
       useIsNaN: function (str) {
         var rx = /([a-zA-Z_$][0-9a-zA-Z_$]*)( )*(=|!)(=|==)( )*NaN/;
@@ -347,6 +365,7 @@
   w(1, "A leading decimal point can be confused with a dot: '.{a}'.",     fix.leadingDecimal);
   w(1, "A trailing decimal point can be confused with a dot '{a}'.",      fix.trailingDecimal);
   w(1, "All 'debugger' statements should be removed.",                    fix.rmDebugger);
+  w(1, "Do not use {a} as a constructor.",                                fix.objNoConstruct);
   w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",    fix.indent);
   w(1, "It is not necessary to initialize '{a}' to 'undefined'.",         fix.rmUndefined);
   w(1, "Missing '()' invoking a constructor.",                            fix.invokeConstructor);
