@@ -228,6 +228,22 @@
         return str;
       },
 
+// Removes `new` when it's used as a statement.
+// Only works if option `nonew` is set to true.
+//
+// Example: `new Ajax()` -> `Ajax()`
+      noNew: function (str) {
+        var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
+        var exec;
+        var rmnew = "";
+        if (rx.test(str)) {
+          exec = rx.exec(str);
+          rmnew = exec[0].replace("new ", "");
+          str = str.replace(exec[0], rmnew);
+        }
+        return str;
+      },
+
 // Converts assignments from Object to Literal form.
       objectLiteral: function (str) {
         return str.replace("new Object()", "{}");
@@ -366,6 +382,7 @@
   w(1, "A trailing decimal point can be confused with a dot '{a}'.",      fix.trailingDecimal);
   w(1, "All 'debugger' statements should be removed.",                    fix.rmDebugger);
   w(1, "Do not use {a} as a constructor.",                                fix.objNoConstruct);
+  w(1, "Do not use 'new' for side effects.",                              fix.noNew);
   w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",    fix.indent);
   w(1, "It is not necessary to initialize '{a}' to 'undefined'.",         fix.rmUndefined);
   w(1, "Missing '()' invoking a constructor.",                            fix.invokeConstructor);

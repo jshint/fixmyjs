@@ -16,7 +16,7 @@ var options = {
   debug: false, indent: 2,
   indentpref: "spaces", immed: true,
   lastsemic: false, laxbreak: true,
-  maxerr: 500, shadow: false, sub: false,
+  maxerr: 500, nonew: true, shadow: false, sub: false,
   supernew: false, trailing: true, white: true
 };
 
