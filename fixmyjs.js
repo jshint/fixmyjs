@@ -9,12 +9,9 @@
     return this.src.join("\n");
   };
 
-  Code.prototype.fix = function (fn, line) {
-    var args = Array.prototype.slice.call(arguments, 2);
-
-    args.unshift(this.src[line]);
-
-    this.src[line] = fn.apply(this, args);
+  Code.prototype.fix = function (fn, o) {
+    var line = o.line;
+    return (this.src[line] = fn.call(fn, this.src[line], o, this));
   };
 
   Code.prototype.getChr = function (r) {
@@ -40,13 +37,16 @@
     };
 
     var Fix = {
-      addSemicolon: function (str, chr) {
+      addSemicolon: function (str, o, code) {
+        var chr = code.getChr(o);
         return helpers.insertIntoString(str, chr, ";");
       },
-      addSpace: function (str, chr) {
+      addSpace: function (str, o, code) {
+        var chr = code.getChr(o);
         return helpers.insertIntoString(str, chr, " ");
       },
-      alreadyDefined: function (str, a) {
+      alreadyDefined: function (str, o) {
+        var a = o.a;
         var rx = new RegExp("(.*)(var " + a + ")");
         var exec = "",
             incorrect = "",
@@ -63,7 +63,8 @@
       arrayLiteral: function (str) {
         return str.replace("new Array()", "[]");
       },
-      dotNotation: function (str, dot) {
+      dotNotation: function (str, o) {
+        var dot = o.a;
         var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
         var sqbNotation;
 
@@ -85,7 +86,9 @@
 
         return str;
       },
-      indent: function (str, indent, config) {
+      indent: function (str, o) {
+        var indent = o.b;
+        var config = o.config;
         var ident;
         if (config.auto_indent === true && config.indentpref) {
           if (config.indentpref === "spaces") {
@@ -134,7 +137,8 @@
 
         return str;
       },
-      mixedSpacesNTabs: function (str, config) {
+      mixedSpacesNTabs: function (str, o) {
+        var config = o.config;
         var spaces;
         if (config.indentpref) {
           spaces = new Array(config.indent + 1).join(" ");
@@ -177,7 +181,8 @@
 
         return str;
       },
-      rmChar: function (str, chr) {
+      rmChar: function (str, o, code) {
+        var chr = code.getChr(o);
         return helpers.rmFromString(str, chr);
       },
       rmDebugger: function () {
@@ -188,6 +193,9 @@
       },
       rmTrailingWhitespace: function (str) {
         return str.replace(/\s+$/g, "");
+      },
+      tme: function () {
+        throw new Error("Too many errors reported by JSHint.");
       },
       trailingDecimal: function (str) {
         var rx = /([0-9]*)\.(\D)/;
@@ -206,154 +214,39 @@
   }());
 
 
-  var errors = {
-    "'{a}' is already defined.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.alreadyDefined, r.line, r.a);
-      }
-    },
+  var errors = {};
 
-    "['{a}'] is better written in dot notation.": {
-      priority: 1,
+  function w(priority, err, fn) {
+    errors[err] = {
+      priority: priority,
       fix: function (r, code) {
-        code.fix(fix.dotNotation, r.line, r.a);
+        return code.fix(fn, r);
       }
-    },
+    };
+  }
 
-    "A leading decimal point can be confused with a dot: '.{a}'.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.leadingDecimal, r.line);
-      }
-    },
+  w(0, "Extra comma.",                                                    fix.rmChar);
+  w(0, "Missing semicolon.",                                              fix.addSemicolon);
+  w(0, "Missing space after '{a}'.",                                      fix.addSpace);
+  w(0, "Unexpected space after '{a}'.",                                   fix.rmChar);
+  w(0, "Unnecessary semicolon.",                                          fix.rmChar);
+  w(1, "'{a}' is already defined.",                                       fix.alreadyDefined);
+  w(1, "['{a}'] is better written in dot notation.",                      fix.dotNotation);
+  w(1, "A leading decimal point can be confused with a dot: '.{a}'.",     fix.leadingDecimal);
+  w(1, "A trailing decimal point can be confused with a dot '{a}'.",      fix.trailingDecimal);
+  w(1, "All 'debugger' statements should be removed.",                    fix.rmDebugger);
+  w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",    fix.indent);
+  w(1, "It is not necessary to initialize '{a}' to 'undefined'.",         fix.rmUndefined);
+  w(1, "Missing '()' invoking a constructor.",                            fix.invokeConstructor);
+  w(1, "Missing radix parameter.",                                        fix.radix);
+  w(1, "Mixed spaces and tabs.",                                          fix.mixedSpacesNTabs);
+  w(1, "Move the invocation into the parens that contain the function.",  fix.immed);
+  w(1, "Trailing whitespace.",                                            fix.rmTrailingWhitespace);
+  w(1, "Use the isNaN function to compare with NaN.",                     fix.useIsNaN);
+  w(1, "Use the array literal notation [].",                              fix.arrayLiteral);
+  w(1, "Use the object literal notation {}.",                             fix.objectLiteral);
+  w(2, "Too many errors.",                                                fix.tme);
 
-    "A trailing decimal point can be confused with a dot '{a}'.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.trailingDecimal, r.line);
-      }
-    },
-
-    "All 'debugger' statements should be removed.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.rmDebugger, r.line);
-      }
-    },
-
-    "Expected '{a}' to have an indentation at {b} instead at {c}.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.indent, r.line, r.b, r.config);
-      }
-    },
-
-    "Extra comma.": {
-      priority: 0,
-      fix: function (r, code) {
-        code.fix(fix.rmChar, r.line, code.getChr(r));
-      }
-    },
-
-    "It is not necessary to initialize '{a}' to 'undefined'.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.rmUndefined, r.line);
-      }
-    },
-
-    "Missing '()' invoking a constructor.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.invokeConstructor, r.line);
-      }
-    },
-
-    "Missing radix parameter.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.radix, r.line);
-      }
-    },
-
-    "Missing semicolon.": {
-      priority: 0,
-      fix: function (r, code) {
-        code.fix(fix.addSemicolon, r.line, code.getChr(r));
-      }
-    },
-
-    "Missing space after '{a}'.": {
-      priority: 0,
-      fix: function (r, code) {
-        code.fix(fix.addSpace, r.line, code.getChr(r));
-      }
-    },
-
-    "Mixed spaces and tabs.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.mixedSpacesNTabs, r.line, r.config);
-      }
-    },
-
-    "Move the invocation into the parens that contain the function.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.immed, r.line);
-      }
-    },
-
-    "Too many errors.": {
-      priority: 2,
-      fix: function () {
-        throw new Error("Too many errors reported by JSHint.");
-      }
-    },
-
-    "Trailing whitespace.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.rmTrailingWhitespace, r.line);
-      }
-    },
-
-    "Unexpected space after '{a}'.": {
-      priority: 0,
-      fix: function (r, code) {
-        code.fix(fix.rmChar, r.line, code.getChr(r));
-      }
-    },
-
-    "Unnecessary semicolon.": {
-      priority: 0,
-      fix: function (r, code) {
-        code.fix(fix.rmChar, r.line, code.getChr(r));
-      }
-    },
-
-    "Use the isNaN function to compare with NaN.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.useIsNaN, r.line);
-      }
-    },
-
-    "Use the array literal notation [].": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.arrayLiteral, r.line);
-      }
-    },
-
-    "Use the object literal notation {}.": {
-      priority: 1,
-      fix: function (r, code) {
-        code.fix(fix.objectLiteral, r.line);
-      }
-    }
-  };
 
   exports.fixMyJS = (function () {
     // copies over the results into one of our own objects
