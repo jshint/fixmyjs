@@ -356,6 +356,22 @@
         }
 
         return str;
+      },
+
+// Wraps RegularExpression literals in parenthesis to
+// disambiguate the slash operator.
+//
+// Example: `return /hello/;` -> `return (/hello/);`
+      wrapRegExp: function (str) {
+        var rx = /\/(.*)\/\w?/;
+        var result;
+
+        if (rx.test(str)) {
+          result = rx.exec(str);
+          str = str.replace(rx, "(" + result[0] + ")");
+        }
+
+        return str;
       }
     };
 
@@ -385,30 +401,31 @@
 // **priority** Is the order in which the error will be fixed, lower is sooner.
 // **error** is a string describing the raw input of the error.
 // **fn** is the function which handles the fixing.
-  w(0, "Extra comma.",                                                    fix.rmChar);
-  w(0, "Missing semicolon.",                                              fix.addSemicolon);
-  w(0, "Missing space after '{a}'.",                                      fix.addSpace);
-  w(0, "Unexpected space after '{a}'.",                                   fix.rmChar);
-  w(0, "Unnecessary semicolon.",                                          fix.rmChar);
-  w(1, "'{a}' is already defined.",                                       fix.alreadyDefined);
-  w(1, "['{a}'] is better written in dot notation.",                      fix.dotNotation);
-  w(1, "A leading decimal point can be confused with a dot: '.{a}'.",     fix.leadingDecimal);
-  w(1, "A trailing decimal point can be confused with a dot '{a}'.",      fix.trailingDecimal);
-  w(1, "All 'debugger' statements should be removed.",                    fix.rmDebugger);
-  w(1, "Do not use {a} as a constructor.",                                fix.objNoConstruct);
-  w(1, "Do not use 'new' for side effects.",                              fix.noNew);
-  w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",    fix.indent);
-  w(1, "It is not necessary to initialize '{a}' to 'undefined'.",         fix.rmUndefined);
-  w(1, "Missing '()' invoking a constructor.",                            fix.invokeConstructor);
-  w(1, "Missing radix parameter.",                                        fix.radix);
-  w(1, "Mixed spaces and tabs.",                                          fix.mixedSpacesNTabs);
-  w(1, "Move the invocation into the parens that contain the function.",  fix.immed);
-  w(1, "Trailing whitespace.",                                            fix.rmTrailingWhitespace);
-  w(1, "Use the isNaN function to compare with NaN.",                     fix.useIsNaN);
-  w(1, "Use the array literal notation [].",                              fix.arrayLiteral);
-  w(1, "Use the object literal notation {}.",                             fix.objectLiteral);
-  w(1, "Variables should not be deleted.",                                fix.noDeleteVar);
-  w(2, "Too many errors.",                                                fix.tme);
+  w(0, "Extra comma.",                                                            fix.rmChar);
+  w(0, "Missing semicolon.",                                                      fix.addSemicolon);
+  w(0, "Missing space after '{a}'.",                                              fix.addSpace);
+  w(0, "Unexpected space after '{a}'.",                                           fix.rmChar);
+  w(0, "Unnecessary semicolon.",                                                  fix.rmChar);
+  w(1, "'{a}' is already defined.",                                               fix.alreadyDefined);
+  w(1, "['{a}'] is better written in dot notation.",                              fix.dotNotation);
+  w(1, "A leading decimal point can be confused with a dot: '.{a}'.",             fix.leadingDecimal);
+  w(1, "A trailing decimal point can be confused with a dot '{a}'.",              fix.trailingDecimal);
+  w(1, "All 'debugger' statements should be removed.",                            fix.rmDebugger);
+  w(1, "Do not use {a} as a constructor.",                                        fix.objNoConstruct);
+  w(1, "Do not use 'new' for side effects.",                                      fix.noNew);
+  w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",            fix.indent);
+  w(1, "It is not necessary to initialize '{a}' to 'undefined'.",                 fix.rmUndefined);
+  w(1, "Missing '()' invoking a constructor.",                                    fix.invokeConstructor);
+  w(1, "Missing radix parameter.",                                                fix.radix);
+  w(1, "Mixed spaces and tabs.",                                                  fix.mixedSpacesNTabs);
+  w(1, "Move the invocation into the parens that contain the function.",          fix.immed);
+  w(1, "Trailing whitespace.",                                                    fix.rmTrailingWhitespace);
+  w(1, "Use the isNaN function to compare with NaN.",                             fix.useIsNaN);
+  w(1, "Use the array literal notation [].",                                      fix.arrayLiteral);
+  w(1, "Use the object literal notation {}.",                                     fix.objectLiteral);
+  w(1, "Variables should not be deleted.",                                        fix.noDeleteVar);
+  w(1, "Wrap the /regexp/ literal in parens to disambiguate the slash operator.", fix.wrapRegExp);
+  w(2, "Too many errors.",                                                        fix.tme);
 
 
 // fixMyJS is part of the global object
