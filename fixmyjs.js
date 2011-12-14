@@ -92,19 +92,40 @@
 // returns String
     var Fix = {
 
-// Adds a semicolon at the position specified by JSHint
+// Adds a semicolon at the position specified by JSHint.
+//
+// For those that prefer to end their statements with
+// a semicolon fixmyjs will automatically insert a semicolon
+// wherever one is thought to be missing.
+//
+// Example:
+//
+// `var foo = 1` -> `var foo = 1;`
       addSemicolon: function (str, o, code) {
         var chr = code.getChr(o);
         return helpers.insertIntoString(str, chr, ";");
       },
 
-// Adds a space at the position specified by JSHint
+// Adds a space at the position specified by JSHint.
+//
+// Related to the `white` option in JSHint. It is
+// meant for beautifying code and adds spaces where
+// spaces are supposed to be according to certain
+// authorities of the language.
+//
+// Example:
+//
+// `var a = function(){}` -> `var a = function () {}`
       addSpace: function (str, o, code) {
         var chr = code.getChr(o);
         return helpers.insertIntoString(str, chr, " ");
       },
 
-// If a var is already defined `shadow` then we remove the var.
+// If a var is already defined, `shadow`, then we remove the var.
+//
+// Example:
+//
+// `var a = 1; var a = 2;` -> `var a = 1; a = 2`
       alreadyDefined: function (str, o) {
         var a = o.a;
         var rx = new RegExp("(.*)(var " + a + ")");
