@@ -148,6 +148,10 @@
       },
 
 // Converts from square bracket notation to dot notation.
+//
+// Example:
+//
+// `person['name']` -> `person.name`
       dotNotation: function (str, o) {
         var dot = o.a;
         var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
@@ -162,6 +166,10 @@
       },
 
 // Immediate functions are executed within the parenthesis.
+//
+// By wrapping immediate functions in parenthesis you indicate
+// that the expression is the result of a function and not the
+// function itself.
       immed: function (str) {
         var rx = /\)\((.*)\);/;
         var params;
@@ -174,7 +182,16 @@
         return str;
       },
 
-// Auto-indents.
+// Auto-indents. Based on your preferences of `spaces`
+// or `tabs`.
+//
+// fixmyjs will not automatically indent your code unless
+// you have the `indentpref` option set to your preference
+// and `auto_indent` is set to true in your `.jshintrc` file.
+//
+// You may also want to configure the `indent` option to the
+// desired amount of characters you wish to indent. The default
+// set by JSHint is four.
       indent: function (str, o) {
         var indent = o.b;
         var config = o.config;
@@ -218,6 +235,14 @@
       },
 
 // Adds a zero when there is a leading decimal.
+//
+// A leading decimal can be confusing if there isn't a
+// zero in front of it since the dot is used for calling
+// methods of an object. Plus it's easy to miss the dot.
+//
+// Example:
+//
+// `.5` -> `0.5`
       leadingDecimal: function (str) {
         var rx = /([\D])(\.[0-9]*)/;
 
@@ -303,6 +328,10 @@
       },
 
 // Uses isNaN function rather than comparing to NaN.
+//
+// It's the same reason you shouldn't compare with undefined.
+// NaN can be redefined. Although comparing to NaN is faster
+// than using the isNaN function.
       useIsNaN: function (str) {
         var rx = /([a-zA-Z_$][0-9a-zA-Z_$]*)( )*(=|!)(=|==)( )*NaN/;
         var exec;
@@ -319,6 +348,19 @@
       },
 
 // Adds radix parameter to parseInt statements.
+//
+// Although this parameter is optional, it's good practice
+// to add it so that the function won't assume the number is
+// octal.
+//
+// In the example below we have a sample Credit Card security
+// code which is padded by a zero. By adding the radix parameter
+// we are telling the compiler the base of the number is being
+// passed.
+//
+// Example:
+//
+// `parseInt(0420)` -> `parseInt(0420, 10)`
       radix: function (str) {
         var rx = /parseInt\((.*)\)/;
         var exec;
@@ -339,16 +381,28 @@
       },
 
 // Removes debugger statements.
+//
+// Debugger statements can be useful for debugging
+// but some browsers don't support them so they shouldn't
+// be in production.
       rmDebugger: function () {
         return "";
       },
 
 // Removes undefined when variables are initialized to it.
+//
+// It's not necessary to initialize variables to undefined since
+// they are already initialized to undefined by declaring them.
+//
+// Example:
+//
+// `var foo = undefined;` -> `var foo;`
       rmUndefined: function (str) {
         return str.replace(/( )*=( )*undefined/, "");
       },
 
-// Removes trailing whitespace.
+// Removes any whitespace at the end of the line.
+// Trailing whitespace sucks. It must die.
       rmTrailingWhitespace: function (str) {
         return str.replace(/\s+$/g, "");
       },
@@ -366,7 +420,11 @@
         throw new Error("Too many errors reported by JSHint.");
       },
 
-// Removes a trailing decimal where not necessary.
+// Removes a trailing decimal where it's not necessary.
+//
+// Example:
+//
+// `12.` -> `12`
       trailingDecimal: function (str) {
         var rx = /([0-9]*)\.(\D)/;
         var result;
