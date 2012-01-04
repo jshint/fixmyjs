@@ -1,6 +1,6 @@
 {
   "name": "fixmyjs",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Automatically fixes silly errors from jshint",
   "homepage": "http://fixmyjs.com",
   "author": {

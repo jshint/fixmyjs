@@ -622,6 +622,16 @@
           return JSON.parse(JSON.stringify(config));
         },
 
+// Iterator method. Returns Boolean if there is a next item
+//
+// Example:
+// while (af.hasNext()) {
+//   var a = af.next();
+// }
+        hasNext: function () {
+          return (current < results.length);
+        },
+
 // Iterator method. Iterates through each error in the
 // Array and returns an Object with fix and getDetails methods.
 // if the end of the Array is reached then an error is thrown.
@@ -629,7 +639,7 @@
 // fix function will fix the current error and return the state of the code.
 // getDetails will return the current error's details including the config object.
         next: function () {
-          if (current >= results.length) {
+          if (!this.hasNext()) {
             throw new Error("End of list.");
           }
 

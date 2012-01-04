@@ -22,7 +22,7 @@ var options = {
 
 // DSL for running a string against JSHint and passing off results
 // to fixmyjs. Returns an Object.
-var DSL = function (code, opts) {
+function DSL(code, opts) {
   code = code || "var foo = 1";
   opts = opts || options;
   var result = jshint(code, opts);
@@ -129,6 +129,27 @@ if (tests.length > 1) {
         assert.isObject(topic);
         assert.isFalse(topic.asi);
         assert.isTrue(topic.immed);
+      }
+    },
+
+    "hasNext() when testing if there is a next": {
+      topic: function () {
+        return DSL().hasNext();
+      },
+
+      "we get true since there is a next object": function (topic) {
+        assert.isTrue(topic);
+      }
+    },
+
+    "hasNext() when testing if there is a next": {
+      topic: function () {
+        return DSL();
+      },
+
+      "we get false since there is not a next object": function (topic) {
+        topic.next();
+        assert.isFalse(topic.hasNext());
       }
     },
 
