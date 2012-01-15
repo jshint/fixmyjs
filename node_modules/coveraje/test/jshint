@@ -1,0 +1,116 @@
+#!/usr/bin/env node
+
+(function () {
+    "use strict";
+    
+    //
+    // jshint the files
+    var jshint = require("jshint").JSHINT,
+        fs = require("fs"),
+        path = require("path");
+        
+    var headWritten = false;
+    function showhead() {
+        if (!headWritten) {
+            headWritten = true;
+            console.log("jshint errors");
+            console.log("-------------");
+        }
+    }
+    
+    
+    function test(file, options, globals) {
+        fs.readFile(file, 'utf-8', function (err, data) {
+            if (err) {
+                showhead();
+                console.log(file);
+                console.log("cannot load " + err);
+            } else {
+                if (path.extname(file) === "") {
+                    // if  no extension, only lint files with #! ... node
+                    if (data.length < 2 || data.substr(0, 2) !== "#!") {
+                        return;
+                    }
+                    var nidx = data.indexOf("node");
+                    
+                    if (nidx === -1 || nidx > data.indexOf("\n")) {
+                        return;
+                    }
+                }
+                
+                if (!jshint(data, options, globals)) {
+                    showhead();
+                    
+                    console.log(file);
+                    console.log(
+                        jshint.errors.map(function (el) {
+                            if (el) {
+                                return {line: el.line, msg: el.reason, code: el.evidence};
+                            }
+                        })
+                    );
+                    console.log("--------------");
+                }
+            }
+        });
+    }
+
+    function testFiles(folder, options, globals) {
+        folder = path.resolve(__dirname, folder);
+        fs.readdir(
+            folder,
+            function (err, files) {
+                if (err) return;
+                
+                var ops = {
+                    node: true,
+                    white: true,
+                    eqnull: true,
+                    multistr: true,
+                    plusplus: false,
+                    regexp: false,
+                    strict: true,
+                    
+                    bitwise: true,
+                    eqeqeqe: true,
+                    forin: true,
+                    immed: true,
+                    latedef: true,
+                    newcap: true,
+                    noarg: true,
+                    noempty: true,
+                    nonew: true,
+                    undef: true,
+                    trailing: true
+                };
+                
+                if (options) {
+                    for (var k in options) {
+                        if (options.hasOwnProperty(k)) {
+                            ops[k] = options[k];
+                        }
+                    }
+                }
+                
+                
+                var l = files.length;
+                for (var i = 0; i < l; i++) {
+                    var fp = path.join(folder, files[i]);
+                    var ext = path.extname(files[i]);
+                    if (fs.statSync(fp).isFile(fp) &&
+                        fp.substr(fp.length - 1) !== "~" &&
+                        (ext === ".js" || ext === ".json" || ext === "")) {
+                        test(fp, ops, globals);
+                    }
+                }
+            }
+        );
+    }
+    
+    testFiles("../");
+    testFiles("../lib");
+    testFiles("../examples");
+    testFiles("../lib/helper");
+    testFiles("../webserver");
+    testFiles("../test");
+}());

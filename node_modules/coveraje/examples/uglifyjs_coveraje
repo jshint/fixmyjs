@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+(function () {
+    "use strict";
+    
+    var coveraje = require("coveraje").coveraje,
+        fs = require("fs"),
+        path = require("path");
+    var rel = path.relative(process.cwd(), __dirname);
+    var filePath = path.resolve(path.join(rel, "../lib/parse-js.js"));
+    
+    function runTests(file, helper) {
+        return function (context) {
+            // hack: set cache value
+            require.cache[filePath] = {
+                id: filePath,
+                exports: context.exports,
+                loaded: true
+            };
+            
+            return coveraje.runHelper(helper).run(file);
+        };
+    }
+    
+    var tests = {
+        "testparser.js": runTests(path.join(rel, "testparser.js")),
+        "unit": runTests(path.join(rel, "unit/scripts.js"), "nodeunit")
+    };
+    
+    coveraje.cover(
+        function () {
+            // always read the content from disk, so changes can be refreshed in the browser
+            try {
+                return fs.readFileSync(filePath, 'utf-8');
+            } catch (ex) {
+                return "{ /*" + ex.message + "*/ }";
+            }
+        },
+        tests,
+        {
+            useServer: true,
+            globals: "node"
+        }
+    );
+}());

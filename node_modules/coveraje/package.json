@@ -1,0 +1,28 @@
+{
+    "name": "coveraje",
+    "description" : "a simple javascript code coverage tool",
+    "keywords": [
+        "code coverage",
+        "test coverage",
+        "javascript"
+    ],
+    "author": {
+        "name": "Wolfgang Kluge (klugesoftware.de gehirnwindung.de)"
+    },
+    "version": "0.1.1",
+    "preferGlobal": true,
+    "main": "./lib/node-coveraje.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/coveraje/coveraje"
+    },
+    "dependencies": {
+        "uglify-js": ">=1.2"
+    },
+    "devDependencies": {
+        "jshint": ">=0.4"
+    },
+    "engines": {
+        "node": ">=0.4"
+    }
+}
