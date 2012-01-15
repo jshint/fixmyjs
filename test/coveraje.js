@@ -7,12 +7,21 @@ var useServer = (process.argv[2] === 'server');
 var tests = [];
 
 var options = {
-  asi: false, auto_indent: false,
-  debug: false, indent: 2,
-  indentpref: "spaces", immed: true,
-  lastsemic: false, laxbreak: true,
-  maxerr: 500, nonew: true, shadow: false, sub: false,
-  supernew: false, trailing: true, white: true
+  asi: false,
+  auto_indent: false,
+  debug: false,
+  indent: 2,
+  indentpref: "spaces",
+  immed: true,
+  lastsemic: false,
+  laxbreak: true,
+  maxerr: 500,
+  nonew: true,
+  shadow: false,
+  sub: false,
+  supernew: false,
+  trailing: true,
+  white: true
 };
 
 
@@ -21,6 +30,38 @@ function DSL(self, code, opts) {
   opts = opts || options;
   var result = jshint(code, opts);
   return self.fixMyJS(jshint.data(), code);
+}
+
+function reporter(done) {
+  var runtime = done.runtime;
+  var data = runtime.reportData();
+  var cl = 0;
+  var clt = 0;
+  var vlt = 0;
+  var vl = 0;
+  var total = 0;
+
+  vl = data.visited.length;
+  cl += vl;
+
+  if (vl > 0) {
+    vlt = data.visited.filter(runtime.visit.isTested).length;
+    clt += vlt;
+  }
+
+  vl = data.branches.length;
+  cl += vl;
+
+  if (vl > 0) {
+    vlt = data.branches.filter(runtime.branch.isTested).length;
+    clt += vlt;
+  }
+
+  total = (clt / cl * 100).toFixed(2);
+
+  console.log('Coverage:', total + '%');
+
+  process.exit(total < 90);
 }
 
 // Loop through each test and add a topic. Prepare for coveraje.
@@ -135,4 +176,4 @@ coverage.cover(fs.readFileSync(__dirname + '/../fixmyjs.js', 'utf-8'), function 
   tests.forEach(function (test) {
     test(self);
   });
-}, { useServer: useServer }, function () { console.log('Done'); });
+}, { useServer: useServer, quiet: true }, reporter);
