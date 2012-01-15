@@ -13,9 +13,6 @@
     "type": "MIT",
     "url": "http://josh.mit-license.org"
   },
-  "devDependencies": {
-    "vows": "0.5.x"
-  },
   "scripts": {
     "test": "test/auto.sh"
   }
