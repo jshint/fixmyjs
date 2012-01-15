@@ -3,16 +3,11 @@
 test:
 	@vows test/index-test.js --spec
 
-coverage: clean cover
-
 docs:
 	@docco fixmyjs.js
 
-cover:
-	@jscoverage . /tmp/jscoverage --exclude=node_modules --exclude=packages --exclude=tests && \
-	mv /tmp/jscoverage . && \
-	vows test/index-test.js --cover-html && \
-	google-chrome coverage.html
+coverage:
+	@node test/coveraje.js
 
-clean:
-	@rm -rf jscoverage && rm -f coverage.html
+coverage-server:
+	@node test/coveraje.js server
