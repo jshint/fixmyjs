@@ -3,6 +3,7 @@ var assert = require('assert');
 var jshint = require('../packages/jshint/jshint').JSHINT;
 var jsdiff = require('./lib/jsdiff');
 var fs = require('fs');
+var fixmyjs = require('../fixmyjs');
 
 // An Array of tests to run.
 var tests;
@@ -12,12 +13,21 @@ var specs = {};
 
 // These are the options fixmyjs supports.
 var options = {
-  asi: false, auto_indent: false,
-  debug: false, indent: 2,
-  indentpref: "spaces", immed: true,
-  lastsemic: false, laxbreak: true,
-  maxerr: 500, nonew: true, shadow: false, sub: false,
-  supernew: false, trailing: true, white: true
+  asi: false,
+  auto_indent: false,
+  debug: false,
+  indent: 2,
+  indentpref: "spaces",
+  immed: true,
+  lastsemic: false,
+  laxbreak: true,
+  maxerr: 500,
+  nonew: true,
+  shadow: false,
+  sub: false,
+  supernew: false,
+  trailing: true,
+  white: true
 };
 
 // DSL for running a string against JSHint and passing off results
@@ -27,7 +37,7 @@ function DSL(code, opts) {
   opts = opts || options;
   var result = jshint(code, opts);
   return fixmyjs(jshint.data(), code);
-};
+}
 
 // Allows single tests to be ran.
 // Otherwise it reads the directory `fixtures/broken` for all tests.
@@ -36,10 +46,6 @@ if (process.argv[1].indexOf("vows") === -1 && process.argv[2]) {
 } else {
   tests = fs.readdirSync(__dirname + "/fixtures/broken/");
 }
-
-// Determines whether we use the instrumented version
-// of fixmyjs or the regular version.
-var fixmyjs = require((process.argv[3] && process.argv[3].indexOf("--cover") !== -1) ? '../jscoverage/fixmyjs' : '../fixmyjs');
 
 
 // Loop through each test and add a topic. Prepare for vows.
@@ -142,7 +148,7 @@ if (tests.length > 1) {
       }
     },
 
-    "hasNext() when testing if there is a next": {
+    "hasNext() when testing if there is a next item": {
       topic: function () {
         return DSL();
       },
