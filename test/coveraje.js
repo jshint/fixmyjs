@@ -61,7 +61,9 @@ function reporter(done) {
 
   console.log('Coverage:', total + '%');
 
-  process.exit(total < 90);
+  if (!useServer) {
+    process.exit(total < 90);
+  }
 }
 
 // Loop through each test and add a topic. Prepare for coveraje.
