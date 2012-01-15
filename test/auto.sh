@@ -1,2 +1,3 @@
+#!/bin/bash
 vows --spec
-node test/coveraje.js
+#node test/coveraje.js
