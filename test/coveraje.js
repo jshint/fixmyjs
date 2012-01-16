@@ -32,32 +32,9 @@ function DSL(self, code, opts) {
   return self.fixMyJS(jshint.data(), code);
 }
 
-function reporter(done) {
-  var runtime = done.runtime;
-  var data = runtime.reportData();
-  var cl = 0;
-  var clt = 0;
-  var vlt = 0;
-  var vl = 0;
-  var total = 0;
-
-  vl = data.visited.length;
-  cl += vl;
-
-  if (vl > 0) {
-    vlt = data.visited.filter(runtime.visit.isTested).length;
-    clt += vlt;
-  }
-
-  vl = data.branches.length;
-  cl += vl;
-
-  if (vl > 0) {
-    vlt = data.branches.filter(runtime.branch.isTested).length;
-    clt += vlt;
-  }
-
-  total = (clt / cl * 100).toFixed(2);
+function reporter(instance) {
+  var results = instance.runtime.getResults();
+  var total = results.total;
 
   console.log('Coverage:', total + '%');
 
