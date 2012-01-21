@@ -17,6 +17,6 @@
     "vows": "0.5.x"
   },
   "scripts": {
-    "test": "test/auto.sh"
+    "test": "test/bin/travis-ci"
   }
 }

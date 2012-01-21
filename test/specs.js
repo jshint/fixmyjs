@@ -1,18 +1,31 @@
+/*global fixMyJS: true */
 var vows = require('vows');
 var assert = require('assert');
 var jshint = require('../packages/jshint/jshint').JSHINT;
 var jsdiff = require('./lib/jsdiff');
 var fs = require('fs');
-var fixmyjs = require('../fixmyjs');
 
-// An Array of tests to run.
-var tests;
+if (typeof fixMyJS === 'undefined') {
+  fixMyJS = require('../fixmyjs');
+}
 
-// The specs object.
-var specs = {};
+var Test = function Test() {
+  this.specs = {};
+};
+
+
+// DSL for running a string against JSHint and passing off results
+// to fixmyjs. Returns an Object.
+function DSL(code, opts) {
+  code = code || "var foo = 1";
+  opts = opts || Test.options;
+  var result = jshint(code, opts);
+  return fixMyJS(jshint.data(), code);
+}
+
 
 // These are the options fixmyjs supports.
-var options = {
+Test.options = {
   asi: false,
   auto_indent: false,
   debug: false,
@@ -30,30 +43,11 @@ var options = {
   white: true
 };
 
-// DSL for running a string against JSHint and passing off results
-// to fixmyjs. Returns an Object.
-function DSL(code, opts) {
-  code = code || "var foo = 1";
-  opts = opts || options;
-  var result = jshint(code, opts);
-  return fixmyjs(jshint.data(), code);
-}
-
-// Allows single tests to be ran.
-// Otherwise it reads the directory `fixtures/broken` for all tests.
-if (process.argv[1].indexOf("vows") === -1 && process.argv[2]) {
-  tests = [process.argv[2]];
-} else {
-  tests = fs.readdirSync(__dirname + "/fixtures/broken/");
-}
-
-
-// Loop through each test and add a topic. Prepare for vows.
-tests.forEach(function (test) {
+Test.prototype.addTest = function (test) {
   var file_n = __dirname + "/fixtures/broken/" + test;
   var file_y = __dirname + "/fixtures/ok/" + test;
 
-  var opts = options;
+  var opts = Test.options;
 
   // special case tests where options need to be different.
   if (test === "autoindentspaces.js") {
@@ -88,11 +82,33 @@ tests.forEach(function (test) {
   };
 
   // Adds individual spec into group of specs.
-  specs[test] = spec;
-});
+  this.specs[test] = spec;
+};
 
-if (tests.length > 1) {
-  specs.api = {
+
+// Allows single tests to be ran.
+// Otherwise it reads the directory `fixtures/broken` for all tests.
+//
+// returns this.specs
+Test.prototype.addFiles = function (files) {
+  if (typeof files === 'undefined') {
+    files = fs.readdirSync(__dirname + '/fixtures/broken/');
+  }
+
+  if (!Array.isArray(files)) {
+    files = [files];
+  }
+
+  // Loop through each test and add a topic. Prepare for vows.
+  files.forEach(this.addTest.bind(this));
+
+  return this.specs;
+};
+
+// Adds API related tests to the runner
+// is only called if we're running all unit tests
+Test.prototype.addTests = function () {
+  this.specs.api = {
     "when too many errors are encountered": {
       topic: function () {
         return DSL(fs.readFileSync(__dirname + "/fixtures/toomanyerrors.js", "utf-8")).run;
@@ -210,7 +226,19 @@ if (tests.length > 1) {
       }
     }
   };
-}
+};
 
 // Export to vows.
-vows.describe("jshint-autofix").addBatch(specs).export(module);
+module.exports = {
+  run: function (fn, cb) {
+    var test = this.test;
+    test.addFiles();
+    test.addTests();
+
+    fixMyJS = fn;
+
+    vows.describe('fixmyjs').addBatch(test.specs).run({}, cb);
+  },
+
+  test: new Test()
+};

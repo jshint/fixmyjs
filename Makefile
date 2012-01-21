@@ -1,13 +1,13 @@
 .PHONY: test docs coverage
 
 test:
-	@vows test/index-test.js --spec
+	@vows --spec
 
 docs:
 	@docco fixmyjs.js
 
 coverage:
-	@node test/coveraje.js
+	@node test/travis-ci.js
 
 coverage-server:
-	@node test/coveraje.js server
+	@node test/travis-ci.js server
