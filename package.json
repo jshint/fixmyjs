@@ -14,9 +14,10 @@
     "url": "http://josh.mit-license.org"
   },
   "devDependencies": {
-    "vows": "0.5.x"
+    "vows": "0.5.x",
+    "koala-t": "latest"
   },
   "scripts": {
-    "test": "test/bin/travis-ci"
+    "test": "koala-t"
   }
 }

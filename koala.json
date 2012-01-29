@@ -1,0 +1,6 @@
+{
+  "lint": ["fixmyjs.js"],
+  "test": ["test/koala.js"],
+  "coverage": "fixmyjs.js",
+  "percentage": 90
+}
