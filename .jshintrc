@@ -16,6 +16,7 @@
   "maxerr": 50,
   "newcap": true,
   "noarg": true,
+  "node": true,
   "noempty": false,
   "nonew": true,
   "nomen": false,
