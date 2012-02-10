@@ -14,7 +14,8 @@
     "url": "http://josh.mit-license.org"
   },
   "devDependencies": {
-    "koala-t": "latest"
+    "koala-t": "latest",
+    "vows": "latest"
   },
   "scripts": {
     "prepublish": "docco fixmyjs.js",
