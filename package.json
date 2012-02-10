@@ -14,9 +14,11 @@
     "url": "http://josh.mit-license.org"
   },
   "devDependencies": {
-    "vows": "0.5.x"
+    "koala-t": "latest",
+    "vows": "latest"
   },
   "scripts": {
-    "test": "test/bin/travis-ci"
+    "prepublish": "docco fixmyjs.js",
+    "test": "koala-t"
   }
 }
