@@ -1,6 +1,6 @@
 # fixmyjs || jshint-autofix
 
-[![Build Status](https://secure.travis-ci.org/goatslacker/jshint-autofix.png)](http://travis-ci.org/goatslacker/jshint-autofix)
+[![Build Status](https://secure.travis-ci.org/goatslacker/fixmyjs.png)](http://travis-ci.org/goatslacker/fixmyjs)
 
 Meant to automatically fix your lint errors in a non-destructive way.
 
