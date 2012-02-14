@@ -360,7 +360,7 @@
 //
 // Example:
 //
-// `parseInt(0420)` -> `parseInt(0420, 10)`
+// `parseInt('0420')` -> `parseInt('0420', 10)`
       radix: function (str) {
         var rx = /parseInt\((.*)\)/;
         var exec;
