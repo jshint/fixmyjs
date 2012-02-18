@@ -624,7 +624,7 @@
 //   * fix
 //   * getDetails
 // * run
-      return {
+      var api = {
 // returns are supported errors that can be fixed.
         getErrors: function () {
           return results.slice(0);
@@ -684,6 +684,7 @@
         }
       };
 
+      return api;
     }
 
     return fixMyJS;
