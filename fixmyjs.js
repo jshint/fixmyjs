@@ -126,6 +126,7 @@
 // Example:
 //
 // `var a = 1; var a = 2;` -> `var a = 1; a = 2`
+//+ alreadyDefined :: String -> { a: Number } -> String
       alreadyDefined: function (str, o) {
         var a = o.a;
         var rx = new RegExp("(.*)(var " + a + ")");
@@ -143,6 +144,7 @@
       },
 
 // Converts assignments from Object to Literal form.
+//+ arrayLiteral :: String -> String
       arrayLiteral: function (str) {
         return str.replace("new Array()", "[]");
       },
@@ -152,6 +154,7 @@
 // Example:
 //
 // `person['name']` -> `person.name`
+//+ dotNotation :: String -> { a: Number } -> String
       dotNotation: function (str, o) {
         var dot = o.a;
         var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
@@ -170,6 +173,7 @@
 // By wrapping immediate functions in parenthesis you indicate
 // that the expression is the result of a function and not the
 // function itself.
+//+ immed :: String -> String
       immed: function (str) {
         var rx = /\)\((.*)\);/;
         var params;
@@ -192,6 +196,7 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
+//+ indent :: String -> { config: { b: Number, indent: Number } } -> String
       indent: function (str, o) {
         var indent = o.b;
         var config = o.config;
@@ -211,6 +216,7 @@
       },
 
 // Adds parens to constructors missing them during invocation.
+//+ invokeConstructor :: String -> String
       invokeConstructor: function (str) {
         var rx = /new [a-zA-Z_$][0-9a-zA-Z_$]*\(/g;
         var result = str;
@@ -243,6 +249,7 @@
 // Example:
 //
 // `.5` -> `0.5`
+//+ leadingDecimal :: String -> String
       leadingDecimal: function (str) {
         var rx = /([\D])(\.[0-9]*)/;
 
@@ -258,6 +265,7 @@
 
 // Removes spaces or tabs (depending on preference) when
 // both are present on the same line.
+//+ mixedSpacesAndTabs :: String -> { config: { indentpref: String, indent: Number } } -> String
       mixedSpacesNTabs: function (str, o) {
         var config = o.config;
         var spaces;
@@ -278,6 +286,7 @@
 // and instead set the variable to undefined.
 //
 // Example: `delete foo;` -> `foo = undefined;`
+//+ noDeleteVar :: String -> String
       noDeleteVar: function (str) {
         var rx = /delete ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
         var exec;
@@ -292,6 +301,7 @@
 // Only works if option `nonew` is set to true.
 //
 // Example: `new Ajax()` -> `Ajax()`
+//+ noNew :: String -> String
       noNew: function (str) {
         var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
         var exec;
@@ -305,6 +315,7 @@
       },
 
 // Converts assignments from Object to Literal form.
+//+ objectLiteral :: String -> String
       objectLiteral: function (str) {
         return str.replace("new Object()", "{}");
       },
@@ -317,6 +328,7 @@
 // execution, and use them in String replace.
 //
 // Example: `new Number(16)` -> `Number(16)`
+//+ objNoConstruct :: String -> String
       objNoConstruct: function (str) {
         var rx = /new (Number|String|Boolean|Math|JSON)/;
         var exec;
@@ -332,6 +344,7 @@
 // It's the same reason you shouldn't compare with undefined.
 // NaN can be redefined. Although comparing to NaN is faster
 // than using the isNaN function.
+//+ useIsNaN :: String -> String
       useIsNaN: function (str) {
         var rx = /([a-zA-Z_$][0-9a-zA-Z_$]*)( )*(=|!)(=|==)( )*NaN/;
         var exec;
@@ -360,7 +373,8 @@
 //
 // Example:
 //
-// `parseInt(0420)` -> `parseInt(0420, 10)`
+// `parseInt('0420')` -> `parseInt('0420', 10)`
+//+ radix :: String -> String
       radix: function (str) {
         var rx = /parseInt\((.*)\)/;
         var exec;
@@ -385,6 +399,7 @@
 // Debugger statements can be useful for debugging
 // but some browsers don't support them so they shouldn't
 // be in production.
+//+ rmDebugger :: String
       rmDebugger: function () {
         return "";
       },
@@ -397,12 +412,14 @@
 // Example:
 //
 // `var foo = undefined;` -> `var foo;`
+//+ rmUndefined :: String -> String
       rmUndefined: function (str) {
         return str.replace(/( )*=( )*undefined/, "");
       },
 
 // Removes any whitespace at the end of the line.
 // Trailing whitespace sucks. It must die.
+//+ rmTrailingWhitespace :: String -> String
       rmTrailingWhitespace: function (str) {
         return str.replace(/\s+$/g, "");
       },
@@ -425,6 +442,7 @@
 // Example:
 //
 // `12.` -> `12`
+//+ trailingDecimal :: String -> String
       trailingDecimal: function (str) {
         var rx = /([0-9]*)\.(\D)/;
         var result;
@@ -441,6 +459,7 @@
 // disambiguate the slash operator.
 //
 // Example: `return /hello/;` -> `return (/hello/);`
+//+ wrapRegExp :: String -> String
       wrapRegExp: function (str) {
         var rx = /\/(.*)\/\w?/;
         var result;
@@ -605,7 +624,7 @@
 //   * fix
 //   * getDetails
 // * run
-      return {
+      var api = {
 // returns are supported errors that can be fixed.
         getErrors: function () {
           return results.slice(0);
@@ -665,6 +684,7 @@
         }
       };
 
+      return api;
     }
 
     return fixMyJS;
