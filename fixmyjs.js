@@ -126,7 +126,6 @@
 // Example:
 //
 // `var a = 1; var a = 2;` -> `var a = 1; a = 2`
-//+ alreadyDefined :: String -> { a: Number } -> String
       alreadyDefined: function (str, o) {
         var a = o.a;
         var rx = new RegExp("(.*)(var " + a + ")");
@@ -154,7 +153,6 @@
 // Example:
 //
 // `person['name']` -> `person.name`
-//+ dotNotation :: String -> { a: Number } -> String
       dotNotation: function (str, o) {
         var dot = o.a;
         var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
@@ -196,7 +194,6 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
-//+ indent :: String -> { config: { b: Number, indent: Number } } -> String
       indent: function (str, o) {
         var indent = o.b;
         var config = o.config;
