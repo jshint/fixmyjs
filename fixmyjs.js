@@ -126,7 +126,6 @@
 // Example:
 //
 // `var a = 1; var a = 2;` -> `var a = 1; a = 2`
-//+ alreadyDefined :: String -> { a: Number } -> String
       alreadyDefined: function (str, o) {
         var a = o.a;
         var rx = new RegExp("(.*)(var " + a + ")");
@@ -154,7 +153,6 @@
 // Example:
 //
 // `person['name']` -> `person.name`
-//+ dotNotation :: String -> { a: Number } -> String
       dotNotation: function (str, o) {
         var dot = o.a;
         var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
@@ -196,7 +194,6 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
-//+ indent :: String -> { config: { b: Number, indent: Number } } -> String
       indent: function (str, o) {
         var indent = o.b;
         var config = o.config;
@@ -587,7 +584,9 @@
 // returns an Object containing the API
     function fixMyJS(data, src) {
       var code = new Code(src);
-      var results = data.errors || [];
+      var warnings = data.errors || [];
+      var results = [];
+      var unfixable = [];
       var config = data.options || {};
       var dupes = {};
       var current = 0;
@@ -597,18 +596,24 @@
 // Then we check for duplicate errors. Sometimes JSHint will complain
 // about the same thing twice. This is a safeguard.
 // Otherwise we return true if we support this error.
-      results = results.filter(function (v) {
+      results = warnings.filter(function (v) {
         if (!v) {
           return false;
         }
 
         var err = "line" + v.line + "char" + v.character + "reason" + v.reason;
+
         if (dupes.hasOwnProperty(err)) {
           return false;
         }
         dupes[err] = v;
 
-        return errors.hasOwnProperty(v.raw);
+        if (!errors.hasOwnProperty(v.raw)) {
+          unfixable.push(v);
+          return false;
+        }
+
+        return true;
       });
 
 // sorts errors by priority.
@@ -618,6 +623,8 @@
 // fixMyJS API
 //
 // * getErrors
+// * getAllErrors
+// * getUnsupportedErrors
 // * getCode
 // * getConfig
 // * next
@@ -628,6 +635,14 @@
 // returns are supported errors that can be fixed.
         getErrors: function () {
           return results.slice(0);
+        },
+
+        getAllErrors: function () {
+          return warnings.slice(0);
+        },
+
+        getUnsupportedErrors: function () {
+          return unfixable.slice(0);
         },
 
 // returns the current state of the code.
