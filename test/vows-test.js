@@ -97,14 +97,45 @@ specs.api = {
   },
 
   // Testing for the API of fixmyjs.
-  "getErrors() when retrieving all errors": {
+  "when retrieving errors": {
     topic: function () {
-      return DSL().getErrors();
+      return DSL("function foo() { return a = c }");
     },
 
-    "we get an Array of all the errors": function (topic) {
-      assert.isArray(topic);
-      assert.equal(topic.length, 1);
+    "and retrieving all fixable errors": {
+      topic: function (t) {
+        return t.getErrors();
+      },
+      "we get an Array": function (topic) {
+        assert.isArray(topic);
+      },
+      "there is 1 fixable error in the list": function (topic) {
+        assert.equal(topic.length, 1);
+      }
+    },
+
+    "and retrieving all errors": {
+      topic: function (t) {
+        return t.getAllErrors();
+      },
+      "we get an Array of all the errors": function (topic) {
+        assert.isArray(topic);
+      },
+      "there are 2 errors in the list": function (topic) {
+        assert.equal(topic.length, 2);
+      }
+    },
+
+    "and retrieving all unfixable errors": {
+      topic: function (t) {
+        return t.getUnsupportedErrors();
+      },
+      "we get an Array of all the errors": function (topic) {
+        assert.isArray(topic);
+      },
+      "there is 1 unsupported error in the list": function (topic) {
+        assert.equal(topic.length, 1);
+      }
     }
   },
 
@@ -205,3 +236,4 @@ specs.api = {
 };
 
 vows.describe('fixmyjs').addBatch(specs).export(module);
+
