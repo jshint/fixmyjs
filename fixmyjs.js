@@ -586,7 +586,6 @@
       var code = new Code(src);
       var warnings = data.errors || [];
       var results = [];
-      var unfixable = [];
       var config = data.options || {};
       var dupes = {};
       var current = 0;
@@ -608,12 +607,7 @@
         }
         dupes[err] = v;
 
-        if (!errors.hasOwnProperty(v.raw)) {
-          unfixable.push(v);
-          return false;
-        }
-
-        return true;
+        return (v.fixable = errors.hasOwnProperty(v.raw));
       });
 
 // sorts errors by priority.
@@ -624,7 +618,6 @@
 //
 // * getErrors
 // * getAllErrors
-// * getUnsupportedErrors
 // * getCode
 // * getConfig
 // * next
@@ -639,10 +632,6 @@
 
         getAllErrors: function () {
           return warnings.slice(0);
-        },
-
-        getUnsupportedErrors: function () {
-          return unfixable.slice(0);
         },
 
 // returns the current state of the code.
@@ -693,9 +682,21 @@
 
 // runs through all errors and fixes them.
 // returns the fixed code.
-        run: function () {
-          results.forEach(fixErrors(code, config));
-          return code.getCode();
+//
+// **returnErrors** Boolean - true if you'd like an Array of all errors
+// with the proposed fix.
+//
+// returns the code String || an Array of JSHint errors.
+        run: function (returnErrors) {
+          if (returnErrors) {
+            warnings.forEach(function (v) {
+              v.fixable && (v.fix = fixError(copyResults(v, config), code));
+            });
+            return this.getAllErrors();
+          } else {
+            results.forEach(fixErrors(code, config));
+            return code.getCode();
+          }
         }
       };
 

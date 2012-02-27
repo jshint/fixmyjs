@@ -124,18 +124,6 @@ specs.api = {
       "there are 2 errors in the list": function (topic) {
         assert.equal(topic.length, 2);
       }
-    },
-
-    "and retrieving all unfixable errors": {
-      topic: function (t) {
-        return t.getUnsupportedErrors();
-      },
-      "we get an Array of all the errors": function (topic) {
-        assert.isArray(topic);
-      },
-      "there is 1 unsupported error in the list": function (topic) {
-        assert.equal(topic.length, 1);
-      }
     }
   },
 
