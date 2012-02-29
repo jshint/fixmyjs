@@ -124,6 +124,18 @@ specs.api = {
       "there are 2 errors in the list": function (topic) {
         assert.equal(topic.length, 2);
       }
+    },
+
+    "run and return errors": {
+      topic: function (t) {
+        return t.run(true);
+      },
+      "we get an Array of all the errors": function (topic) {
+        assert.isArray(topic);
+      },
+      "there are 2 errors in the list": function (topic) {
+        assert.equal(topic.length, 2);
+      }
     }
   },
 
