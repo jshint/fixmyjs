@@ -540,7 +540,7 @@
 
 // Calls the function responsible for fixing the error passed.
     function fixError(r, code) {
-      errors[r.raw].fix(r, code);
+      return errors[r.raw].fix(r, code);
     }
 
 // Function used in forEach which fixes all errors passed

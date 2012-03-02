@@ -135,6 +135,20 @@ specs.api = {
       },
       "there are 2 errors in the list": function (topic) {
         assert.equal(topic.length, 2);
+      },
+
+      "when we iterate over one of the errors": {
+        topic: function (topic) {
+          return topic.pop();
+        },
+
+        "should have property fixable": function (topic) {
+          assert.isNotNull(topic.fixable);
+        },
+
+        "should have proposed fix": function (topic) {
+          assert.isString(topic.fix);
+        }
       }
     }
   },
