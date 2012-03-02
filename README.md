@@ -10,7 +10,7 @@ For the website see https://github.com/goatslacker/fixmyjs.com
 
 ## How to Install CLI
 
-    npm install fixmyjs
+    npm install fixmyjs -g
 
 ## Website
 
@@ -47,6 +47,21 @@ http://fixmyjs.com allows you to use this tool on the web.
 * Moves the invocation of a function within it's parenthesis `(function () { })()` -> `(function () { }())`
 
 * Extra comma `var a = [1,,2];` -> `var a = [1,2];`
+
+## Developing on fixmyjs
+
+Fork the repo. I welcome contributions.
+
+    git clone git://github.com/jshint/fixmyjs.git && cd fixmyjs
+    git submodule init && git submodule update
+    npm install
+
+### Coding style
+
+* Indent 2 spaces
+* Single quotes > Double quotes
+* Write tests
+* Code must pass `npm test`
 
 # License
 

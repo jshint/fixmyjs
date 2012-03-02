@@ -6,14 +6,14 @@
 // This object is what manipulates the code that's passed
 // to be fixed.
   var Code = function (src) {
-    this.src = src.split("\n");
+    this.src = src.split('\n');
   };
 
 // Retrieves the code that was stored in the Object
 //
 // returns String
   Code.prototype.getCode = function () {
-    return this.src.join("\n");
+    return this.src.join('\n');
   };
 
 // The fix method fixes a certain line in the code.
@@ -43,7 +43,7 @@
 // how many characters each tab is supposed to be worth.
   Code.prototype.getChr = function (r) {
     var lineNo = r.line;
-    var tabs = this.src[lineNo].split("\t");
+    var tabs = this.src[lineNo].split('\t');
 
     return r.character - ((tabs.length - 1) * (r.config.indent - 1)) - 1;
   };
@@ -77,7 +77,7 @@
 //
 // returns the modified String
       rmFromString: function (str, pos) {
-        return str.slice(0, pos) + "".substr(0, 1) + "".slice(1) + str.slice(pos + 1);
+        return str.slice(0, pos) + ''.substr(0, 1) + ''.slice(1) + str.slice(pos + 1);
       }
     };
 
@@ -103,7 +103,7 @@
 // `var foo = 1` -> `var foo = 1;`
       addSemicolon: function (str, o, code) {
         var chr = code.getChr(o);
-        return helpers.insertIntoString(str, chr, ";");
+        return helpers.insertIntoString(str, chr, ';');
       },
 
 // Adds a space at the position specified by JSHint.
@@ -118,7 +118,7 @@
 // `var a = function(){}` -> `var a = function () {}`
       addSpace: function (str, o, code) {
         var chr = code.getChr(o);
-        return helpers.insertIntoString(str, chr, " ");
+        return helpers.insertIntoString(str, chr, ' ');
       },
 
 // If a var is already defined, `shadow`, then we remove the var.
@@ -128,14 +128,14 @@
 // `var a = 1; var a = 2;` -> `var a = 1; a = 2`
       alreadyDefined: function (str, o) {
         var a = o.a;
-        var rx = new RegExp("(.*)(var " + a + ")");
-        var exec = "";
-        var incorrect = "";
-        var replacement = "";
+        var rx = new RegExp('(.*)(var ' + a + ')');
+        var exec = '';
+        var incorrect = '';
+        var replacement = '';
 
         if (rx.test(str)) {
           exec = rx.exec(str);
-          incorrect = str.replace(exec[1], "");
+          incorrect = str.replace(exec[1], '');
           replacement = incorrect.replace(exec[2], a);
         }
 
@@ -145,7 +145,7 @@
 // Converts assignments from Object to Literal form.
 //+ arrayLiteral :: String -> String
       arrayLiteral: function (str) {
-        return str.replace("new Array()", "[]");
+        return str.replace('new Array()', '[]');
       },
 
 // Converts from square bracket notation to dot notation.
@@ -155,7 +155,7 @@
 // `person['name']` -> `person.name`
       dotNotation: function (str, o) {
         var dot = o.a;
-        var rx = new RegExp("\\[[\"']" + dot + "[\"']\\]");
+        var rx = new RegExp('\\[[\'"]' + dot + '[\'"]\\]');
         var sqbNotation;
 
         if (rx.test(str)) {
@@ -178,7 +178,7 @@
 
         if (rx.test(str)) {
           params = rx.exec(str);
-          str = str.replace(params[0], "(" + params[1] + "));");
+          str = str.replace(params[0], '(' + params[1] + '));');
         }
 
         return str;
@@ -199,9 +199,9 @@
         var config = o.config;
         var ident;
         if (config.auto_indent === true && config.indentpref) {
-          if (config.indentpref === "spaces") {
+          if (config.indentpref === 'spaces') {
             str = new Array(indent).join(" ") + str.trim();
-          } else if (config.indentpref === "tabs") {
+          } else if (config.indentpref === 'tabs') {
             ident = (indent + 1) / config.indent;
             if (ident > 0) {
               str = new Array(ident).join("\t") + str.trim();
@@ -224,14 +224,14 @@
 
           if (rx.test(tmp)) {
             res = rx.exec(tmp).shift();
-            str = str.replace(res, res + "()");
+            str = str.replace(res, res + '()');
           }
 
           return str;
         }
 
         if (rx.test(str)) {
-          result = str.replace(rx, "");
+          result = str.replace(rx, '');
         }
 
         return addInvocation(result);
@@ -254,7 +254,7 @@
 
         if (rx.test(str)) {
           result = rx.exec(str);
-          str = str.replace(rx, result[1] + "0" + result[2]);
+          str = str.replace(rx, result[1] + '0' + result[2]);
         }
 
         return str;
@@ -269,10 +269,10 @@
         if (config.indentpref) {
           spaces = new Array(config.indent + 1).join(" ");
 
-          if (config.indentpref === "spaces") {
+          if (config.indentpref === 'spaces') {
             str = str.replace(/\t/g, spaces);
-          } else if (config.indentpref === "tabs") {
-            str = str.replace(new RegExp(spaces, "g"), "\t");
+          } else if (config.indentpref === 'tabs') {
+            str = str.replace(new RegExp(spaces, 'g'), '\t');
           }
         }
 
@@ -289,7 +289,7 @@
         var exec;
         if (rx.test(str)) {
           exec = rx.exec(str);
-          str = str.replace(exec[0], exec[1] + " = undefined");
+          str = str.replace(exec[0], exec[1] + ' = undefined');
         }
         return str;
       },
@@ -302,10 +302,10 @@
       noNew: function (str) {
         var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
         var exec;
-        var rmnew = "";
+        var rmnew = '';
         if (rx.test(str)) {
           exec = rx.exec(str);
-          rmnew = exec[0].replace("new ", "");
+          rmnew = exec[0].replace('new ', '');
           str = str.replace(exec[0], rmnew);
         }
         return str;
@@ -314,7 +314,7 @@
 // Converts assignments from Object to Literal form.
 //+ objectLiteral :: String -> String
       objectLiteral: function (str) {
-        return str.replace("new Object()", "{}");
+        return str.replace('new Object()', '{}');
       },
 
 // Removes `new` when attempting to use a function not meant to
@@ -350,7 +350,7 @@
           exec = rx.exec(str);
 
           if (exec) {
-            str = str.replace(exec[0], (exec[3] === "!" ? "!": "") + "isNaN(" + exec[1] + ")");
+            str = str.replace(exec[0], (exec[3] === '!' ? '!': '') + 'isNaN(' + exec[1] + ')');
           }
         }
 
@@ -379,7 +379,7 @@
         if (rx.test(str)) {
           exec = rx.exec(str);
 
-          str = str.replace(exec[0], "parseInt(" + exec[1] + ", 10)");
+          str = str.replace(exec[0], 'parseInt(' + exec[1] + ', 10)');
         }
 
         return str;
@@ -398,7 +398,7 @@
 // be in production.
 //+ rmDebugger :: String
       rmDebugger: function () {
-        return "";
+        return '';
       },
 
 // Removes undefined when variables are initialized to it.
@@ -411,14 +411,14 @@
 // `var foo = undefined;` -> `var foo;`
 //+ rmUndefined :: String -> String
       rmUndefined: function (str) {
-        return str.replace(/( )*=( )*undefined/, "");
+        return str.replace(/( )*=( )*undefined/, '');
       },
 
 // Removes any whitespace at the end of the line.
 // Trailing whitespace sucks. It must die.
 //+ rmTrailingWhitespace :: String -> String
       rmTrailingWhitespace: function (str) {
-        return str.replace(/\s+$/g, "");
+        return str.replace(/\s+$/g, '');
       },
 
 // Throws an error that too many errors were reported by JSHint.
@@ -431,7 +431,7 @@
 // may be encountered and none of the errors reported are supported by fixmyjs
 // see: GH-31
       tme: function () {
-        throw new Error("Too many errors reported by JSHint.");
+        throw new Error('Too many errors reported by JSHint.');
       },
 
 // Removes a trailing decimal where it's not necessary.
@@ -463,7 +463,7 @@
 
         if (rx.test(str)) {
           result = rx.exec(str);
-          str = str.replace(rx, "(" + result[0] + ")");
+          str = str.replace(rx, '(' + result[0] + ')');
         }
 
         return str;
@@ -600,7 +600,7 @@
           return false;
         }
 
-        var err = "line" + v.line + "char" + v.character + "reason" + v.reason;
+        var err = 'line' + v.line + 'char' + v.character + 'reason' + v.reason;
 
         if (dupes.hasOwnProperty(err)) {
           return false;
@@ -663,7 +663,7 @@
 // getDetails will return the current error's details including the config object.
         next: function () {
           if (!this.hasNext()) {
-            throw new Error("End of list.");
+            throw new Error('End of list.');
           }
 
           var r = copyResults(results[current], config);
@@ -708,7 +708,7 @@
 
 // for node.js
 // if module is available, we export to it.
-  if (typeof module !== "undefined") {
+  if (typeof module !== 'undefined') {
     module.exports = exports.fixMyJS;
   }
 
