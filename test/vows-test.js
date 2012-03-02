@@ -126,15 +126,29 @@ specs.api = {
       }
     },
 
-    "and retrieving all unfixable errors": {
+    "run and return errors": {
       topic: function (t) {
-        return t.getUnsupportedErrors();
+        return t.run(true);
       },
       "we get an Array of all the errors": function (topic) {
         assert.isArray(topic);
       },
-      "there is 1 unsupported error in the list": function (topic) {
-        assert.equal(topic.length, 1);
+      "there are 2 errors in the list": function (topic) {
+        assert.equal(topic.length, 2);
+      },
+
+      "when we iterate over one of the errors": {
+        topic: function (topic) {
+          return topic.pop();
+        },
+
+        "should have property fixable": function (topic) {
+          assert.isNotNull(topic.fixable);
+        },
+
+        "should have proposed fix": function (topic) {
+          assert.isString(topic.fix);
+        }
       }
     }
   },
