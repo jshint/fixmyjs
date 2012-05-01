@@ -248,7 +248,7 @@
 // `.5` -> `0.5`
 //+ leadingDecimal :: String -> String
       leadingDecimal: function (str) {
-        var rx = /([\D])(\.[0-9]*)/;
+        var rx = /([\D])(\.[0-9]+)/;
 
         var result;
 
