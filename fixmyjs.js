@@ -373,15 +373,19 @@
 // `parseInt('0420')` -> `parseInt('0420', 10)`
 //+ radix :: String -> String
       radix: function (str) {
-        var rx = /parseInt\((.*)\)/;
+        var rx = /parseInt\(([^,\)\(]+)\)/;
+        var offset = 0;
         var exec;
 
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-
-          str = str.replace(exec[0], 'parseInt(' + exec[1] + ', 10)');
+        while ((exec = rx.exec(str.substr(offset))) !== null) {
+          var limit = exec.index + exec[0].length;
+          var newCode = 'parseInt(' + exec[1] + ', 10)';
+          var result = str.substr(0, exec.index + offset)
+                        + newCode
+                        + str.substr(limit + offset);
+          str = result;
+          offset = exec.index + offset + newCode.length;
         }
-
         return str;
       },
 
@@ -441,7 +445,7 @@
 // `12.` -> `12`
 //+ trailingDecimal :: String -> String
       trailingDecimal: function (str) {
-        var rx = /([0-9]*)\.(\D)/;
+        var rx = /([0-9]+)\.(\D)/;
         var result;
 
         if (rx.test(str)) {
