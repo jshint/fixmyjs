@@ -13,3 +13,5 @@ function foo() {
 function bar() {
 	return 2;
 }
+foo = 1
+delete bar;

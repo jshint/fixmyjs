@@ -103,6 +103,11 @@
 // `var foo = 1` -> `var foo = 1;`
       addSemicolon: function (str, o, code) {
         var chr = code.getChr(o);
+        //Protect against JSHINT bug: https://github.com/jshint/jshint/issues/387
+        var offset = chr - 'delete'.length;
+        if (offset > -1 && str.substr(offset, chr) === 'delete') {
+          return str;
+        }
         return helpers.insertIntoString(str, chr, ';');
       },
 
