@@ -104,7 +104,7 @@
       addSemicolon: function (str, o, code) {
         var chr = code.getChr(o);
         //Protect against JSHINT bug: https://github.com/jshint/jshint/issues/387
-        var offset = chr - 'delete'.length;
+        var offset = chr - 6;
         if (offset > -1 && str.substr(offset, chr) === 'delete') {
           return str;
         }
@@ -714,6 +714,8 @@
 
     return fixMyJS;
   }());
+
+  exports.fixMyJS.version = '0.6.0';
 
 // for node.js
 // if module is available, we export to it.
