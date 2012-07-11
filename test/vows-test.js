@@ -237,6 +237,21 @@ specs.api = {
     }
   },
 
+  "next().fixVerbose() when fixing an item": {
+    topic: function () {
+      return DSL().next().fixVerbose();
+    },
+
+    "expect an Object with the original and replacement": function (topic) {
+      console.log('wtf');
+      assert.isObject(topic);
+      assert.deepEqual(topic, {
+        original: "var foo = 1",
+        replacement: "var foo = 1;"
+      });
+    }
+  },
+
   "next().next() when getting to the end of the list.": {
     topic: function () {
       return DSL();

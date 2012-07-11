@@ -7,6 +7,7 @@
 // to be fixed.
   var Code = function (src) {
     this.src = src.split('\n');
+    this._src = this.src.slice(0);
   };
 
 // Retrieves the code that was stored in the Object
@@ -680,6 +681,12 @@
             fix: function () {
               fixError(r, code);
               return code.getCode();
+            },
+            fixVerbose: function () {
+              return {
+                original: code._src[r.line],
+                replacement: fixError(r, code)
+              };
             },
             getDetails: function () {
               return JSON.parse(JSON.stringify(r));
