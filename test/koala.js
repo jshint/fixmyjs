@@ -214,6 +214,19 @@ specs.api = {
       topic.next();
       assert.throws(topic.next, Error);
     }
+  },
+
+  "runVerbose": {
+    topic: function () {
+      return DSL().runVerbose();
+    },
+
+    "should receive an Array with a set of original and replacement code": function (topic) {
+      assert.isTrue(Array.isArray(topic));
+      assert.isObject(topic[0]);
+      assert.equal(topic[0].original, "var foo = 1");
+      assert.equal(topic[0].replacement, "var foo = 1;");
+    }
   }
 };
 

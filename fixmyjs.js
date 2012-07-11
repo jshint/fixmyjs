@@ -716,6 +716,24 @@
             results.forEach(fixErrors(code, config));
             return code.getCode();
           }
+        },
+
+        runVerbose: function () {
+          var lint = [];
+          var dup = {};
+          var next;
+          while (api.hasNext()) {
+            next = api.next();
+            lint.push(copyResults(next.fixVerbose(), next.getDetails()));
+          }
+          return lint.reverse().filter(function (x) {
+            if (dup.hasOwnProperty(x.original)) {
+              return false;
+            }
+            x.line = x.config.line;
+            dup[x.original] = x;
+            return true;
+          });
         }
       };
 
