@@ -705,10 +705,13 @@
 // returns the code String || an Array of JSHint errors.
         run: function (returnErrors) {
           if (returnErrors) {
-            warnings.forEach(function (v) {
-              v.fixable && (v.fix = fixError(copyResults(v, config), code));
-            });
-            return this.getAllErrors();
+            return warnings
+              .slice(0)
+              .sort(byPriority)
+              .map(function (v) {
+                v.fixable && (v.fix = fixError(copyResults(v, config), code));
+                return v;
+              });
           } else {
             results.forEach(fixErrors(code, config));
             return code.getCode();
