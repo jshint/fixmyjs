@@ -571,8 +571,14 @@
 // then we check the line, if that matches
 // we check the character and return in descending order.
     function byPriority(a, b) {
-      var p1 = errors[a.raw].priority;
-      var p2 = errors[b.raw].priority;
+//      if (!a.fixable || !b.fixable) {
+//        return a;
+//      }
+      var p1 = errors[a.raw] ? errors[a.raw].priority : -1;
+      var p2 = errors[b.raw] ? errors[b.raw].priority : -1;
+
+//      var p1 = errors[a.raw].priority;
+//      var p2 = errors[b.raw].priority;
 
       if (p1 === p2) {
         if (a.line === b.line) {
@@ -704,6 +710,7 @@
 //
 // returns the code String || an Array of JSHint errors.
         run: function (returnErrors) {
+          var dup = {};
           if (returnErrors) {
             return warnings
               .slice(0)
@@ -711,7 +718,17 @@
               .map(function (v) {
                 v.fixable && (v.fix = fixError(copyResults(v, config), code));
                 return v;
-              });
+              })
+              .reverse()
+              .filter(function (x) {
+                var key = x.evidence + x.reason;
+                if (dup.hasOwnProperty(key)) {
+                  return false;
+                }
+                dup[key] = x;
+                return true;
+              })
+              .reverse();
           } else {
             results.forEach(fixErrors(code, config));
             return code.getCode();
