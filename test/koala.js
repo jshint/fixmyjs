@@ -216,6 +216,20 @@ specs.api = {
     }
   },
 
+  "filterErrors": {
+    topic: function () {
+      return DSL();
+    },
+    "should receive same input code": function (topic) {
+      topic.filterErrors(function (x) {
+        return false; // don't fix any errors
+      });
+
+      var code = topic.run();
+      assert.equal(code, "var foo = 1");
+    }
+  },
+
   "runVerbose": {
     topic: function () {
       return DSL().runVerbose();

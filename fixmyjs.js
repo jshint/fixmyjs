@@ -603,31 +603,40 @@
       var warnings = data.errors || [];
       var results = [];
       var config = data.options || {};
-      var dupes = {};
       var current = 0;
 
+
+      function resetResults() {
+        var dupes = {};
 // Filter out errors we don't support.
 // If the error is null then we immediately return false
 // Then we check for duplicate errors. Sometimes JSHint will complain
 // about the same thing twice. This is a safeguard.
 // Otherwise we return true if we support this error.
-      results = warnings.filter(function (v) {
-        if (!v) {
-          return false;
-        }
+        results = warnings.filter(function (v) {
+          if (!v) {
+            return false;
+          }
 
-        var err = 'line' + v.line + 'char' + v.character + 'reason' + v.reason;
+          var err = 'line' + v.line + 'char' + v.character + 'reason' + v.reason;
 
-        if (dupes.hasOwnProperty(err)) {
-          return false;
-        }
-        dupes[err] = v;
+          if (dupes.hasOwnProperty(err)) {
+            return false;
+          }
+          dupes[err] = v;
 
-        return (v.fixable = errors.hasOwnProperty(v.raw));
-      });
+          if (v.hasOwnProperty('fixable')) {
+            return v.fixable;
+          }
+
+          return (v.fixable = errors.hasOwnProperty(v.raw));
+        });
 
 // sorts errors by priority.
-      results.sort(byPriority);
+        results.sort(byPriority);
+      }
+
+      resetResults();
 
 
 // fixMyJS API
@@ -702,6 +711,15 @@
           return data;
         },
 
+        filterErrors: function (fn) {
+          warnings = warnings.map(function (w) {
+            w.fixable = fn(w);
+            return w;
+          });
+          resetResults();
+          return warnings.slice(0);
+        },
+
 // runs through all errors and fixes them.
 // returns the fixed code.
 //
@@ -710,7 +728,6 @@
 //
 // returns the code String || an Array of JSHint errors.
         run: function (returnErrors) {
-          var dup = {};
           if (returnErrors) {
             return warnings
               .slice(0)
@@ -718,17 +735,7 @@
               .map(function (v) {
                 v.fixable && (v.fix = fixError(copyResults(v, config), code));
                 return v;
-              })
-              .reverse()
-              .filter(function (x) {
-                var key = x.evidence + x.reason;
-                if (dup.hasOwnProperty(key)) {
-                  return false;
-                }
-                dup[key] = x;
-                return true;
-              })
-              .reverse();
+              });
           } else {
             results.forEach(fixErrors(code, config));
             return code.getCode();
