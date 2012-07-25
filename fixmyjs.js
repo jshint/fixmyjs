@@ -127,27 +127,6 @@
         return helpers.insertIntoString(str, chr, ' ');
       },
 
-// If a var is already defined, `shadow`, then we remove the var.
-//
-// Example:
-//
-// `var a = 1; var a = 2;` -> `var a = 1; a = 2`
-      alreadyDefined: function (str, o) {
-        var a = o.a;
-        var rx = new RegExp('(.*)(var ' + a + ')');
-        var exec = '';
-        var incorrect = '';
-        var replacement = '';
-
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-          incorrect = str.replace(exec[1], '');
-          replacement = incorrect.replace(exec[2], a);
-        }
-
-        return str.replace(incorrect, replacement);
-      },
-
 // Converts assignments from Object to Literal form.
 //+ arrayLiteral :: String -> String
       arrayLiteral: function (str) {
@@ -528,7 +507,6 @@
   w(0, "Missing space after '{a}'.",                                              fix.addSpace);
   w(0, "Unexpected space after '{a}'.",                                           fix.rmChar);
   w(0, "Unnecessary semicolon.",                                                  fix.rmChar);
-  w(1, "'{a}' is already defined.",                                               fix.alreadyDefined);
   w(1, "['{a}'] is better written in dot notation.",                              fix.dotNotation);
   w(1, "A leading decimal point can be confused with a dot: '.{a}'.",             fix.leadingDecimal);
   w(1, "A trailing decimal point can be confused with a dot '{a}'.",              fix.trailingDecimal);
