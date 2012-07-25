@@ -44,7 +44,7 @@ function addTest(test) {
   var opts = options;
 
   // special case tests where options need to be different.
-  if (test === "autoindentspaces.js") {
+  if (test === "autoindentspaces.js" || test === "gh-56.js") {
     opts = { white: true, indent: 2, indentpref: "spaces", auto_indent: true };
   } else if (test === "autoindenttabs.js") {
     opts = { white: true, indent: 2, indentpref: "tabs", auto_indent: true };

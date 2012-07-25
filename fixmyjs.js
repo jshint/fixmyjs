@@ -202,17 +202,28 @@
 // set by JSHint is four.
       indent: function (str, o) {
         var indent = o.b;
+        var found = o.c;
         var config = o.config;
-        var ident;
+        var tabs;
+        var whitespace;
         if (config.auto_indent === true && config.indentpref) {
-          if (config.indentpref === 'spaces') {
-            str = new Array(indent).join(" ") + str.trim();
-          } else if (config.indentpref === 'tabs') {
-            ident = (indent + 1) / config.indent;
-            if (ident > 0) {
-              str = new Array(ident).join("\t") + str.trim();
+          switch (config.indentpref) {
+          case 'spaces':
+            whitespace = new Array(indent).join(" ");
+            break;
+          case 'tabs':
+            tabs = (indent + 1) / config.indent;
+            if (tabs > 0) {
+              whitespace = new Array(tabs).join("\t");
             }
+            break;
           }
+
+          if (found > 1 && !/^[\s]+$/.test(str.slice(0, found))) {
+            return str;
+          }
+
+          str = whitespace + str.trim();
         }
 
         return str;
