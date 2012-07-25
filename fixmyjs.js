@@ -200,12 +200,13 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
-      indent: function (str, o) {
+      indent: function (str, o, code) {
         var indent = o.b;
-        var found = o.c;
+        var found = o.c - 1;
         var config = o.config;
         var tabs;
         var whitespace;
+        var cutstr;
         if (config.auto_indent === true && config.indentpref) {
           switch (config.indentpref) {
           case 'spaces':
@@ -219,8 +220,13 @@
             break;
           }
 
-          if (found > 1 && !/^[\s]+$/.test(str.slice(0, found))) {
-            return str;
+          cutstr = str.slice(0, found);
+
+          // if the whitespace 'fix' should be on a newline
+          if (found > 1 && !/^[\s]+$/.test(cutstr)) {
+            // mutates the line count
+            code.src.splice(o.line + 1, 0, whitespace + str.slice(found).trim());
+            return cutstr.replace(/\s+$/, "");
           }
 
           str = whitespace + str.trim();
