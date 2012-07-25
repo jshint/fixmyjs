@@ -25,7 +25,9 @@
 // returns the fixed line as a String
   Code.prototype.fix = function (fn, o) {
     var line = o.line;
-    return (this.src[line] = fn.call(fn, this.src[line], o, this));
+    var result = fn.call(fn, this.src[line], o, this);
+    this.src.splice.apply(this.src, [line, 1].concat(result.split("\n")));
+    return result;
   };
 
 // This function keeps track of character changes.
@@ -200,7 +202,7 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
-      indent: function (str, o, code) {
+      indent: function (str, o) {
         var indent = o.b;
         var found = o.c - 1;
         var config = o.config;
@@ -225,8 +227,7 @@
           // if the whitespace 'fix' should be on a newline
           if (found > 1 && !/^[\s]+$/.test(cutstr)) {
             // mutates the line count
-            code.src.splice(o.line + 1, 0, whitespace + str.slice(found).trim());
-            return cutstr.replace(/\s+$/, "");
+            return cutstr.replace(/\s+$/, "") + "\n" + whitespace + str.slice(found).trim();
           }
 
           str = whitespace + str.trim();
