@@ -1,7 +1,7 @@
 /*global fixMyJS: true */
 var vows = require('vows');
 var assert = require('assert');
-var jshint = require('../packages/jshint/jshint').JSHINT;
+var jshint = require('jshint').JSHINT;
 var jsdiff = require('./lib/jsdiff');
 var fs = require('fs');
 

@@ -15,6 +15,7 @@
     "url": "http://josh.mit-license.org"
   },
   "devDependencies": {
+    "jshint": "latest",
     "koala-t": "latest",
     "vows": "latest"
   },
