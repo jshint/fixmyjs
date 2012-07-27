@@ -1,6 +1,6 @@
 {
   "name": "fixmyjs",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Automatically fixes silly errors from jshint",
   "homepage": "http://fixmyjs.com",
   "author": "Josh Perez <josh@goatslacker.com> (http://github.com/goatslacker)",
