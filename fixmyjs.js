@@ -87,7 +87,10 @@
 //
 // returns the modified String
       rmFromString: function (str, pos) {
-        return str.slice(0, pos) + ''.substr(0, 1) + ''.slice(1) + str.slice(pos + 1);
+        return str.slice(0, pos) +
+          ''.substr(0, 1) +
+          ''.slice(1) +
+          str.slice(pos + 1);
       }
     };
 
@@ -113,7 +116,8 @@
 // `var foo = 1` -> `var foo = 1;`
       addSemicolon: function (str, o, code) {
         var chr = code.getChr(o);
-        //Protect against JSHINT bug: https://github.com/jshint/jshint/issues/387
+        // Protect against JSHINT bug:
+        // https://github.com/jshint/jshint/issues/387
         var offset = chr - 6;
         if (offset > -1 && str.substr(offset, chr) === 'delete') {
           return str;
@@ -218,7 +222,9 @@
           // if the whitespace 'fix' should be on a newline
           if (found > 1 && !/^[\s]+$/.test(cutstr)) {
             // mutates the line count
-            return cutstr.replace(/\s+$/, "") + "\n" + whitespace + str.slice(found).trim();
+            return cutstr.replace(/\s+$/, "") +
+              "\n" + whitespace +
+              str.slice(found).trim();
           }
 
           str = whitespace + str.trim();
@@ -261,7 +267,6 @@
 
 // Removes spaces or tabs (depending on preference) when
 // both are present on the same line.
-//+ mixedSpacesAndTabs :: String -> { config: { indentpref: String, indent: Number } } -> String
       mixedSpacesNTabs: function (str, o) {
         var config = o.config;
         var spaces;
@@ -346,7 +351,10 @@
           exec = rx.exec(str);
 
           if (exec) {
-            str = str.replace(exec[0], (exec[3] === '!' ? '!': '') + 'isNaN(' + exec[1] + ')');
+            str = str.replace(
+              exec[0],
+              (exec[3] === '!' ? '!': '') + 'isNaN(' + exec[1] + ')'
+            );
           }
         }
 
@@ -607,13 +615,19 @@
 // **src** is the original src passed to JSHint
 //
 // returns an Object containing the API
-    function fixMyJS(data, src) {
+    function fixMyJS(data, src, options) {
       var code = new Code(src);
       var warnings = data.errors || [];
       var results = [];
       var config = data.options || {};
       var current = 0;
 
+// merge custom options into config
+      if (options) {
+        Object.keys(options).forEach(function (option) {
+          config[option] = options[option];
+        });
+      }
 
       function resetResults() {
         var dupes = {};
@@ -627,7 +641,9 @@
             return false;
           }
 
-          var err = 'line' + v.line + 'char' + v.character + 'reason' + v.reason;
+          var err = 'line' + v.line +
+                    'char' + v.character +
+                    'reason' + v.reason;
 
           if (dupes.hasOwnProperty(err)) {
             return false;
@@ -653,7 +669,6 @@
 // * getErrors
 // * getAllErrors
 // * getCode
-// * getConfig
 // * next
 //   * fix
 //   * getDetails
@@ -673,12 +688,6 @@
           return code.getCode();
         },
 
-// returns the config Object that JSHint used to
-// parse the code.
-        getConfig: function () {
-          return JSON.parse(JSON.stringify(config));
-        },
-
 // Iterator method. Returns Boolean if there is a next item
 //
 // Example:
@@ -694,7 +703,7 @@
 // if the end of the Array is reached then an error is thrown.
 //
 // fix function will fix the current error and return the state of the code.
-// getDetails will return the current error's details including the config object.
+// getDetails will return a prototype of the current error's details
         next: function () {
           if (!this.hasNext()) {
             throw new Error('End of list.');
@@ -713,7 +722,7 @@
               };
             },
             getDetails: function () {
-              return JSON.parse(JSON.stringify(r));
+              return Object.create(r);
             }
           };
           current += 1;
@@ -776,7 +785,7 @@
     return fixMyJS;
   }());
 
-  exports.fixMyJS.version = '0.6.4';
+  exports.fixMyJS.version = '0.7.0';
 
 // for node.js
 // if module is available, we export to it.

@@ -118,18 +118,6 @@ specs.api = {
     }
   },
 
-  "getConfig() when retrieving the config": {
-    topic: function () {
-      return DSL().getConfig();
-    },
-
-    "we get the config as an Object": function (topic) {
-      assert.isObject(topic);
-      assert.isFalse(topic.asi);
-      assert.isTrue(topic.immed);
-    }
-  },
-
   "hasNext() when testing if there is a next": {
     topic: function () {
       return DSL().hasNext();
