@@ -483,52 +483,88 @@
   }());
 
 
-// The errors Object
-  var errors = {};
+  // All errors supported by fixmyjs.
+  var errors = {
+    "Extra comma.":
+      fix.rmChar,
 
-// DSL to generate the error fixing function.
-// First we apply the error to `errors` Object
-// Next, we set the priority which determines in which order
-// the error will be fixed.
-// Last, we pass the function responsible for fixing the error
-// along with the Object containing the error's details.
-  function w(priority, err, fn) {
-    errors[err] = {
-      priority: priority,
-      fix: function (r, code) {
-        return code.fix(fn, r);
-      }
+    "Missing semicolon.":
+      fix.addSemicolon,
+
+    "Missing space after '{a}'.":
+      fix.addSpace,
+
+    "Unexpected space after '{a}'.":
+      fix.rmChar,
+
+    "Unnecessary semicolon.":
+      fix.rmChar,
+
+    "['{a}'] is better written in dot notation.":
+      fix.dotNotation,
+
+    "A leading decimal point can be confused with a dot: '.{a}'.":
+      fix.leadingDecimal,
+
+    "A trailing decimal point can be confused with a dot '{a}'.":
+      fix.trailingDecimal,
+
+    "All 'debugger' statements should be removed.":
+      fix.rmDebugger,
+
+    "Do not use {a} as a constructor.":
+      fix.objNoConstruct,
+
+    "Do not use 'new' for side effects.":
+      fix.noNew,
+
+    "Expected '{a}' to have an indentation at {b} instead at {c}.":
+      fix.indent,
+
+    "It is not necessary to initialize '{a}' to 'undefined'.":
+      fix.rmUndefined,
+
+    "Missing '()' invoking a constructor.":
+      fix.invokeConstructor,
+
+    "Missing radix parameter.":
+      fix.radix,
+
+    "Mixed spaces and tabs.":
+      fix.mixedSpacesNTabs,
+
+    "Move the invocation into the parens that contain the function.":
+      fix.immed,
+
+    "Trailing whitespace.":
+      fix.rmTrailingWhitespace,
+
+    "Use the isNaN function to compare with NaN.":
+      fix.useIsNaN,
+
+    "Use the array literal notation [].":
+      fix.arrayLiteral,
+
+    "Use the object literal notation {}.":
+      fix.objectLiteral,
+
+    "Variables should not be deleted.":
+      fix.noDeleteVar,
+
+    "Wrap the /regexp/ literal in parens to disambiguate the slash operator.":
+      fix.wrapRegExp,
+
+    "Too many errors.":
+      fix.tme
+  };
+
+  // Give each error a function which will call the proper fix function
+  Object.keys(errors).forEach(function (key) {
+    var fn = errors[key];
+    errors[key] = function (r, code) {
+      return code.fix(fn, r);
     };
-  }
-
-// All errors supported by fixmyjs.
-// **priority** Is the order in which the error will be fixed, lower is sooner.
-// **error** is a string describing the raw input of the error.
-// **fn** is the function which handles the fixing.
-  w(0, "Extra comma.",                                                            fix.rmChar);
-  w(0, "Missing semicolon.",                                                      fix.addSemicolon);
-  w(0, "Missing space after '{a}'.",                                              fix.addSpace);
-  w(0, "Unexpected space after '{a}'.",                                           fix.rmChar);
-  w(0, "Unnecessary semicolon.",                                                  fix.rmChar);
-  w(1, "['{a}'] is better written in dot notation.",                              fix.dotNotation);
-  w(1, "A leading decimal point can be confused with a dot: '.{a}'.",             fix.leadingDecimal);
-  w(1, "A trailing decimal point can be confused with a dot '{a}'.",              fix.trailingDecimal);
-  w(1, "All 'debugger' statements should be removed.",                            fix.rmDebugger);
-  w(1, "Do not use {a} as a constructor.",                                        fix.objNoConstruct);
-  w(1, "Do not use 'new' for side effects.",                                      fix.noNew);
-  w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",            fix.indent);
-  w(1, "It is not necessary to initialize '{a}' to 'undefined'.",                 fix.rmUndefined);
-  w(1, "Missing '()' invoking a constructor.",                                    fix.invokeConstructor);
-  w(1, "Missing radix parameter.",                                                fix.radix);
-  w(1, "Mixed spaces and tabs.",                                                  fix.mixedSpacesNTabs);
-  w(1, "Move the invocation into the parens that contain the function.",          fix.immed);
-  w(1, "Trailing whitespace.",                                                    fix.rmTrailingWhitespace);
-  w(1, "Use the isNaN function to compare with NaN.",                             fix.useIsNaN);
-  w(1, "Use the array literal notation [].",                                      fix.arrayLiteral);
-  w(1, "Use the object literal notation {}.",                                     fix.objectLiteral);
-  w(1, "Variables should not be deleted.",                                        fix.noDeleteVar);
-  w(1, "Wrap the /regexp/ literal in parens to disambiguate the slash operator.", fix.wrapRegExp);
-  w(2, "Too many errors.",                                                        fix.tme);
+  });
 
 
 // fixMyJS is part of the global object
@@ -548,7 +584,7 @@
 
 // Calls the function responsible for fixing the error passed.
     function fixError(r, code) {
-      return errors[r.raw].fix(r, code);
+      return errors[r.raw](r, code);
     }
 
 // Function used in forEach which fixes all errors passed
@@ -564,29 +600,13 @@
     }
 
 // Used by fixMyJS function in order to sort the
-// errors in descending order by priority.
-// The logic is that if the priority matches
-// then we check the line, if that matches
-// we check the character and return in descending order.
+// errors so we can fix the code bottom-up and right-left
     function byPriority(a, b) {
-//      if (!a.fixable || !b.fixable) {
-//        return a;
-//      }
-      var p1 = errors[a.raw] ? errors[a.raw].priority : -1;
-      var p2 = errors[b.raw] ? errors[b.raw].priority : -1;
-
-//      var p1 = errors[a.raw].priority;
-//      var p2 = errors[b.raw].priority;
-
-      if (p1 === p2) {
-        if (a.line === b.line) {
-          return b.character - a.character;
-        } else {
-          return b.line - a.line;
-        }
-      } else {
-        return p1 - p2;
+      if (a.line === b.line) {
+        return b.character - a.character;
       }
+
+      return b.line - a.line;
     }
 
 // The fixMyJS function is what's returned to the
