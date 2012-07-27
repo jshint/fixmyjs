@@ -417,8 +417,10 @@
 //
 // `var foo = undefined;` -> `var foo;`
 //+ rmUndefined :: String -> String
-      rmUndefined: function (str) {
-        return str.replace(/( )*=( )*undefined/, '');
+      rmUndefined: function (str, o) {
+        return str.replace(/([^ ]*) *= *undefined */g, function (orig, name) {
+          return name === o.a ? name : orig;
+        });
       },
 
 // Removes any whitespace at the end of the line.
