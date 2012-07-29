@@ -250,9 +250,12 @@
 //
 // `.5` -> `0.5`
 //+ leadingDecimal :: String -> String
-      leadingDecimal: function (str) {
-        return str.replace(/([\D] *)(\.[\d]+)/g, function (a, b, c) {
-          return b + '0' + c;
+      leadingDecimal: function (str, o) {
+        return str.replace(/([\D] *)\.([\d]+)/g, function (a, b, c) {
+          if (o.a === c) {
+            return b + '0.' + c;
+          }
+          return a;
         });
       },
 
@@ -442,16 +445,13 @@
 //
 // `12.` -> `12`
 //+ trailingDecimal :: String -> String
-      trailingDecimal: function (str) {
-        var rx = /([0-9]+)\.(\D)/;
-        var result;
-
-        if (rx.test(str)) {
-          result = rx.exec(str);
-          str = str.replace(rx, result[1] + result[2]);
-        }
-
-        return str;
+      trailingDecimal: function (str, o) {
+        return str.replace(/([\d]+)\./g, function (a, b) {
+          if (b + '.' === o.a) {
+            return b;
+          }
+          return a;
+        });
       },
 
 // Wraps RegularExpression literals in parenthesis to
