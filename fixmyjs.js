@@ -131,8 +131,8 @@
 
 // Converts assignments from Object to Literal form.
 //+ arrayLiteral :: String -> String
-      arrayLiteral: function (str) {
-        return str.replace('new Array()', '[]');
+      arrayLiteral: function (str, o) {
+        return str.replace(/new Array(\(\))?(?!.*new Array(\(\))?)/, '[]');
       },
 
 // Converts from square bracket notation to dot notation.
