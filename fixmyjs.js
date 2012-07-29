@@ -181,9 +181,9 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
-      indent: function (str, o) {
+      indent: function (str, o, code) {
         var indent = o.b;
-        var found = o.c - 1;
+        var found = code.getChr(o);
         var config = o.config;
         var tabs;
         var whitespace;
