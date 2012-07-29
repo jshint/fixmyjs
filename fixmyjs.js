@@ -309,7 +309,7 @@
 // Converts assignments from Object to Literal form.
 //+ objectLiteral :: String -> String
       objectLiteral: function (str) {
-        return str.replace('new Object()', '{}');
+        return str.replace(/new Object(\(\))?(?!.*new Object(\(\))?)/, '{}');
       },
 
 // Removes `new` when attempting to use a function not meant to
