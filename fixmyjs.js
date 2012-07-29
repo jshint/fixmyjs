@@ -218,26 +218,22 @@
 // Adds parens to constructors missing them during invocation.
 //+ invokeConstructor :: String -> String
       invokeConstructor: function (str) {
-        var rx = /new [a-zA-Z_$][0-9a-zA-Z_$]*\(/g;
-        var result = str;
+        // FIXME replace with proper fix once
+        // https://github.com/jshint/jshint/pull/598
+        // is merged and released into npm.
+        // in the meantime, this regexp will match the last identifier missing
+        // the invocation parenthesis given a string.
+        var rx = new RegExp(
+          '((?!new [a-zA-Z_$][0-9a-zA-Z_$]*\\()' +
+          'new [a-zA-Z_$][0-9a-zA-Z_$]*)' +
+          '(?!.*' +
+          '(?!new [a-zA-Z_$][0-9a-zA-Z_$]*\\()' +
+          'new [a-zA-Z_$][0-9a-zA-Z_$]*)'
+        );
 
-        function addInvocation(tmp) {
-          var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
-          var res;
-
-          if (rx.test(tmp)) {
-            res = rx.exec(tmp).shift();
-            str = str.replace(res, res + '()');
-          }
-
-          return str;
-        }
-
-        if (rx.test(str)) {
-          result = str.replace(rx, '');
-        }
-
-        return addInvocation(result);
+        return str.replace(rx, function (a) {
+          return a + '()';
+        });
       },
 
 // Adds a zero when there is a leading decimal.
