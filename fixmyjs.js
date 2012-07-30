@@ -284,15 +284,11 @@
 //
 // Example: `delete foo;` -> `foo = undefined;`
 //+ noDeleteVar :: String -> String
-// XXX
-      noDeleteVar: function (str) {
-        var rx = /delete ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
-        var exec;
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-          str = str.replace(exec[0], exec[1] + ' = undefined');
-        }
-        return str;
+      noDeleteVar: function (str, o) {
+        var rx = /delete ([\w]+)(?!.*delete [\w]+)/;
+        return str.replace(rx, function (a, b) {
+          return b + ' = undefined';
+        });
       },
 
 // Removes `new` when it's used as a statement.
