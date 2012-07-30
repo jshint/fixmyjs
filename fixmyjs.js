@@ -285,7 +285,7 @@
 // Example: `delete foo;` -> `foo = undefined;`
 //+ noDeleteVar :: String -> String
       noDeleteVar: function (str, o) {
-        var rx = /delete ([\w]+)(?!.*delete [\w]+)/;
+        var rx = /delete ([\w$_]+)(?!.*delete [\w$_]+)/;
         return str.replace(rx, function (a, b) {
           return b + ' = undefined';
         });
@@ -296,17 +296,11 @@
 //
 // Example: `new Ajax()` -> `Ajax()`
 //+ noNew :: String -> String
-// XXX
-      noNew: function (str) {
-        var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
-        var exec;
-        var rmnew = '';
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-          rmnew = exec[0].replace('new ', '');
-          str = str.replace(exec[0], rmnew);
-        }
-        return str;
+      noNew: function (str, o) {
+        var rx = /new ([\w$_]+)(?!.*new [\w$_]+)/;
+        return str.replace(rx, function (a, b) {
+          return b;
+        });
       },
 
 // Converts assignments from Object to Literal form.
