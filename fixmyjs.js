@@ -126,7 +126,11 @@
 // `var a = function(){}` -> `var a = function () {}`
       addSpace: function (str, o, code) {
         var chr = code.getChr(o);
-        return helpers.insertIntoString(str, chr, ' ');
+        if (chr < str.length) {
+          return helpers.insertIntoString(str, chr, ' ');
+        }
+
+        return str;
       },
 
 // Converts assignments from Object to Literal form.
