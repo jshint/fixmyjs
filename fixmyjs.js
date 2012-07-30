@@ -159,6 +159,7 @@
 // that the expression is the result of a function and not the
 // function itself.
 //+ immed :: String -> String
+// XXX
       immed: function (str) {
         var rx = /\)\((.*)\);/;
         var params;
@@ -279,6 +280,7 @@
 //
 // Example: `delete foo;` -> `foo = undefined;`
 //+ noDeleteVar :: String -> String
+// XXX
       noDeleteVar: function (str) {
         var rx = /delete ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
         var exec;
@@ -294,6 +296,7 @@
 //
 // Example: `new Ajax()` -> `Ajax()`
 //+ noNew :: String -> String
+// XXX
       noNew: function (str) {
         var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
         var exec;
@@ -321,6 +324,7 @@
 //
 // Example: `new Number(16)` -> `Number(16)`
 //+ objNoConstruct :: String -> String
+// XXX
       objNoConstruct: function (str) {
         var rx = /new (Number|String|Boolean|Math|JSON)/;
         var exec;
@@ -337,6 +341,7 @@
 // NaN can be redefined. Although comparing to NaN is faster
 // than using the isNaN function.
 //+ useIsNaN :: String -> String
+// XXX
       useIsNaN: function (str) {
         var rx = /([a-zA-Z_$][0-9a-zA-Z_$]*)( )*(=|!)(=|==)( )*NaN/;
         var exec;
