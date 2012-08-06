@@ -25,7 +25,9 @@
 // returns the fixed line as a String
   Code.prototype.fix = function (fn, o) {
     var line = o.line;
-    return (this.src[line] = fn.call(fn, this.src[line], o, this));
+    var result = fn.call(fn, this.src[line], o, this);
+    this.src.splice.apply(this.src, [line, 1].concat(result.split("\n")));
+    return result;
   };
 
 // This function keeps track of character changes.
@@ -124,34 +126,17 @@
 // `var a = function(){}` -> `var a = function () {}`
       addSpace: function (str, o, code) {
         var chr = code.getChr(o);
-        return helpers.insertIntoString(str, chr, ' ');
-      },
-
-// If a var is already defined, `shadow`, then we remove the var.
-//
-// Example:
-//
-// `var a = 1; var a = 2;` -> `var a = 1; a = 2`
-      alreadyDefined: function (str, o) {
-        var a = o.a;
-        var rx = new RegExp('(.*)(var ' + a + ')');
-        var exec = '';
-        var incorrect = '';
-        var replacement = '';
-
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-          incorrect = str.replace(exec[1], '');
-          replacement = incorrect.replace(exec[2], a);
+        if (chr < str.length) {
+          return helpers.insertIntoString(str, chr, ' ');
         }
 
-        return str.replace(incorrect, replacement);
+        return str;
       },
 
 // Converts assignments from Object to Literal form.
 //+ arrayLiteral :: String -> String
-      arrayLiteral: function (str) {
-        return str.replace('new Array()', '[]');
+      arrayLiteral: function (str, o) {
+        return str.replace(/new Array(\(\))?(?!.*new Array(\(\))?)/, '[]');
       },
 
 // Converts from square bracket notation to dot notation.
@@ -178,6 +163,7 @@
 // that the expression is the result of a function and not the
 // function itself.
 //+ immed :: String -> String
+// XXX
       immed: function (str) {
         var rx = /\)\((.*)\);/;
         var params;
@@ -200,19 +186,35 @@
 // You may also want to configure the `indent` option to the
 // desired amount of characters you wish to indent. The default
 // set by JSHint is four.
-      indent: function (str, o) {
+      indent: function (str, o, code) {
         var indent = o.b;
+        var found = code.getChr(o);
         var config = o.config;
-        var ident;
+        var tabs;
+        var whitespace;
+        var cutstr;
         if (config.auto_indent === true && config.indentpref) {
-          if (config.indentpref === 'spaces') {
-            str = new Array(indent).join(" ") + str.trim();
-          } else if (config.indentpref === 'tabs') {
-            ident = (indent + 1) / config.indent;
-            if (ident > 0) {
-              str = new Array(ident).join("\t") + str.trim();
+          switch (config.indentpref) {
+          case 'spaces':
+            whitespace = new Array(indent).join(" ");
+            break;
+          case 'tabs':
+            tabs = (indent + 1) / config.indent;
+            if (tabs > 0) {
+              whitespace = new Array(tabs).join("\t");
             }
+            break;
           }
+
+          cutstr = str.slice(0, found);
+
+          // if the whitespace 'fix' should be on a newline
+          if (found > 1 && !/^[\s]+$/.test(cutstr)) {
+            // mutates the line count
+            return cutstr.replace(/\s+$/, "") + "\n" + whitespace + str.slice(found).trim();
+          }
+
+          str = whitespace + str.trim();
         }
 
         return str;
@@ -221,26 +223,22 @@
 // Adds parens to constructors missing them during invocation.
 //+ invokeConstructor :: String -> String
       invokeConstructor: function (str) {
-        var rx = /new [a-zA-Z_$][0-9a-zA-Z_$]*\(/g;
-        var result = str;
+        // FIXME replace with proper fix once
+        // https://github.com/jshint/jshint/pull/598
+        // is merged and released into npm.
+        // in the meantime, this regexp will match the last identifier missing
+        // the invocation parenthesis given a string.
+        var rx = new RegExp(
+          '((?!new [a-zA-Z_$][0-9a-zA-Z_$]*\\()' +
+          'new [a-zA-Z_$][0-9a-zA-Z_$]*)' +
+          '(?!.*' +
+          '(?!new [a-zA-Z_$][0-9a-zA-Z_$]*\\()' +
+          'new [a-zA-Z_$][0-9a-zA-Z_$]*)'
+        );
 
-        function addInvocation(tmp) {
-          var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
-          var res;
-
-          if (rx.test(tmp)) {
-            res = rx.exec(tmp).shift();
-            str = str.replace(res, res + '()');
-          }
-
-          return str;
-        }
-
-        if (rx.test(str)) {
-          result = str.replace(rx, '');
-        }
-
-        return addInvocation(result);
+        return str.replace(rx, function (a) {
+          return a + '()';
+        });
       },
 
 // Adds a zero when there is a leading decimal.
@@ -253,17 +251,13 @@
 //
 // `.5` -> `0.5`
 //+ leadingDecimal :: String -> String
-      leadingDecimal: function (str) {
-        var rx = /([\D])(\.[0-9]+)/;
-
-        var result;
-
-        if (rx.test(str)) {
-          result = rx.exec(str);
-          str = str.replace(rx, result[1] + '0' + result[2]);
-        }
-
-        return str;
+      leadingDecimal: function (str, o) {
+        return str.replace(/([\D] *)\.([\d]+)/g, function (a, b, c) {
+          if (o.a === c) {
+            return b + '0.' + c;
+          }
+          return a;
+        });
       },
 
 // Removes spaces or tabs (depending on preference) when
@@ -290,14 +284,11 @@
 //
 // Example: `delete foo;` -> `foo = undefined;`
 //+ noDeleteVar :: String -> String
-      noDeleteVar: function (str) {
-        var rx = /delete ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
-        var exec;
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-          str = str.replace(exec[0], exec[1] + ' = undefined');
-        }
-        return str;
+      noDeleteVar: function (str, o) {
+        var rx = /delete ([\w$_]+)(?!.*delete [\w$_]+)/;
+        return str.replace(rx, function (a, b) {
+          return b + ' = undefined';
+        });
       },
 
 // Removes `new` when it's used as a statement.
@@ -305,22 +296,17 @@
 //
 // Example: `new Ajax()` -> `Ajax()`
 //+ noNew :: String -> String
-      noNew: function (str) {
-        var rx = /new ([a-zA-Z_$][0-9a-zA-Z_$]*)/;
-        var exec;
-        var rmnew = '';
-        if (rx.test(str)) {
-          exec = rx.exec(str);
-          rmnew = exec[0].replace('new ', '');
-          str = str.replace(exec[0], rmnew);
-        }
-        return str;
+      noNew: function (str, o) {
+        var rx = /new ([\w$_]+)(?!.*new [\w$_]+)/;
+        return str.replace(rx, function (a, b) {
+          return b;
+        });
       },
 
 // Converts assignments from Object to Literal form.
 //+ objectLiteral :: String -> String
       objectLiteral: function (str) {
-        return str.replace('new Object()', '{}');
+        return str.replace(/new Object(\(\))?(?!.*new Object(\(\))?)/, '{}');
       },
 
 // Removes `new` when attempting to use a function not meant to
@@ -332,6 +318,7 @@
 //
 // Example: `new Number(16)` -> `Number(16)`
 //+ objNoConstruct :: String -> String
+// XXX
       objNoConstruct: function (str) {
         var rx = /new (Number|String|Boolean|Math|JSON)/;
         var exec;
@@ -348,6 +335,7 @@
 // NaN can be redefined. Although comparing to NaN is faster
 // than using the isNaN function.
 //+ useIsNaN :: String -> String
+// XXX
       useIsNaN: function (str) {
         var rx = /([a-zA-Z_$][0-9a-zA-Z_$]*)( )*(=|!)(=|==)( )*NaN/;
         var exec;
@@ -420,8 +408,10 @@
 //
 // `var foo = undefined;` -> `var foo;`
 //+ rmUndefined :: String -> String
-      rmUndefined: function (str) {
-        return str.replace(/( )*=( )*undefined/, '');
+      rmUndefined: function (str, o) {
+        return str.replace(/([^ ]*) *= *undefined */g, function (orig, name) {
+          return name === o.a ? name : orig;
+        });
       },
 
 // Removes any whitespace at the end of the line.
@@ -450,16 +440,13 @@
 //
 // `12.` -> `12`
 //+ trailingDecimal :: String -> String
-      trailingDecimal: function (str) {
-        var rx = /([0-9]+)\.(\D)/;
-        var result;
-
-        if (rx.test(str)) {
-          result = rx.exec(str);
-          str = str.replace(rx, result[1] + result[2]);
-        }
-
-        return str;
+      trailingDecimal: function (str, o) {
+        return str.replace(/([\d]+)\./g, function (a, b) {
+          if (b + '.' === o.a) {
+            return b;
+          }
+          return a;
+        });
       },
 
 // Wraps RegularExpression literals in parenthesis to
@@ -484,53 +471,88 @@
   }());
 
 
-// The errors Object
-  var errors = {};
+  // All errors supported by fixmyjs.
+  var errors = {
+    "Extra comma.":
+      fix.rmChar,
 
-// DSL to generate the error fixing function.
-// First we apply the error to `errors` Object
-// Next, we set the priority which determines in which order
-// the error will be fixed.
-// Last, we pass the function responsible for fixing the error
-// along with the Object containing the error's details.
-  function w(priority, err, fn) {
-    errors[err] = {
-      priority: priority,
-      fix: function (r, code) {
-        return code.fix(fn, r);
-      }
+    "Missing semicolon.":
+      fix.addSemicolon,
+
+    "Missing space after '{a}'.":
+      fix.addSpace,
+
+    "Unexpected space after '{a}'.":
+      fix.rmChar,
+
+    "Unnecessary semicolon.":
+      fix.rmChar,
+
+    "['{a}'] is better written in dot notation.":
+      fix.dotNotation,
+
+    "A leading decimal point can be confused with a dot: '.{a}'.":
+      fix.leadingDecimal,
+
+    "A trailing decimal point can be confused with a dot '{a}'.":
+      fix.trailingDecimal,
+
+    "All 'debugger' statements should be removed.":
+      fix.rmDebugger,
+
+    "Do not use {a} as a constructor.":
+      fix.objNoConstruct,
+
+    "Do not use 'new' for side effects.":
+      fix.noNew,
+
+    "Expected '{a}' to have an indentation at {b} instead at {c}.":
+      fix.indent,
+
+    "It is not necessary to initialize '{a}' to 'undefined'.":
+      fix.rmUndefined,
+
+    "Missing '()' invoking a constructor.":
+      fix.invokeConstructor,
+
+    "Missing radix parameter.":
+      fix.radix,
+
+    "Mixed spaces and tabs.":
+      fix.mixedSpacesNTabs,
+
+    "Move the invocation into the parens that contain the function.":
+      fix.immed,
+
+    "Trailing whitespace.":
+      fix.rmTrailingWhitespace,
+
+    "Use the isNaN function to compare with NaN.":
+      fix.useIsNaN,
+
+    "Use the array literal notation [].":
+      fix.arrayLiteral,
+
+    "Use the object literal notation {}.":
+      fix.objectLiteral,
+
+    "Variables should not be deleted.":
+      fix.noDeleteVar,
+
+    "Wrap the /regexp/ literal in parens to disambiguate the slash operator.":
+      fix.wrapRegExp,
+
+    "Too many errors.":
+      fix.tme
+  };
+
+  // Give each error a function which will call the proper fix function
+  Object.keys(errors).forEach(function (key) {
+    var fn = errors[key];
+    errors[key] = function (r, code) {
+      return code.fix(fn, r);
     };
-  }
-
-// All errors supported by fixmyjs.
-// **priority** Is the order in which the error will be fixed, lower is sooner.
-// **error** is a string describing the raw input of the error.
-// **fn** is the function which handles the fixing.
-  w(0, "Extra comma.",                                                            fix.rmChar);
-  w(0, "Missing semicolon.",                                                      fix.addSemicolon);
-  w(0, "Missing space after '{a}'.",                                              fix.addSpace);
-  w(0, "Unexpected space after '{a}'.",                                           fix.rmChar);
-  w(0, "Unnecessary semicolon.",                                                  fix.rmChar);
-  w(1, "'{a}' is already defined.",                                               fix.alreadyDefined);
-  w(1, "['{a}'] is better written in dot notation.",                              fix.dotNotation);
-  w(1, "A leading decimal point can be confused with a dot: '.{a}'.",             fix.leadingDecimal);
-  w(1, "A trailing decimal point can be confused with a dot '{a}'.",              fix.trailingDecimal);
-  w(1, "All 'debugger' statements should be removed.",                            fix.rmDebugger);
-  w(1, "Do not use {a} as a constructor.",                                        fix.objNoConstruct);
-  w(1, "Do not use 'new' for side effects.",                                      fix.noNew);
-  w(1, "Expected '{a}' to have an indentation at {b} instead at {c}.",            fix.indent);
-  w(1, "It is not necessary to initialize '{a}' to 'undefined'.",                 fix.rmUndefined);
-  w(1, "Missing '()' invoking a constructor.",                                    fix.invokeConstructor);
-  w(1, "Missing radix parameter.",                                                fix.radix);
-  w(1, "Mixed spaces and tabs.",                                                  fix.mixedSpacesNTabs);
-  w(1, "Move the invocation into the parens that contain the function.",          fix.immed);
-  w(1, "Trailing whitespace.",                                                    fix.rmTrailingWhitespace);
-  w(1, "Use the isNaN function to compare with NaN.",                             fix.useIsNaN);
-  w(1, "Use the array literal notation [].",                                      fix.arrayLiteral);
-  w(1, "Use the object literal notation {}.",                                     fix.objectLiteral);
-  w(1, "Variables should not be deleted.",                                        fix.noDeleteVar);
-  w(1, "Wrap the /regexp/ literal in parens to disambiguate the slash operator.", fix.wrapRegExp);
-  w(2, "Too many errors.",                                                        fix.tme);
+  });
 
 
 // fixMyJS is part of the global object
@@ -550,7 +572,7 @@
 
 // Calls the function responsible for fixing the error passed.
     function fixError(r, code) {
-      return errors[r.raw].fix(r, code);
+      return errors[r.raw](r, code);
     }
 
 // Function used in forEach which fixes all errors passed
@@ -566,29 +588,13 @@
     }
 
 // Used by fixMyJS function in order to sort the
-// errors in descending order by priority.
-// The logic is that if the priority matches
-// then we check the line, if that matches
-// we check the character and return in descending order.
+// errors so we can fix the code bottom-up and right-left
     function byPriority(a, b) {
-//      if (!a.fixable || !b.fixable) {
-//        return a;
-//      }
-      var p1 = errors[a.raw] ? errors[a.raw].priority : -1;
-      var p2 = errors[b.raw] ? errors[b.raw].priority : -1;
-
-//      var p1 = errors[a.raw].priority;
-//      var p2 = errors[b.raw].priority;
-
-      if (p1 === p2) {
-        if (a.line === b.line) {
-          return b.character - a.character;
-        } else {
-          return b.line - a.line;
-        }
-      } else {
-        return p1 - p2;
+      if (a.line === b.line) {
+        return b.character - a.character;
       }
+
+      return b.line - a.line;
     }
 
 // The fixMyJS function is what's returned to the
@@ -767,7 +773,7 @@
     return fixMyJS;
   }());
 
-  exports.fixMyJS.version = '0.6.0';
+  exports.fixMyJS.version = '0.6.4';
 
 // for node.js
 // if module is available, we export to it.

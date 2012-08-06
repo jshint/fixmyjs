@@ -44,7 +44,7 @@ function addTest(test) {
   var opts = options;
 
   // special case tests where options need to be different.
-  if (test === "autoindentspaces.js") {
+  if (test === "autoindentspaces.js" || test === "gh-56.js") {
     opts = { white: true, indent: 2, indentpref: "spaces", auto_indent: true };
   } else if (test === "autoindenttabs.js") {
     opts = { white: true, indent: 2, indentpref: "tabs", auto_indent: true };
@@ -240,6 +240,19 @@ specs.api = {
       assert.isObject(topic[0]);
       assert.equal(topic[0].original, "var foo = 1");
       assert.equal(topic[0].replacement, "var foo = 1;");
+    }
+  },
+
+  "fixes that introduce newlines": {
+    topic: function () {
+      var opts = { white: true, indent: 2, indentpref: "spaces", auto_indent: true };
+      return DSL(fs.readFileSync(__dirname + "/fixtures/needs-newline.js", "utf-8"), opts).next().fixVerbose();
+    },
+
+    "should show the newlines in the fix": function (topic) {
+      assert.isObject(topic);
+      assert.equal(topic.original, "    fn.apply(ctx, arguments); };");
+      assert.equal(topic.replacement, "    fn.apply(ctx, arguments);\n  };");
     }
   }
 };

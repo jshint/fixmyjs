@@ -4,7 +4,6 @@ var foo = function () {
   var test = null;
 
   // missing semicolon
-  // already defined test
   var test = 12
 
 // missing semicolon
