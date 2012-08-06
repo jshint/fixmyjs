@@ -73,6 +73,13 @@
         return part1 + newstr + part2;
       },
 
+      replaceBetween: function (str, offset, fn) {
+        var part1 = str.substr(0, offset);
+        var part2 = str.substr(offset);
+
+        return part1 + fn(part2);
+      },
+
 // Removes a certain character from the string
 //
 // **str** is the string
@@ -222,22 +229,14 @@
 
 // Adds parens to constructors missing them during invocation.
 //+ invokeConstructor :: String -> String
-      invokeConstructor: function (str) {
-        // FIXME replace with proper fix once
-        // https://github.com/jshint/jshint/pull/598
-        // is merged and released into npm.
-        // in the meantime, this regexp will match the last identifier missing
-        // the invocation parenthesis given a string.
-        var rx = new RegExp(
-          '((?!new [a-zA-Z_$][0-9a-zA-Z_$]*\\()' +
-          'new [a-zA-Z_$][0-9a-zA-Z_$]*)' +
-          '(?!.*' +
-          '(?!new [a-zA-Z_$][0-9a-zA-Z_$]*\\()' +
-          'new [a-zA-Z_$][0-9a-zA-Z_$]*)'
-        );
+      invokeConstructor: function (str, o, code) {
+        var chr = code.getChr(o);
+        var rx = new RegExp('^' + o.a);
 
-        return str.replace(rx, function (a) {
-          return a + '()';
+        return helpers.replaceBetween(str, chr, function (rest) {
+          return rest.replace(rx, function (a) {
+            return a + '()';
+          });
         });
       },
 
