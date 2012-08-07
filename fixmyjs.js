@@ -153,15 +153,13 @@
 // `person['name']` -> `person.name`
       dotNotation: function (str, o) {
         var dot = o.a;
-        var rx = new RegExp('\\[[\'"]' + dot + '[\'"]\\]');
-        var sqbNotation;
+        var rx = new RegExp('\\[[\'"]' +
+          dot + '[\'"]\\]?(?!.*\\[[\'"]' +
+          dot + '[\'"]\\]?)');
 
-        if (rx.test(str)) {
-          sqbNotation = rx.exec(str);
-          str = str.replace(sqbNotation[0], "." + dot);
-        }
-
-        return str;
+        return str.replace(rx, function () {
+          return '.' + dot;
+        });
       },
 
 // Immediate functions are executed within the parenthesis.

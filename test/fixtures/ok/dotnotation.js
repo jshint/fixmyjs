@@ -18,3 +18,5 @@ lol.cats;
 hello["return"];
 
 foo["for"]; foo.that; foo['this'];
+
+window.foo = window.foo || function () {};
