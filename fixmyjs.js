@@ -142,6 +142,7 @@
 
 // Converts assignments from Object to Literal form.
 //+ arrayLiteral :: String -> String
+// FIXME r10 JSHINT
       arrayLiteral: function (str, o) {
         return str.replace(/new Array(\(\))?(?!.*new Array(\(\))?)/, '[]');
       },
@@ -151,6 +152,7 @@
 // Example:
 //
 // `person['name']` -> `person.name`
+// FIXME r10 JSHINT
       dotNotation: function (str, o) {
         var dot = o.a;
         var rx = new RegExp('\\[[\'"]' +
@@ -281,6 +283,7 @@
 //
 // Example: `delete foo;` -> `foo = undefined;`
 //+ noDeleteVar :: String -> String
+// XXX
       noDeleteVar: function (str, o) {
         var rx = /delete ([\w$_]+)(?!.*delete [\w$_]+)/;
         return str.replace(rx, function (a, b) {
@@ -293,6 +296,7 @@
 //
 // Example: `new Ajax()` -> `Ajax()`
 //+ noNew :: String -> String
+// FIXME r10 JSHINT
       noNew: function (str, o) {
         var rx = /new ([\w$_]+)(?!.*new [\w$_]+)/;
         return str.replace(rx, function (a, b) {
@@ -302,6 +306,7 @@
 
 // Converts assignments from Object to Literal form.
 //+ objectLiteral :: String -> String
+// XXX
       objectLiteral: function (str) {
         return str.replace(/new Object(\(\))?(?!.*new Object(\(\))?)/, '{}');
       },
@@ -315,7 +320,7 @@
 //
 // Example: `new Number(16)` -> `Number(16)`
 //+ objNoConstruct :: String -> String
-// XXX
+// FIXME r10 JSHINT
       objNoConstruct: function (str) {
         var rx = /new (Number|String|Boolean|Math|JSON)/;
         var exec;
@@ -363,6 +368,7 @@
 //
 // `parseInt('0420')` -> `parseInt('0420', 10)`
 //+ radix :: String -> String
+// FIXME r10 JSHINT
       radix: function (str) {
         var rx = /parseInt\(([^,\)\(]+)\)/;
         var offset = 0;
