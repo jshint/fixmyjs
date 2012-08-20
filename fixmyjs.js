@@ -785,7 +785,7 @@
     return fixMyJS;
   }());
 
-  exports.fixMyJS.version = '0.7.0';
+  exports.fixMyJS.version = '0.6.9';
 
 // for node.js
 // if module is available, we export to it.
