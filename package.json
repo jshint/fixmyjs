@@ -1,10 +1,11 @@
 {
   "name": "fixmyjs",
-  "version": "0.6.9",
+  "version": "0.9.0",
   "description": "Automatically fixes silly errors from jshint",
   "homepage": "http://fixmyjs.com",
   "author": "Josh Perez <josh@goatslacker.com> (http://github.com/goatslacker)",
   "keywords": [
+    "beautify",
     "jshint",
     "hint",
     "lint",
@@ -14,17 +15,14 @@
     "type": "MIT",
     "url": "http://josh.mit-license.org"
   },
-  "devDependencies": {
-    "jshint": "latest",
-    "koala-t": "latest",
-    "vows": "latest"
+  "dependencies": {
+    "esprima": "*",
+    "escodegen": "*",
+    "fu": "*"
   },
   "scripts": {
-    "prepublish": "docco fixmyjs.js",
-    "test": "koala-t"
+    "test": "testla test"
   },
-  "dependencies": {},
-  "optionalDependencies": {},
   "engines": {
     "node": "*"
   }
