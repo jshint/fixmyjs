@@ -4,9 +4,15 @@ var fu = require('fu')
 
 var rules = [
   require('./lib/isNaN'),
-  require('./lib/delete')
+  require('./lib/delete'),
+  require('./lib/debugger'),
+  require('./lib/dotNotation'),
+  require('./lib/invalidConstructor'),
+  require('./lib/initUndefined'),
+  require('./lib/parseInt'),
 ]
 
+// XXX need parent information for 'dont use new for side effects'
 function traverse(o, f) {
   var k, r = Array.isArray(o) ? [] : {}
   var self = function (o) { return traverse(o, f) }
@@ -33,7 +39,12 @@ var code = [
 //  'var a = ((function () {',
 //  '  return 2',
 //  '}()) == NaN)'
-  'delete foo'
+  'debugger',
+  'var foo = a["bananas"]',
+  'new Number(5)',
+  'new Array(10)',
+  'var g = undefined',
+  'parseInt("12")'
 ].join('\n')
 
 console.log(escodegen.generate(fixMyJS(code)))
