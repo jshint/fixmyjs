@@ -10,6 +10,7 @@ var rules = [
   require('./lib/invalidConstructor'),
   require('./lib/initUndefined'),
   require('./lib/parseInt'),
+  require('./lib/useLiteral'),
 ]
 
 // XXX need parent information for 'dont use new for side effects'
@@ -44,7 +45,10 @@ var code = [
   'new Number(5)',
   'new Array(10)',
   'var g = undefined',
-  'parseInt("12")'
+  'parseInt("12")',
+  'var c = Array()',
+  'var d = Array(4)',
+  'g = Object()'
 ].join('\n')
 
 console.log(escodegen.generate(fixMyJS(code)))
