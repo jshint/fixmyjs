@@ -1,7 +1,7 @@
 {
   "name": "fixmyjs",
   "version": "0.9.0",
-  "description": "Automatically fixes silly errors from jshint",
+  "description": "Automatically fixes your JavaScript based on lint rules",
   "homepage": "http://fixmyjs.com",
   "author": "Josh Perez <josh@goatslacker.com> (http://github.com/goatslacker)",
   "keywords": [
@@ -11,6 +11,7 @@
     "lint",
     "jslint"
   ],
+  "main": "./lib/index.js",
   "license": {
     "type": "MIT",
     "url": "http://josh.mit-license.org"
@@ -18,7 +19,9 @@
   "dependencies": {
     "esprima": "*",
     "escodegen": "*",
-    "fu": "*"
+    "fu": "*",
+    "commander": "*",
+    "diff": "*"
   },
   "scripts": {
     "test": "testla test"
