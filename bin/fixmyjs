@@ -3,16 +3,16 @@ var commander = require('commander')
 var fixmyjs = require('../lib/cli')
 
 commander
-  .option('-c, --config [.jshintrc]', "Load your own config file")
-  .option('-d, --diff', "Similar to dry-run")
-  .option('-i, --indent', "Enabled auto indent")
-  .option('-n, --indent-pref [tabs|spaces]', "Your indentation preference")
-  .option('-p, --patch', "Output a patch file to stdout")
-  .option('-r, --dry-run', "Performs a dry-run and shows you a diff")
+  .option('-c, --config [.jshintrc]', 'Load your own config file')
+  .option('-d, --diff', 'Similar to dry-run')
+  .option('-n, --indent-pref [tabs|spaces]', 'Your indentation preference')
+  .option('-p, --patch', 'Output a patch file to stdout')
+  .option('-r, --dry-run', 'Performs a dry-run and shows you a diff')
+  .option('-s, --silent', 'A useless option')
   .parse(process.argv)
 
 if (commander.args.length === 0) {
   commander.emit('help')
 } else {
-  fixmyjs(commander.args);
+  fixmyjs()
 }

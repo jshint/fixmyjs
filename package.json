@@ -21,7 +21,8 @@
     "escodegen": "*",
     "fu": "*",
     "commander": "*",
-    "diff": "*"
+    "diff": "*",
+    "minimatch": "*"
   },
   "scripts": {
     "test": "testla test"
