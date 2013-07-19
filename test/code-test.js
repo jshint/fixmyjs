@@ -1,0 +1,32 @@
+
+//var code = [
+//  'var a = ((function () {',
+//  '  return 2',
+//  '}()) == NaN)',
+//  'debugger',
+//  'var foo = a["bananas"]',
+//  'new Number(5)',
+//  'new Array(10)',
+//  'var g = undefined',
+//  'parseInt("12")',
+//  'var c = Array()',
+//  'var d = Array(4)',
+//  'g = Object()',
+//  'for (;;) x',
+//  'if (x) x; else x',
+//  'if (false) x',
+//  'while (true) { x }',
+//  'while (true) x',
+//  'a++',
+//  'v--',
+//  'for (i = 0; i < a.length; i++) i',
+//  'snake_case_not_tolerated',
+//  '_leadingisok',
+//  '__wtf',
+//  'yeah_',
+//  'yeah_n',
+//  'double__is_good_too',
+//  'whatAboutCamelCase',
+//].join('\n')
+//
+//console.log(fixMyJS(code, {}))
