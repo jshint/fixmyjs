@@ -22,7 +22,8 @@
     "fu": "*",
     "commander": "*",
     "diff": "*",
-    "minimatch": "*"
+    "minimatch": "*",
+    "jshint": "*"
   },
   "devDependencies": {
     "testla": "*"
