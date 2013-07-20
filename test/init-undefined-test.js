@@ -4,7 +4,6 @@ module.exports = function (f, l, assert) {
       var code = 'var a = undefined;'
       var result = 'var a;'
       assert.equal(f(code, {}), result)
-      console.log(l(code, {}))
       assert.equal(l(code, {}), result)
     }
   }
