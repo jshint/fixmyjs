@@ -28,6 +28,7 @@
   "devDependencies": {
     "testla": "*"
   },
+  "preferGlobal": true,
   "scripts": {
     "test": "./node_modules/testla/bin/testla test"
   },
