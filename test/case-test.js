@@ -1,0 +1,7 @@
+//  'snake_case_not_tolerated',
+//  '_leadingisok',
+//  '__wtf',
+//  'yeah_',
+//  'yeah_n',
+//  'double__is_good_too',
+//  'whatAboutCamelCase',
