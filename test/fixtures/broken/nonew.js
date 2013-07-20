@@ -1,9 +1,0 @@
-new Ajax();
-new Foo();
-new Bar();
-new Hello1();
-new _whatisGoingOn();
-new __dirname();
-new $();
-new $2();
-new $a();
