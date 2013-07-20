@@ -24,8 +24,11 @@
     "diff": "*",
     "minimatch": "*"
   },
+  "devDependencies": {
+    "testla": "*"
+  },
   "scripts": {
-    "test": "testla test"
+    "test": "./node_modules/testla/bin/testla test"
   },
   "engines": {
     "node": "*"
