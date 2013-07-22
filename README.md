@@ -4,62 +4,54 @@
 
 Meant to automatically fix your lint errors in a non-destructive way.
 
-For the nodejs package see https://github.com/goatslacker/node-fixmyjs
-
 For the website see https://github.com/goatslacker/fixmyjs.com
 
 ## How to Install CLI
 
     npm install fixmyjs -g
 
+## Usage
+
+    fixmyjs your_file.js
+
+or from node
+
+    var fixmyjs = require('fixmyjs')
+    var stringFixedCode = fixmyjs.fix(stringOfCode, objectOfOptions)
+
 ## Website
 
-http://fixmyjs.com allows you to use this tool on the web.
+[fixmyjs.com](http://fixmyjs.com) allows you to use this tool on the web.
 
 ## Currently supports
 
-* Missing semicolon. `var a = 1` -> `var a = 1;`
-
-* Missing spaces. `white`
-
-* Multiple definitions of a variable in scope.
-
-* Statements written better in dot notation vs square bracket notation. `foo['hello']` -> `foo.hello`
-
+* `asi` Missing semicolons.
+* `camelcase|snakecase` Enforces camelCase and snake_case convention.
+* `curly` Adds curly braces to statements.
+* `debugger` Removes debugger statements
+* `plusplus` Converts plusplus and minusminus.
+* `quotmark` Enforces single and double quote style.
+* Adds parenthesis when invoking a constructor
+* Adds the radix parameter to parseInt
+* Convert to use array literal and object literal
+* Dot notation conversion
+* Extra trailing commas
+* Leading and trailing zeroes on decimals.
+* Missing whitespaces.
 * Mixed spaces/tabs
-
-* Unnecessary semicolons `if (1) { };` -> `if (1) { }`
-
-* Removes confusing trailing decimal points `4.` -> `4`
-
-* Obj & Array literals instead of new Array | new Object `var arr = new Array();` -> `var arr = [];`
-
-* Adds 0 to leading decimals `.2` -> `0.2`
-
-* Adds parenthesis when invoking a constructor without them `var a = new Foo;` -> `var a = new Foo();`
-
+* Proper indentation
+* Removes deletion of variables
 * Removes `undefined` when assigning to variables
+* Removes unnecessary semicolons
+* Uses isNaN function rather than comparing to NaN
 
-* Removes debugger statements
-
-* Uses isNaN function rather than comparing to NaN `a === NaN` -> `isNaN(a)`
-
-* Moves the invocation of a function within it's parenthesis `(function () { })()` -> `(function () { }())`
-
-* Extra comma `var a = [1,,2];` -> `var a = [1,2];`
-
-## Developing on fixmyjs
-
-Fork the repo. I welcome contributions.
-
-    git clone git://github.com/jshint/fixmyjs.git && cd fixmyjs
-    git submodule init && git submodule update
-    npm install
-
-### Coding style
+### Contributing
 
 * Indent 2 spaces
 * Single quotes > Double quotes
+* Use ASI
+* Maximum line length is 80 characters
+* Avoid mutation
 * Write tests
 * Code must pass `npm test`
 
