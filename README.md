@@ -1,6 +1,7 @@
 # fixmyjs || jshint-autofix
 
 [![Build Status](https://secure.travis-ci.org/jshint/fixmyjs.png)](http://travis-ci.org/jshint/fixmyjs)
+[![NPM version](https://badge.fury.io/js/fixmyjs.png)](http://badge.fury.io/js/fixmyjs)
 
 Meant to automatically fix your lint errors in a non-destructive way.
 
