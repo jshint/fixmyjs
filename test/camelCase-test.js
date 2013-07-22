@@ -29,6 +29,11 @@ module.exports = function (f, assert) {
       assert.equal(f(code, options), code)
     },
 
+    'member expressions are not converted': function () {
+      var code = 'a.foo_bar();'
+      assert.equal(f(code, options), code)
+    },
+
     'camelCase is not converted': function () {
       var code = 'camelCase;'
       assert.equal(f(code, options), code)

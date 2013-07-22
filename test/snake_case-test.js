@@ -12,6 +12,11 @@ module.exports = function (f, assert) {
       assert.equal(f(code, options), code)
     },
 
+    'member expressions are not converted': function () {
+      var code = 'a.fooBar();'
+      assert.equal(f(code, options), code)
+    },
+
     'snake_case is not converted': function () {
       var code = 'snake_case;'
       assert.equal(f(code, options), code)
