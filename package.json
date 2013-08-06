@@ -4,6 +4,9 @@
   "description": "Automatically fixes your JavaScript based on lint rules",
   "homepage": "http://fixmyjs.com",
   "author": "Josh Perez <josh@goatslacker.com> (http://github.com/goatslacker)",
+  "bin": {
+    "fixmyjs": "./bin/fixmyjs"
+  },
   "keywords": [
     "beautify",
     "jshint",
