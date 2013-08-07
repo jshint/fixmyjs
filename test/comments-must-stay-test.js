@@ -4,7 +4,6 @@ module.exports = function (f, l, assert) {
       var code = 'var i = 0;\n//test\ni++;'
       var result = 'var i = 0;\n//test\ni++;'
       var real = f(code, {});
-      console.log(real);
       assert.equal(real, result)
     }
   }
