@@ -5,20 +5,26 @@
 
 Meant to automatically fix your lint errors in a non-destructive way.
 
-For the website see https://github.com/goatslacker/fixmyjs.com
+For the website see <https://github.com/goatslacker/fixmyjs.com>.
 
 ## How to Install CLI
 
-    npm install fixmyjs -g
+```
+npm install fixmyjs -g
+```
 
 ## Usage
 
-    fixmyjs your_file.js
+```
+fixmyjs your_file.js
+```
 
-or from node
+or from node.js
 
-    var fixmyjs = require('fixmyjs')
-    var stringFixedCode = fixmyjs.fix(stringOfCode, objectOfOptions)
+```js
+var fixmyjs = require('fixmyjs')
+var stringFixedCode = fixmyjs.fix(stringOfCode, objectOfOptions)
+```
 
 ## Website
 
