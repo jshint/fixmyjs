@@ -17,23 +17,23 @@
   },
   "keywords": [
     "beautify",
-    "jshint",
     "hint",
-    "lint",
-    "jslint"
+    "jshint",
+    "jslint",
+    "lint"
   ],
   "main": "./lib/index.js",
   "dependencies": {
-    "esprima": "*",
-    "escodegen": "*",
-    "fu": "*",
-    "commander": "*",
-    "diff": "*",
-    "minimatch": "*",
-    "jshint": "*"
+    "commander": "~2.0.0",
+    "diff": "~1.0.7",
+    "escodegen": "~0.0.28",
+    "esprima": "~1.0.4",
+    "fu": "~0.1.0",
+    "jshint": "~2.3.0",
+    "minimatch": "~0.2.12"
   },
   "devDependencies": {
-    "testla": "*"
+    "testla": "~0.0.8"
   },
   "preferGlobal": true,
   "scripts": {
