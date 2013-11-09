@@ -39,6 +39,12 @@
   "scripts": {
     "test": "testla test"
   },
+  "files": [
+    "bin",
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
   "engines": {
     "node": "*"
   }
