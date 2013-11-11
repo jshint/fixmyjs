@@ -2,6 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/jshint/fixmyjs.png)](http://travis-ci.org/jshint/fixmyjs)
 [![NPM version](https://badge.fury.io/js/fixmyjs.png)](http://badge.fury.io/js/fixmyjs)
+[![Dependency Status](https://david-dm.org/jshint/fixmyjs.png)](https://david-dm.org/jshint/fixmyjs)
+[![devDependency Status](https://david-dm.org/jshint/fixmyjs/dev-status.png)](https://david-dm.org/jshint/fixmyjs#info=devDependencies)
 
 Meant to automatically fix your lint errors in a non-destructive way.
 

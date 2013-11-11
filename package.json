@@ -3,39 +3,48 @@
   "version": "0.12.0",
   "description": "Automatically fixes your JavaScript based on lint rules",
   "homepage": "http://fixmyjs.com",
+  "license": "MIT",
   "author": "Josh Perez <josh@goatslacker.com> (http://github.com/goatslacker)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jshint/fixmyjs"
+  },
+  "bugs": {
+    "url": "https://github.com/jshint/fixmyjs/issues"
+  },
   "bin": {
     "fixmyjs": "./bin/fixmyjs"
   },
   "keywords": [
     "beautify",
-    "jshint",
     "hint",
-    "lint",
-    "jslint"
+    "jshint",
+    "jslint",
+    "lint"
   ],
   "main": "./lib/index.js",
-  "license": {
-    "type": "MIT",
-    "url": "http://josh.mit-license.org"
-  },
   "dependencies": {
-    "esprima": "*",
-    "escodegen": "*",
-    "fu": "*",
-    "commander": "*",
-    "diff": "*",
-    "minimatch": "*",
-    "jshint": "*"
+    "commander": "~2.0.0",
+    "diff": "~1.0.7",
+    "escodegen": "~0.0.28",
+    "esprima": "~1.0.4",
+    "fu": "~0.1.0",
+    "jshint": "~2.3.0",
+    "minimatch": "~0.2.12"
   },
   "devDependencies": {
-    "testla": "*"
+    "testla": "~0.0.8"
   },
-  "repository": "git://github.com/jshint/fixmyjs",
   "preferGlobal": true,
   "scripts": {
-    "test": "./node_modules/testla/bin/testla test"
+    "test": "testla test"
   },
+  "files": [
+    "bin",
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
   "engines": {
     "node": "*"
   }
