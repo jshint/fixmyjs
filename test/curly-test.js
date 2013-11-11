@@ -29,17 +29,20 @@ module.exports = function (f, assert) {
       var result = 'if (x) {\n  x;\n}'
       assert.equal(f(code, options), result)
     },
+
     'leave elseif\'s be': function () {
       var code = 'if (x) x; else if (x || y) x;'
       var result = 'if (x) {\n  x;\n} else if (x || y) {\n  x;\n}'
       assert.equal(f(code, options), result)
     },
-    'nested ifs': function(){
+
+    'nested ifs': function () {
       var code = 'if (x) if (x || y) if (z) x;'
       var result = 'if (x) {\n  if (x || y) {\n    if (z) {\n      x;\n    }\n  }\n}'
       assert.equal(f(code, options), result)
     },
-    'nested else ifs': function(){
+
+    'nested else ifs': function () {
       var code = 'if (x) if (x || y) x; else if (z) x; else if(q) x; else x;'
       var result = 'if (x) {\n  if (x || y) {\n    x;\n  } else if (z) {\n    x;\n  } else if (q) {\n    x;\n  } else {\n    x;\n  }\n}'
       assert.equal(f(code, options), result)
