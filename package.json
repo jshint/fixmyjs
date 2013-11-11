@@ -37,7 +37,8 @@
   },
   "preferGlobal": true,
   "scripts": {
-    "test": "testla test"
+    "lint": "jshint .",
+    "test": "npm run lint && testla test"
   },
   "files": [
     "bin",
