@@ -1,6 +1,6 @@
 {
   "name": "fixmyjs",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Automatically fixes your JavaScript based on lint rules",
   "homepage": "http://fixmyjs.com",
   "license": "MIT",
