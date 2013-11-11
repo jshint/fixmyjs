@@ -28,12 +28,12 @@
     "diff": "~1.0.7",
     "escodegen": "~0.0.28",
     "esprima": "~1.0.4",
-    "fu": "~0.1.0",
+    "fu": "0.1.x",
     "jshint": "~2.3.0",
     "minimatch": "~0.2.12"
   },
   "devDependencies": {
-    "testla": "~0.0.8"
+    "testla": "0.1.x"
   },
   "preferGlobal": true,
   "scripts": {
