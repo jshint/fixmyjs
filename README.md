@@ -28,6 +28,15 @@ var fixmyjs = require('fixmyjs')
 var stringFixedCode = fixmyjs.fix(stringOfCode, objectOfOptions)
 ```
 
+node.js legacy:
+
+```js
+var jshint = require('jshint').JSHINT
+var fixmyjs = require('fixmyjs')
+jshint(stringOfCode, objectOfOptions)
+var stringFixedCode = fixmyjs(jshint.data(), stringOfCode, objectOfOptions).run()
+```
+
 ## Website
 
 [fixmyjs.com](http://fixmyjs.com) allows you to use this tool on the web.
