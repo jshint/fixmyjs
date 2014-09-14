@@ -3,7 +3,7 @@ module.exports = function (f, assert) {
   return {
     'for statements get curly braces': function () {
       var code = 'for (;;) x;'
-      var result = 'for (;;) {\n  x;\n}'
+      var result = 'for (; ; ) {\n  x;\n}'
       assert.equal(f(code, options), result)
     },
 

@@ -15,7 +15,7 @@ module.exports = function (f, l, assert) {
     },
 
     'computed member expression for reserved words': function () {
-      var code = 'a[\'for\'];'
+      var code = 'a["for"];'
       assert.equal(f(code, {}), code)
       assert.equal(l(code, {}), code)
     },

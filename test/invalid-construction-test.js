@@ -8,8 +8,8 @@ module.exports = function (f, l, assert) {
     },
 
     'String constructions': function () {
-      var code = 'var a = new String(\'foo\');'
-      var result = 'var a = String(\'foo\');'
+      var code = 'var a = new String("foo");'
+      var result = 'var a = String("foo");'
       assert.equal(f(code, {}), result)
       assert.equal(l(code, {}), result)
     },
