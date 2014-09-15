@@ -9,8 +9,7 @@ module.exports = function (f, assert) {
 
     'properties are not converted': function () {
       var code = 'var a = { camelCase: 1 };'
-      var result = 'var a = {\n  camelCase: 1\n};'
-      assert.equal(f(code, options), result)
+      assert.equal(f(code, options), code)
     },
 
     'member expressions are not converted': function () {
