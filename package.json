@@ -33,7 +33,7 @@
     "minimatch": "^1.0.0"
   },
   "devDependencies": {
-    "testla": "0.1.x"
+    "testla": "^0.1.x"
   },
   "preferGlobal": true,
   "scripts": {
