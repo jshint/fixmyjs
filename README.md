@@ -37,6 +37,16 @@ jshint(stringOfCode, objectOfOptions)
 var stringFixedCode = fixmyjs(jshint.data(), stringOfCode, objectOfOptions).run()
 ```
 
+
+## Tools
+
+- [Sublime plugin](https://github.com/addyosmani/sublime-fixmyjs)
+- [Atom plugin](https://github.com/sindresorhus/atom-fixmyjs)
+- [Brackets plugin](https://github.com/fyockm/brackets-fixmyjs)
+- [Gulp plugin](https://github.com/kirjs/gulp-fixmyjs)
+- [Grunt plugin](https://github.com/jonschlinkert/grunt-fixmyjs)
+
+
 ## Website
 
 [fixmyjs.com](http://fixmyjs.com) allows you to use this tool on the web.
