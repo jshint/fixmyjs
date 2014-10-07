@@ -53,19 +53,19 @@ var stringFixedCode = fixmyjs(jshint.data(), stringOfCode, objectOfOptions).run(
 
 ## Currently supports
 
-* `asi` Missing semicolons.
-* `camelcase|snakecase` Enforces camelCase and snake_case convention.
-* `curly` Adds curly braces to statements.
+* `asi` Missing semicolons
+* `camelcase|snakecase` Enforces camelCase and snake_case convention
+* `curly` Adds curly braces to statements
 * `debugger` Removes debugger statements
-* `plusplus` Converts plusplus and minusminus.
-* `quotmark` Enforces single and double quote style.
+* `plusplus` Converts plusplus and minusminus
+* `quotmark` Enforces single and double quote style
 * Adds parenthesis when invoking a constructor
 * Adds the radix parameter to parseInt
 * Convert to use array literal and object literal
 * Dot notation conversion
 * Extra trailing commas
-* Leading and trailing zeroes on decimals.
-* Missing whitespaces.
+* Leading and trailing zeroes on decimals
+* Missing whitespaces
 * Mixed spaces/tabs
 * Proper indentation
 * Removes deletion of variables
