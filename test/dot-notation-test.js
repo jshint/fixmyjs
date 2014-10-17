@@ -18,6 +18,18 @@ module.exports = function (f, l, assert) {
       var code = 'a[\'for\'];'
       assert.equal(f(code, {}), code)
       assert.equal(l(code, {}), code)
-    }
+    },
+
+    'do not convert square bracket notation if sub set to true': function () {
+      var code = 'a["b"];'
+      var result = 'a[\'b\'];'
+      assert.equal(f(code, { sub: true }), result)
+    },
+
+    'do not convert chained computed member expression if set set to true': function () {
+      var code = 'a["b"]["c"];'
+      var result = 'a[\'b\'][\'c\'];'
+      assert.equal(f(code, { sub: true }), result)
+    },
   }
 }
