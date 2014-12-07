@@ -33,6 +33,7 @@
     "minimatch": "^1.0.0"
   },
   "devDependencies": {
+    "ghooks": "^0.2.2",
     "testla": "^0.1.x"
   },
   "preferGlobal": true,
@@ -48,5 +49,10 @@
   ],
   "engines": {
     "node": "*"
+  },
+  "config": {
+    "ghooks": {
+      "pre-push": "npm test"
+    }
   }
 }
