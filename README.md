@@ -1,15 +1,13 @@
-# fixmyjs || jshint-autofix
+# [fixmyjs](https://fixmyjs.com)
+
+> Meant to automatically fix your JavaScript errors in a non-destructive way.
 
 [![Build Status](https://secure.travis-ci.org/jshint/fixmyjs.svg)](http://travis-ci.org/jshint/fixmyjs)
 [![NPM version](https://badge.fury.io/js/fixmyjs.svg)](http://badge.fury.io/js/fixmyjs)
 [![Dependency Status](https://david-dm.org/jshint/fixmyjs.svg)](https://david-dm.org/jshint/fixmyjs)
 [![devDependency Status](https://david-dm.org/jshint/fixmyjs/dev-status.svg)](https://david-dm.org/jshint/fixmyjs#info=devDependencies)
 
-Meant to automatically fix your lint errors in a non-destructive way.
-
-For the website see <https://github.com/goatslacker/fixmyjs.com>.
-
-## How to Install CLI
+## Installing
 
 ```
 npm install fixmyjs -g
@@ -21,14 +19,69 @@ npm install fixmyjs -g
 fixmyjs your_file.js
 ```
 
-or from node.js
+### Programatically
 
 ```js
 var fixmyjs = require('fixmyjs')
 var stringFixedCode = fixmyjs.fix(stringOfCode, objectOfOptions)
 ```
 
-node.js legacy:
+
+## Tools
+
+- [Atom plugin](https://github.com/sindresorhus/atom-fixmyjs)
+- [Brackets plugin](https://github.com/fyockm/brackets-fixmyjs)
+- [Gulp plugin](https://github.com/kirjs/gulp-fixmyjs)
+- [Grunt plugin](https://github.com/jonschlinkert/grunt-fixmyjs)
+- [Sublime plugin](https://github.com/addyosmani/sublime-fixmyjs)
+- [fixmyjs.com](http://fixmyjs.com)
+
+
+## Options
+
+These options are mostly named after their JSHINT counterparts.
+
+### Built in
+
+* `delete` - Removes deletion of variables
+* `emptyStatement` - Removes empty statements
+* `initUndefined` - Rewrites variable initializations to undefined
+* `invalidConstructor` - Does not allow you to initialize built-in primitive constructors
+* `isNaN` - Replaces equality to NaN with isNaN
+* `useLiteral` - Rewrites your primitives to use their literal form
+
+### Truthy
+
+When these are set to true the options apply.
+
+* `camelcase` - Converts all identifiers to camelCase
+* `curly` - Adds curly braces to all statements that don't have them
+* `es3` - Adds a radix parameter to parseInt
+* `nonew` - Removes new when using it for side effects
+* `snakecase` - Convert all identifiers to snake_case
+* `multivar` - Replace single var with multi line var
+* `plusplus` - Converts `++` and `--` to `+= 1` || `-= 1`
+* `eqeqeq` - Enforce strict equality
+
+### Falsy
+
+When these are set to false the options apply.
+
+* `debug` - Removes debugger statements
+* `sub` - Dot notation conversion
+
+
+## Legacy Mode
+
+fixmyjs supports a `legacy` mode which can be used via the CLI and programatically.
+
+### CLI
+
+```
+fixmyjs --legacy your_file.js
+```
+
+### Programatically
 
 ```js
 var jshint = require('jshint').JSHINT
@@ -37,70 +90,13 @@ jshint(stringOfCode, objectOfOptions)
 var stringFixedCode = fixmyjs(jshint.data(), stringOfCode, objectOfOptions).run()
 ```
 
+Legacy uses [JSHINT](https://github.com/jshint/jshint) to determine what needs to be fixed and then uses a combination of regular expressions and string replacements to non-destructively fix any errors. While non-legacy supports more options, it is more prone to being destructive since the JavaScript is rewritten by the program.
 
-## Tools
+### Why is it legacy?
 
-- [Sublime plugin](https://github.com/addyosmani/sublime-fixmyjs)
-- [Atom plugin](https://github.com/sindresorhus/atom-fixmyjs)
-- [Brackets plugin](https://github.com/fyockm/brackets-fixmyjs)
-- [Gulp plugin](https://github.com/kirjs/gulp-fixmyjs)
-- [Grunt plugin](https://github.com/jonschlinkert/grunt-fixmyjs)
+We're planning on moving away from code string transformations and into transforming the AST directly because these rules are easier to write, maintain, and offers flexibility in terms of what can be supported. `2.0` release will have fixmyjs using [recast](https://github.com/benjamn/recast) which will make fixmyjs more performant and less destructive, [esformatter](https://github.com/millermedeiros/esformatter) will also be included to perform any style changes.
 
 
-## Website
+## License
 
-[fixmyjs.com](http://fixmyjs.com) allows you to use this tool on the web.
-
-## Currently supports
-
-* `asi` Missing semicolons
-* `camelcase|snakecase` Enforces camelCase and snake_case convention
-* `curly` Adds curly braces to statements
-* `debugger` Removes debugger statements
-* `plusplus` Converts plusplus and minusminus
-* `quotmark` Enforces single and double quote style
-* `sub` Dot notation conversion
-* Adds parenthesis when invoking a constructor
-* Adds the radix parameter to parseInt
-* Convert to use array literal and object literal
-* Extra trailing commas
-* Leading and trailing zeroes on decimals
-* Missing whitespaces
-* Mixed spaces/tabs
-* Proper indentation
-* Removes deletion of variables
-* Removes `undefined` when assigning to variables
-* Removes unnecessary semicolons
-* Uses isNaN function rather than comparing to NaN
-
-### Contributing
-
-* Indent 2 spaces
-* Single quotes > Double quotes
-* Use ASI
-* Maximum line length is 80 characters
-* Avoid mutation
-* Write tests
-* Code must pass `npm test`
-
-# License
-
-Copyright (C) 2011 by Josh Perez <josh@goatslacker.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+[MIT](https://github.com/jshint/fixmyjs/blob/master/LICENSE)
