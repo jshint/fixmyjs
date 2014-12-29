@@ -28,8 +28,8 @@
     "diff": "~1.0.7",
     "fu": "0.1.x",
     "jshint": "^2.5.6",
-    "minimatch": "^1.0.0",
-    "recast": "~0.7.2"
+    "minimatch": "^2.0.1",
+    "recast": "^0.9.11"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
