@@ -7,11 +7,10 @@ module.exports = function (f, l, assert) {
       assert.equal(l(code, {}), result)
     },
 
-    'neq comparisons to NaN are replaced with isNaN function': function () {
+    'neq comparisons to NaN are left untouched': function () {
       var code = 'a != NaN;'
-      var result = '!isNaN(a);'
-      assert.equal(f(code, {}), result)
-      assert.equal(l(code, {}), result)
+      assert.equal(f(code, {}), 'a != NaN;')
+      assert.equal(l(code, {}), '!isNaN(a);')
     },
 
     'comparisons to NaN with literals': function () {
@@ -23,9 +22,9 @@ module.exports = function (f, l, assert) {
     'multiline NaN comparisons are fixed': function () {
       var code = [
         '(foo || bar(2))',
-        '!= NaN;'
+        '== NaN;'
       ].join('\n')
-      var result = '!isNaN(foo || bar(2));'
+      var result = 'isNaN(foo || bar(2));'
       assert.equal(f(code, {}), result)
     }
   }
