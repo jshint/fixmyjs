@@ -9,6 +9,11 @@ module.exports = function (f, assert) {
     'do not fix delete for MemberExpression': function () {
       var code = 'delete f.u;'
       assert.equal(f(code, {}), code)
+    },
+
+    'unary expressions are not affected': function () {
+      var code = 'typeof foo'
+      assert.equal(f(code, {}), code)
     }
   }
 }

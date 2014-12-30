@@ -28,6 +28,12 @@ module.exports = function (f, assert) {
       var code = 'while (true);'
       var result = 'while (true);'
       assert.equal(f(code, {}), result)
+    },
+
+    'just an empty statement': function () {
+      var code = ';;'
+      var result = ';'
+      assert.equal(f(code, {}), result)
     }
   }
 }

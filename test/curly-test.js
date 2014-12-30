@@ -46,6 +46,11 @@ module.exports = function (f, assert) {
       var code = 'if (x) if (x || y) x; else if (z) x; else if(q) x; else x;'
       var result = 'if (x) {\n  if (x || y) {\n    x;\n  } else if (z) {\n    x;\n  } else if (q) {\n    x;\n  } else {\n    x;\n  }\n}'
       assert.equal(f(code, options), result)
+    },
+
+    'already has curlies': function () {
+      var code = 'if (x) { x } else { x }'
+      assert.equal(f(code, options), code)
     }
   }
 }
