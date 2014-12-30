@@ -33,12 +33,15 @@
     "minimatch": "^1.0.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.2",
     "ghooks": "^0.2.2",
+    "istanbul": "^0.3.5",
     "testla": "^0.1.x"
   },
   "preferGlobal": true,
   "scripts": {
     "lint": "jshint .",
+    "coverage": "node ./node_modules/istanbul/lib/cli.js cover testla test",
     "test": "npm run lint && testla test"
   },
   "files": [

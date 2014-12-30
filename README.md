@@ -3,6 +3,7 @@
 > Meant to automatically fix your JavaScript errors in a non-destructive way.
 
 [![Build Status](https://secure.travis-ci.org/jshint/fixmyjs.svg)](http://travis-ci.org/jshint/fixmyjs)
+[![Coverage Status](https://img.shields.io/coveralls/jshint/fixmyjs.svg)](https://coveralls.io/r/jshint/fixmyjs)
 [![NPM version](https://badge.fury.io/js/fixmyjs.svg)](http://badge.fury.io/js/fixmyjs)
 [![Dependency Status](https://david-dm.org/jshint/fixmyjs.svg)](https://david-dm.org/jshint/fixmyjs)
 [![devDependency Status](https://david-dm.org/jshint/fixmyjs/dev-status.svg)](https://david-dm.org/jshint/fixmyjs#info=devDependencies)
