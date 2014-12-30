@@ -1,5 +1,5 @@
 module.exports = function (f, assert) {
-  var options = { eqeqeq: true, _silent: true }
+  var options = { eqeqeq: true }
   return {
     '== is converted to ===': function () {
       var code = 'a == null;'

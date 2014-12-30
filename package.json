@@ -29,6 +29,7 @@
     "esformatter": "^0.4.3",
     "fu": "0.1.x",
     "minimatch": "^2.0.1",
+    "object-assign": "^2.0.0",
     "recast": "^0.9.11"
   },
   "devDependencies": {
@@ -57,5 +58,26 @@
     "ghooks": {
       "pre-push": "npm test"
     }
+  },
+  "fixmyjs": {
+    "camelcase": false,
+    "curly": true,
+    "debug": true,
+    "decimals": true,
+    "emptyStatement": true,
+    "eqeqeq": false,
+    "initUndefined": true,
+    "invalidConstructor": true,
+    "invokeConstructors": true,
+    "isNan": true,
+    "multivar": false,
+    "nonew": false,
+    "parseIntRadix": true,
+    "plusplus": true,
+    "rmdelete": true,
+    "snakecase": false,
+    "sub": true,
+    "trailingCommas": true,
+    "useLiteral": true
   }
 }

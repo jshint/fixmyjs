@@ -17,16 +17,16 @@ module.exports = function (f, assert) {
       assert.equal(f(code, {}), code)
     },
 
-    'do not convert square bracket notation if sub set to true': function () {
+    'do not convert square bracket notation if sub set to false': function () {
       var code = 'a["b"];'
       var result = 'a["b"];'
-      assert.equal(f(code, { sub: true }), result)
+      assert.equal(f(code, { sub: false }), result)
     },
 
-    'do not convert chained computed member expression if set set to true': function () {
+    'do not convert chained computed member expression if sub set to false': function () {
       var code = 'a["b"]["c"];'
       var result = 'a["b"]["c"];'
-      assert.equal(f(code, { sub: true }), result)
+      assert.equal(f(code, { sub: false }), result)
     },
   }
 }
