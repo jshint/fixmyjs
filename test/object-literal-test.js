@@ -1,4 +1,4 @@
-module.exports = function (f, l, assert) {
+module.exports = function (f, assert) {
   return {
     'convert Object calls to literals': function () {
       var code = 'var a = Object();'
@@ -18,16 +18,6 @@ module.exports = function (f, l, assert) {
     'do not convert Object constructions with an argument': function () {
       var code = 'var a = new Object(null);'
       assert.equal(f(code, {}), 'var a = new Object(null);')
-    },
-
-    'legacy Object literal': function () {
-      var code = 'var foo = new Object();'
-      assert.equal(l(code, {}), 'var foo = {};')
-    },
-
-    'legacy Ojbect literal multiple statements': function () {
-      var code = 'var foo = new Object(); var bar = new Object();'
-      assert.equal(l(code, {}), 'var foo = {}; var bar = {};')
     }
   }
 }

@@ -1,16 +1,14 @@
-module.exports = function (f, l, assert) {
+module.exports = function (f, assert) {
   return {
     'eq comparisons to NaN are replaced with isNaN function': function () {
       var code = 'a == NaN;'
       var result = 'isNaN(a);'
       assert.equal(f(code, {}), result)
-      assert.equal(l(code, {}), result)
     },
 
     'neq comparisons to NaN are left untouched': function () {
       var code = 'a != NaN;'
       assert.equal(f(code, {}), 'a != NaN;')
-      assert.equal(l(code, {}), '!isNaN(a);')
     },
 
     'comparisons to NaN with literals': function () {

@@ -1,4 +1,4 @@
-module.exports = function (f, l, assert) {
+module.exports = function (f, assert) {
   return {
     'dont remove comments': function () {
       var code = 'var i = 0;\n//test\ni++;'

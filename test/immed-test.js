@@ -1,9 +1,8 @@
-module.exports = function (f, l, assert) {
+module.exports = function (f, assert) {
   return {
     'both accept dogballs': function () {
       var code = '(function () { })();'
       assert.equal(f(code, {}), code)
-      assert.equal(l(code, {}), code)
     }
   }
 }

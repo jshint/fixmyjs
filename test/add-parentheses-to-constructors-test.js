@@ -1,4 +1,4 @@
-module.exports = function (f, l, assert) {
+module.exports = function (f, assert) {
   return {
     'adds parentheses to constructor': function () {
       var code = 'var foo = new Foo;'

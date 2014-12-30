@@ -72,32 +72,6 @@ When these are set to false the options apply.
 * `sub` - Dot notation conversion
 
 
-## Legacy Mode
-
-fixmyjs supports a `legacy` mode which can be used via the CLI and programatically.
-
-### CLI
-
-```
-fixmyjs --legacy your_file.js
-```
-
-### Programatically
-
-```js
-var jshint = require('jshint').JSHINT
-var fixmyjs = require('fixmyjs')
-jshint(stringOfCode, objectOfOptions)
-var stringFixedCode = fixmyjs(jshint.data(), stringOfCode, objectOfOptions).run()
-```
-
-Legacy uses [JSHINT](https://github.com/jshint/jshint) to determine what needs to be fixed and then uses a combination of regular expressions and string replacements to non-destructively fix any errors. While non-legacy supports more options, it is more prone to being destructive since the JavaScript is rewritten by the program.
-
-### Why is it legacy?
-
-We're planning on moving away from code string transformations and into transforming the AST directly because these rules are easier to write, maintain, and offers flexibility in terms of what can be supported. `2.0` release will have fixmyjs using [recast](https://github.com/benjamn/recast) which will make fixmyjs more performant and less destructive, [esformatter](https://github.com/millermedeiros/esformatter) will also be included to perform any style changes.
-
-
 ## License
 
 [MIT](https://github.com/jshint/fixmyjs/blob/master/LICENSE)

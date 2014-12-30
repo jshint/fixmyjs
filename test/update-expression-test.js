@@ -1,4 +1,4 @@
-module.exports = function (f, l, assert) {
+module.exports = function (f, assert) {
   var options = { plusplus: true }
 
   return {
