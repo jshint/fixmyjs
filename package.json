@@ -35,6 +35,7 @@
     "coveralls": "^2.11.2",
     "ghooks": "^0.2.2",
     "istanbul": "^0.3.5",
+    "jshint": "^2.5.11",
     "testla": "^0.1.x"
   },
   "preferGlobal": true,
