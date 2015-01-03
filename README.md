@@ -72,6 +72,14 @@ When these are set to false the options apply.
 * `sub` - Dot notation conversion
 
 
+## Upcoming Breaking Changes in 2.0
+
+* Legacy mode has been removed.
+* You now put your config inside package.json. You can check out an [example in this project](https://github.com/jshint/fixmyjs/blob/v2.0/package.json#L62).
+* All rules have been made truthy because having some rules be truthy and others falsy is weird.
+* Option `es3` has been renamed to `parseIntRadix` because that is all the es3 option.
+
+
 ## License
 
 [MIT](https://github.com/jshint/fixmyjs/blob/master/LICENSE)
