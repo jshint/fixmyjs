@@ -51,6 +51,57 @@ module.exports = function (f, assert) {
     'already has curlies': function () {
       var code = 'if (x) { x } else { x }'
       assert.equal(f(code, options), code)
+    },
+
+    'for statements get curly braces with opts curlyfor': function () {
+      var code = 'for (;;) x;'
+      var result = 'for (; ; ) {\n  x;\n}'
+      assert.equal(f(code, { curly: false, curlyfor: true }), result)
+    },
+
+    'while statements get curly braces with opts curlywhile': function () {
+      var code = 'while (true) x;'
+      var result = 'while (true) {\n  x;\n}'
+      assert.equal(f(code, { curly: false, curlywhile: true }), result)
+    },
+
+    'if statements get curly braces with opts curlyif': function () {
+      var code = 'if (x) x; else x;'
+      var result = 'if (x) {\n  x;\n} else {\n  x;\n}'
+      assert.equal(f(code, { curly: false, curlyif: true }), result)
+    },
+
+    'while and if left alone for curlyfor': function () {
+      var code;
+
+      code = 'while (true) x;'
+      assert.equal(f(code, { curly: false, curlyfor: true }), code)
+
+      code = 'if (x) x; else x;'
+      assert.equal(f(code, { curly: false, curlyfor: true }), code)
+    },
+
+    'for and if left alone for curlywhile': function () {
+      var code;
+
+      code = 'for (;;) x;'
+      assert.equal(f(code, { curly: false, curlywhile: true }), code)
+
+      code = 'if (x) x; else x;'
+      assert.equal(f(code, { curly: false, curlywhile: true }), code)
+    },
+
+    'all left alone when curly is false': function () {
+      var code;
+
+      code = 'if (x) x; else x;'
+      assert.equal(f(code, { curly: false }), code)
+
+      code = 'for (;;) x;'
+      assert.equal(f(code, { curly: false }), code)
+
+      code = 'while (true) x;'
+      assert.equal(f(code, { curly: false }), code)
     }
   }
 }
