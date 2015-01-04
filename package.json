@@ -68,6 +68,7 @@
     "debug": true,
     "decimals": true,
     "eqeqeq": false,
+    "es3": true,
     "initUndefined": true,
     "invalidConstructor": true,
     "invokeConstructors": true,
