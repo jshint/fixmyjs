@@ -40,44 +40,41 @@ var stringFixedCode = fixmyjs.fix(stringOfCode, objectOfOptions)
 
 ## Options
 
-These options are mostly named after their JSHINT counterparts.
-
-### Built in
-
-* `delete` - Removes deletion of variables
-* `emptyStatement` - Removes empty statements
-* `initUndefined` - Rewrites variable initializations to undefined
-* `invalidConstructor` - Does not allow you to initialize built-in primitive constructors
-* `isNaN` - Replaces equality to NaN with isNaN
-* `useLiteral` - Rewrites your primitives to use their literal form
-
-### Truthy
-
-When these are set to true the options apply.
+When the options are set to true they are enabled. To get a breakdown of what is enabled by default check out [package.json](https://github.com/jshint/fixmyjs/blob/v2.0/package.json#L62)
 
 * `camelcase` - Converts all identifiers to camelCase
 * `curly` - Adds curly braces to all statements that don't have them
-* `es3` - Adds a radix parameter to parseInt
-* `nonew` - Removes new when using it for side effects
-* `snakecase` - Convert all identifiers to snake_case
-* `multivar` - Replace single var with multi line var
-* `plusplus` - Converts `++` and `--` to `+= 1` || `-= 1`
-* `eqeqeq` - Enforce strict equality
-
-### Falsy
-
-When these are set to false the options apply.
-
+* `curlyfor` - Adds curly braces only to for statements
+* `curlyif` - Adds curly braces only to if/if-else statements
+* `curlywhile` - Adds curly braces only to while statements
 * `debug` - Removes debugger statements
+* `decimals` - Adds a leading `0` for decimals or removes trailing zero if decimal is whole
+* `delete` - Removes deletion of variables
+* `emptyStatement` - Removes empty statements
+* `eqeqeq` - Enforce strict equality
+* `es3` - Enforces `parseIntRadix` as well as `trailingCommas`
+* `initUndefined` - Rewrites variable initializations to undefined
+* `invalidConstructor` - Does not allow you to initialize built-in primitive constructors
+* `invokeConstructors` - Adds `()` to any new expressions
+* `isNan` - Replaces equality to NaN with isNaN
+* `multivar` - Replace single var with multi line var
+* `nonew` - Removes new when using it for side effects
+* `parseIntRadix` - Adds a radix parameter to parseInt
+* `plusplus` - Converts `++` and `--` to `+= 1` || `-= 1`
+* `rmdelete` - Removes the deletion of variables
+* `rmempty` - Removes empty statements
+* `snakecase` - Convert all identifiers to snake_case
 * `sub` - Dot notation conversion
+* `trailingCommas` - Removes trailing commas
+* `useLiteral` - Rewrites your primitives to use their literal form
 
 
-## Upcoming Breaking Changes in 2.0
+## Breaking Changes in 2.0
 
 * Legacy mode has been removed.
 * You now put your config inside package.json. You can check out an [example in this project](https://github.com/jshint/fixmyjs/blob/v2.0/package.json#L62).
 * All rules have been made truthy because having some rules be truthy and others falsy is weird.
-* Option `es3` has been renamed to `parseIntRadix` because that is all the es3 option.
+* Option `es3` now enables `trailingCommas` as well as new option `parseIntRadix`.
 
 
 ## License
