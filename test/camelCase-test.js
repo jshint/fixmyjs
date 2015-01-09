@@ -34,6 +34,12 @@ module.exports = function (f, assert) {
       assert.equal(f(code, options), code)
     },
 
+    'member expressions where the object is snake is converted': function () {
+      var code = 'new_collection[i] = callback();'
+      var result = 'newCollection[i] = callback();'
+      assert.equal(f(code, options), result)
+    },
+
     'camelCase is not converted': function () {
       var code = 'camelCase;'
       assert.equal(f(code, options), code)
