@@ -7,6 +7,7 @@
 [![NPM version](https://badge.fury.io/js/fixmyjs.svg)](http://badge.fury.io/js/fixmyjs)
 [![Dependency Status](https://david-dm.org/jshint/fixmyjs.svg)](https://david-dm.org/jshint/fixmyjs)
 [![devDependency Status](https://david-dm.org/jshint/fixmyjs/dev-status.svg)](https://david-dm.org/jshint/fixmyjs#info=devDependencies)
+[![Download Count](https://img.shields.io/npm/dm/fixmyjs.svg)](https://www.npmjs.com/package/fixmyjs)
 
 ## Installing
 
