@@ -53,7 +53,7 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * `delete` - Removes deletion of variables
 * `emptyStatement` - Removes empty statements
 * `eqeqeq` - Enforce strict equality
-* `es3` - Enforces `parseIntRadix` as well as `trailingCommas`
+* `es3` - Enforces `parseIntRadix` as well as `no-comma-dangle`
 * `initUndefined` - Rewrites variable initializations to undefined
 * `invalidConstructor` - Does not allow you to initialize built-in primitive constructors
 * `invokeConstructors` - Adds `()` to any new expressions
@@ -66,7 +66,7 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * `rmempty` - Removes empty statements
 * `snakecase` - Convert all identifiers to snake_case
 * `sub` - Dot notation conversion
-* `trailingCommas` - Removes trailing commas
+* `no-comma-dangle` - Removes trailing commas
 * `useLiteral` - Rewrites your primitives to use their literal form
 
 
@@ -75,7 +75,7 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * Legacy mode has been removed.
 * You now put your config inside package.json. You can check out an [example in this project](https://github.com/jshint/fixmyjs/blob/v2.0/package.json#L62).
 * All rules have been made truthy because having some rules be truthy and others falsy is weird.
-* Option `es3` now enables `trailingCommas` as well as new option `parseIntRadix`.
+* Option `es3` now enables `no-comma-dangle` as well as new option `parseIntRadix`.
 
 
 ## License

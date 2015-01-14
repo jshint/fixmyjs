@@ -74,6 +74,7 @@
     "invokeConstructors": true,
     "isNan": true,
     "multivar": false,
+    "no-comma-dangle": true,
     "nonew": false,
     "parseIntRadix": true,
     "plusplus": true,
@@ -81,7 +82,6 @@
     "rmempty": true,
     "snakecase": false,
     "sub": true,
-    "trailingCommas": true,
     "useLiteral": true
   }
 }

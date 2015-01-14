@@ -13,6 +13,7 @@ module.exports = function (f, assert) {
     invokeConstructors: false,
     isNan: false,
     multivar: false,
+    'no-comma-dangle': false,
     nonew: false,
     parseIntRadix: false,
     plusplus: false,
@@ -20,7 +21,6 @@ module.exports = function (f, assert) {
     rmempty: false,
     snakecase: false,
     sub: false,
-    trailingCommas: false,
     useLiteral: false
   }
   return {
