@@ -7,18 +7,6 @@ module.exports = function (f, assert) {
           snakecase: true
         })
       }, Error)
-    },
-
-    'invalid type for quotmark': function () {
-      assert.throws(function () {
-        f('', { quotmark: 'triple' })
-      }, Error)
-    },
-
-    'invalid type for indentpref': function () {
-      assert.throws(function () {
-        f('', { indentpref: 'mixed' })
-      }, Error)
     }
   }
 }
