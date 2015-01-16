@@ -59,6 +59,7 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * `invokeConstructors` - Adds `()` to any new expressions
 * `isNan` - Replaces equality to NaN with isNaN
 * `multivar` - Replace single var with multi line var
+* `no-comma-dangle` - Removes trailing commas
 * `nonew` - Removes new when using it for side effects
 * `parseIntRadix` - Adds a radix parameter to parseInt
 * `plusplus` - Converts `++` and `--` to `+= 1` || `-= 1`
@@ -66,7 +67,6 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * `rmempty` - Removes empty statements
 * `snakecase` - Convert all identifiers to snake_case
 * `sub` - Dot notation conversion
-* `no-comma-dangle` - Removes trailing commas
 * `useLiteral` - Rewrites your primitives to use their literal form
 
 
