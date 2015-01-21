@@ -16,6 +16,11 @@ module.exports = function (f, assert) {
       var code = 'var foo = new Foo(1, 2, 3);'
       var result = 'var foo = new Foo(1, 2, 3);'
       assert.equal(f(code, {}), result)
+    },
+
+    'multiline constructor': function () {
+      var code = 'var foo = new Foo\n();'
+      assert.equal(f(code, {}), code)
     }
   }
 }

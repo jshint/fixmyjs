@@ -6,7 +6,7 @@
   "eqnull": true,
   "esnext": true,
   "expr": true,
-  "forin": true,
+  "forin": false,
   "immed": true,
   "laxbreak": true,
   "newcap": false,
