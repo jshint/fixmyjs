@@ -54,6 +54,7 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * `emptyStatement` - Removes empty statements
 * `eqeqeq` - Enforce strict equality
 * `es3` - Enforces `parseIntRadix` as well as `no-comma-dangle`
+* `hoist` - Hoists all your vars to the top of the function
 * `initUndefined` - Rewrites variable initializations to undefined
 * `invalidConstructor` - Does not allow you to initialize built-in primitive constructors
 * `invokeConstructors` - Adds `()` to any new expressions
@@ -61,6 +62,7 @@ When the options are set to true they are enabled. To get a breakdown of what is
 * `multivar` - Replace single var with multi line var
 * `no-comma-dangle` - Removes trailing commas
 * `nonew` - Removes new when using it for side effects
+* `onevar` - Make multi var into one var
 * `parseIntRadix` - Adds a radix parameter to parseInt
 * `plusplus` - Converts `++` and `--` to `+= 1` || `-= 1`
 * `rmdelete` - Removes the deletion of variables

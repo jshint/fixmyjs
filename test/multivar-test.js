@@ -1,7 +1,7 @@
 module.exports = function (f, assert) {
   var options = { multivar: true }
   return {
-    'splits multivar declarations into multiple statements': function () {
+    'splits onevar declarations into multiple statements': function () {
       var code = 'var a, b;'
       var result = 'var a;\nvar b;'
       var real = f(code, options)
