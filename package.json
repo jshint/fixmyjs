@@ -62,9 +62,9 @@
   "fixmyjs": {
     "camelcase": false,
     "curly": true,
-    "curlyfor": false,
-    "curlyif": false,
-    "curlywhile": false,
+    "curlyfor": true,
+    "curlyif": true,
+    "curlywhile": true,
     "debug": true,
     "decimals": true,
     "eqeqeq": false,

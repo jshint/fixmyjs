@@ -1,5 +1,5 @@
 module.exports = function (f, assert) {
-  var options = { curly: false }
+  var options = { curly: false, curlyif: false, curlyfor: false, curlywhile: false }
   return {
     'sole empty statements are removed': function () {
       var code = 'var a = 1;;'

@@ -75,33 +75,33 @@ module.exports = function (f, assert) {
       var code;
 
       code = 'while (true) x;'
-      assert.equal(f(code, { curly: false, curlyfor: true }), code)
+      assert.equal(f(code, { curly: false, curlyfor: true, curlywhile: false }), code)
 
       code = 'if (x) x; else x;'
-      assert.equal(f(code, { curly: false, curlyfor: true }), code)
+      assert.equal(f(code, { curly: false, curlyfor: true, curlyif: false }), code)
     },
 
     'for and if left alone for curlywhile': function () {
       var code;
 
       code = 'for (;;) x;'
-      assert.equal(f(code, { curly: false, curlywhile: true }), code)
+      assert.equal(f(code, { curly: false, curlywhile: true, curlyfor: false }), code)
 
       code = 'if (x) x; else x;'
-      assert.equal(f(code, { curly: false, curlywhile: true }), code)
+      assert.equal(f(code, { curly: false, curlywhile: true, curlyif: false }), code)
     },
 
-    'all left alone when curly is false': function () {
+    'all left alone when curly AND their appropriate functions are false': function () {
       var code;
 
       code = 'if (x) x; else x;'
-      assert.equal(f(code, { curly: false }), code)
+      assert.equal(f(code, { curly: false, curlyif: false }), code)
 
       code = 'for (;;) x;'
-      assert.equal(f(code, { curly: false }), code)
+      assert.equal(f(code, { curly: false, curlyfor: false }), code)
 
       code = 'while (true) x;'
-      assert.equal(f(code, { curly: false }), code)
+      assert.equal(f(code, { curly: false, curlywhile: false }), code)
     }
   }
 }
