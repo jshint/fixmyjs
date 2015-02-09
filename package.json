@@ -25,12 +25,12 @@
   "main": "./lib/index.js",
   "dependencies": {
     "commander": "^2.3.0",
-    "diff": "~1.0.7",
+    "diff": "^1.2.2",
     "esformatter": "^0.4.3",
-    "fu": "0.1.x",
+    "fu": "^0.1.0",
     "minimatch": "^2.0.1",
     "object-assign": "^2.0.0",
-    "recast": "^0.9.11"
+    "recast": "^0.9.17"
   },
   "devDependencies": {
     "coveralls": "^2.11.2",
