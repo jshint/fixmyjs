@@ -1,5 +1,7 @@
 # [fixmyjs](https://fixmyjs.com)
 
+[![Join the chat at https://gitter.im/jshint/fixmyjs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jshint/fixmyjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > Meant to automatically fix your JavaScript errors in a non-destructive way.
 
 [![Build Status](https://secure.travis-ci.org/jshint/fixmyjs.svg)](http://travis-ci.org/jshint/fixmyjs)
