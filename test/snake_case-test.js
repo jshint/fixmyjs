@@ -24,7 +24,7 @@ module.exports = function (f, assert) {
 
     'function camel case gets converted': function () {
       var code = 'function test(fixMe) {}'
-      var result = 'function test(fix_me) {\n}'
+      var result = 'function test(fix_me) {}'
       var real = f(code, options)
       assert.equal(real, result)
     }
