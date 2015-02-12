@@ -43,6 +43,13 @@ module.exports = function (f, assert) {
     'camelCase is not converted': function () {
       var code = 'camelCase;'
       assert.equal(f(code, options), code)
+    },
+
+    'function camel case gets converted': function () {
+      var code = 'function test(fix_me) {}'
+      var result = 'function test(fixMe) {\n}'
+      var real = f(code, options)
+      assert.equal(real, result)
     }
   }
 }

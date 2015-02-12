@@ -20,6 +20,13 @@ module.exports = function (f, assert) {
     'snake_case is not converted': function () {
       var code = 'snake_case;'
       assert.equal(f(code, options), code)
+    },
+
+    'function camel case gets converted': function () {
+      var code = 'function test(fixMe) {}'
+      var result = 'function test(fix_me) {\n}'
+      var real = f(code, options)
+      assert.equal(real, result)
     }
   }
 }
